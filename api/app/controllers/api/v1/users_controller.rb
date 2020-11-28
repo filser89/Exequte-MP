@@ -1,7 +1,7 @@
 module Api
   module V1
     class UsersController < Api::BaseController
-      skip_before_action :authenticate_user_from_token!, only: [:wx_login]
+      skip_before_action :authenticate_user_from_token!, only: [:wx_login, :index]
 
       def index
         # only for Admin user to check the users
