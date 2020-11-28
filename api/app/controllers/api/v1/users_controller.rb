@@ -1,7 +1,7 @@
 module Api
   module V1
     class UsersController < Api::BaseController
-      skip_before_action :authenticate_user_from_token!, only: [:wx_login, :index]
+      skip_before_action :authenticate_user_from_token!, only: [:wx_login]
 
       def index
         # only for Admin user to check the users
@@ -17,7 +17,10 @@ module Api
 
       def wx_login
         # every new user will login here and create a new user and issue an auth token
+        puts "Inside logim"
+        p params
         js_code = params[:code]
+
         return render_error(I18n.t('errors.wechat.js_code_missing'), nil) unless js_code
 
         client = WechatOpenidService.new(js_code)
