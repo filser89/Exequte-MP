@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  city: MyString
+  wechat: MyString
+  phone: MyString
+  email: MyString
+  gender: MyString
+  admin: false
+  wx_open_id: MyString
+  wx_session_key: MyString
+
+two:
+  name: MyString
+  city: MyString
+  wechat: MyString
+  phone: MyString
+  email: MyString
+  gender: MyString
+  admin: false
+  wx_open_id: MyString
+  wx_session_key: MyString
