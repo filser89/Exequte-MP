@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  price_1: 
+  price_2: 
+  price_3: 
+  price_4: 
+  price_5: 
+  price_6: 
+  price_7: 
+  name: MyString
+  type: 1
+  cancel_before: 1
+
+two:
+  price_1: 
+  price_2: 
+  price_3: 
+  price_4: 
+  price_5: 
+  price_6: 
+  price_7: 
+  name: MyString
+  type: 1
+  cancel_before: 1

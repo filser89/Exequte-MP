@@ -1,4 +1,7 @@
 zh-CN:
+  title: "This is Chinese title"
+  dog: "This is Chinese dog"
+  focus: "This is Chinese focus"
   errors:
     failure:
       unauthenticated: 'User unauthenticated!'

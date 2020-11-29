@@ -1,5 +1,8 @@
 //index.js
 //获取应用实例
+import { promisifyAll, promisify } from 'miniprogram-api-promise';
+
+const wxp = {}
 const app = getApp()
 
 Page({
@@ -11,11 +14,12 @@ Page({
   },
   //事件处理函数
   bindViewTap: function() {
-    wx.navigateTo({
+    wxp.navigateTo({
       url: '../logs/logs'
     })
   },
   onLoad: function () {
+    promisifyAll(wx, wxp)
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -32,12 +36,13 @@ Page({
       }
     } else {
       // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
+      wxp.getUserInfo({
         success: res => {
           app.globalData.userInfo = res.userInfo
           this.setData({
             userInfo: res.userInfo,
-            hasUserInfo: true
+            hasUserInfo: true,
+            wxpUsed: true
           })
         }
       })
@@ -49,6 +54,18 @@ Page({
     this.setData({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
+    })
+  },
+  setStrings() {
+    const page = this
+    wxp.request({
+      url: `${app.globalData.BASE_URL}/pages`,
+      method: 'post',
+      header: app.globalData.headers,
+      data: ['title', 'dog', 'focus'],
+      success: res => page.setData({strings: res.data.data}),
+      fail: e => console.log("Failed!!!", e),
+      complete: () => console.log("Completed")
     })
   }
 })

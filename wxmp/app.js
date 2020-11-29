@@ -1,4 +1,7 @@
 //app.js
+import { promisifyAll, promisify } from 'miniprogram-api-promise';
+
+const wxp = {}
 App({
   globalData: {
     ApiKey: 'ExeQuteapikey',

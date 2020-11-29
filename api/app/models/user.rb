@@ -1,5 +1,14 @@
 class User < ApplicationRecord
   DEFAULT_NAME = "#{Rails.application.class.module_parent} User".freeze
+  ACTIVITY_LEVELS = ["worker", "desk"]
+  validates :profession_activity_level, inclusion: { in: ACTIVITY_LEVELS }
+  serialize :music_styles, Array
+  has_one :body
+  has_many :bookings
+  has_many :training_sessions, through: :bookings
+  has_many :memberships
+  has_many :membership_types, through: :memberships
+
 
   before_validation :set_defaults
 

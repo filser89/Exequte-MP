@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  calories: 1
+  duration: 1
+  capacity: 1
+  class_type: one
+
+two:
+  name: MyString
+  calories: 1
+  duration: 1
+  capacity: 1
+  class_type: two

@@ -10,4 +10,11 @@
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
   </view>
+  <button bindtap="setStrings">Set strings</button>
+</view>
+<view wx:if="{{strings}}">
+  <view>{{strings.title}}</view>
+  <view>{{strings.dog}}</view>
+  <view>{{strings.focus}}</view>
+
 </view>

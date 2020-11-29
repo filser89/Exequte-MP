@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  training_session: one
+  price: 
+  cancelled: false
+  cancelled_at: 2020-11-29 19:43:20
+  attended: false
+  booked_with: MyString
+
+two:
+  user: two
+  training_session: two
+  price: 
+  cancelled: false
+  cancelled_at: 2020-11-29 19:43:20
+  attended: false
+  booked_with: MyString

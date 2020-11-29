@@ -10,10 +10,99 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_28_043637) do
+ActiveRecord::Schema.define(version: 2020_11_29_131549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bodies", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "height"
+    t.integer "current_weight"
+    t.integer "current_fat_percentage"
+    t.string "current_shapes"
+    t.string "target"
+    t.integer "target_weight"
+    t.integer "target_fat_percentage"
+    t.string "target_shapes"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_bodies_on_user_id"
+  end
+
+  create_table "bookings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "training_session_id", null: false
+    t.integer "price_cents", default: 0, null: false
+    t.string "price_currency", default: "CNY", null: false
+    t.boolean "cancelled"
+    t.datetime "cancelled_at"
+    t.boolean "attended"
+    t.string "booked_with"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["training_session_id"], name: "index_bookings_on_training_session_id"
+    t.index ["user_id"], name: "index_bookings_on_user_id"
+  end
+
+  create_table "class_types", force: :cascade do |t|
+    t.integer "price_1_cents", default: 0, null: false
+    t.string "price_1_currency", default: "CNY", null: false
+    t.integer "price_2_cents", default: 0, null: false
+    t.string "price_2_currency", default: "CNY", null: false
+    t.integer "price_3_cents", default: 0, null: false
+    t.string "price_3_currency", default: "CNY", null: false
+    t.integer "price_4_cents", default: 0, null: false
+    t.string "price_4_currency", default: "CNY", null: false
+    t.integer "price_5_cents", default: 0, null: false
+    t.string "price_5_currency", default: "CNY", null: false
+    t.integer "price_6_cents", default: 0, null: false
+    t.string "price_6_currency", default: "CNY", null: false
+    t.integer "price_7_cents", default: 0, null: false
+    t.string "price_7_currency", default: "CNY", null: false
+    t.string "name"
+    t.integer "kind"
+    t.integer "cancel_before"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "membership_types", force: :cascade do |t|
+    t.string "name"
+    t.integer "duration"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.bigint "membership_type_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["membership_type_id"], name: "index_memberships_on_membership_type_id"
+    t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
+  create_table "training_sessions", force: :cascade do |t|
+    t.string "queue"
+    t.bigint "training_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "begins_at"
+    t.index ["training_id"], name: "index_training_sessions_on_training_id"
+  end
+
+  create_table "trainings", force: :cascade do |t|
+    t.string "name"
+    t.integer "calories"
+    t.integer "duration"
+    t.integer "capacity"
+    t.bigint "class_type_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.text "description"
+    t.index ["class_type_id"], name: "index_trainings_on_class_type_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
@@ -27,6 +116,26 @@ ActiveRecord::Schema.define(version: 2020_11_28_043637) do
     t.string "wx_session_key"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "workout_name"
+    t.string "emergency_name"
+    t.string "emergency_phone"
+    t.date "birthday"
+    t.string "nationality"
+    t.string "profession"
+    t.string "profession_activity_level"
+    t.string "favorite_song"
+    t.string "music_styles"
+    t.string "sports"
+    t.text "favorite_food"
   end
 
+  add_foreign_key "bodies", "users"
+  add_foreign_key "bookings", "training_sessions"
+  add_foreign_key "bookings", "users"
+  add_foreign_key "memberships", "membership_types"
+  add_foreign_key "memberships", "users"
+  add_foreign_key "training_sessions", "trainings"
+  add_foreign_key "trainings", "class_types"
 end

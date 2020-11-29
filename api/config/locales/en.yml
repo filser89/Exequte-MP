@@ -1,4 +1,7 @@
 en:
+  title: "This is title"
+  dog: "This is dog"
+  focus: "This is focus"
   errors:
     failure:
       unauthenticated: "User unauthenticated!"
