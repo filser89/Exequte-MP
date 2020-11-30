@@ -11,10 +11,16 @@
     <text class="user-motto">{{motto}}</text>
   </view>
   <button bindtap="setStrings">Set strings</button>
+  <button bindtap="getSessions">Get sessions</button>
 </view>
 <view wx:if="{{strings}}">
   <view>{{strings.title}}</view>
   <view>{{strings.dog}}</view>
   <view>{{strings.focus}}</view>
+
+<view wx:for="{{sessions}} wx:key">
+  <view></view>
+</view>
+
 
 </view>

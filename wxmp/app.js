@@ -7,7 +7,8 @@ App({
     ApiKey: 'ExeQuteapikey',
     BASE_URL: 'http://localhost:3000/api/v1',
     headers: {
-      'API-Key': 'ExeQuteapikey'
+      'API-Key': 'ExeQuteapikey',
+      ['X-API-Lang']: 'zh-CN'
     }
   },
   onLaunch: function () {
