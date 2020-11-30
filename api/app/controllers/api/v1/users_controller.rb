@@ -17,7 +17,7 @@ module Api
 
       def wx_login
         # every new user will login here and create a new user and issue an auth token
-        puts "Inside logim"
+        puts "Inside login"
         p params
         js_code = params[:code]
 
@@ -33,9 +33,12 @@ module Api
 
         user = User.find_by(wx_open_id: result['openid'])
         if user
+          puts "UPDATING"
           user.update(wx_session_key: result['session_key'])
         else
-          user = User.create(wx_open_id: result['openid'], wx_session_key: result['session_key'])
+          puts "CREATING"
+          user = User.create!(wx_open_id: result['openid'], wx_session_key: result['session_key'])
+          p user
         end
 
         auth_token = issue_jwt_token(user)

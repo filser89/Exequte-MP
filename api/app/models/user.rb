@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   DEFAULT_NAME = "#{Rails.application.class.module_parent} User".freeze
-  ACTIVITY_LEVELS = ["worker", "desk"]
+  ACTIVITY_LEVELS = [nil, "worker", "desk"]
   validates :profession_activity_level, inclusion: { in: ACTIVITY_LEVELS }
   serialize :music_styles, Array
   has_one :body
@@ -41,6 +41,13 @@ class User < ApplicationRecord
       gender: gender,
       admin: admin
     }
+  end
+
+  def average_attendence
+    attended = bookings.where(attended: true)
+    range = 28.days.ago..Date.yesterday
+    count = attended.count { |a| range.include?(a.training_session.begins_at) }
+    count / 4
   end
 
   private
