@@ -1,6 +1,6 @@
 # Destroy old stuff
 
-puts "Destroying Database"
+puts "Destroying Data..."
 TrainingSession.destroy_all
 Training.destroy_all
 ClassType.destroy_all
@@ -27,7 +27,7 @@ puts "=============================================="
 
 puts "Creating Trainings and Training Sessions"
 
-yoga = Training.create!(name: "Yoga", calories: 200, duration: 90, capacity: 6, class_type: premium, description: "Stretch your body and mind with us")
+yoga = Training.create!(name: "Yoga", cn_name: "CHINESE Yoga", calories: 200, duration: 90, capacity: 6, class_type: premium, description: "Stretch your body and mind with us", cn_description: "CHINESE Stretch your body and mind with us")
 
 puts "Created Training #{yoga.name}"
 5.times do
@@ -35,7 +35,7 @@ puts "Created Training #{yoga.name}"
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
-body_pump = Training.create!(name: "Body Pump", calories: 300, duration: 60, capacity: 30, class_type: standard, description: "Go crazy with Body Pump")
+body_pump = Training.create!(name: "Body Pump", cn_name: "CHINESE Body Pump", calories: 300, duration: 60, capacity: 30, class_type: standard, description: "Go crazy with Body Pump", cn_description: "CHINESE Go crazy with Body Pump")
 puts "Created Training #{body_pump.name}"
 
 5.times do
@@ -43,7 +43,7 @@ puts "Created Training #{body_pump.name}"
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
-stretching = Training.create!(name: "Stretching", calories: 200, duration: 70, capacity: 20, class_type: standard, description: "Same like yoga but without Zen")
+stretching = Training.create!(name: "Stretching", cn_name: "CHINESE Stretching", calories: 200, duration: 70, capacity: 20, class_type: standard, description: "Same like yoga but without Zen", cn_description: "CHINESE Same like yoga but without Zen")
 
 puts "Created Training #{stretching.name}"
 
@@ -52,7 +52,7 @@ puts "Created Training #{stretching.name}"
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
-abs = Training.create!(name: "Abs workout", calories: 400, duration: 80, capacity: 30, class_type: standard, description: "Go get that 6-pack")
+abs = Training.create!(name: "Abs workout", cn_name: "CHINESE Abs workout", calories: 400, duration: 80, capacity: 30, class_type: standard, description: "Go get that 6-pack", cn_description: "CHINESE Go get that 6-pack")
 
 puts "Created Training #{abs.name}"
 
@@ -61,7 +61,7 @@ puts "Created Training #{abs.name}"
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
-lifting = Training.create!(name: "Weight lifting", calories: 700, duration: 90, capacity: 10, class_type: free, description: "Free and powerful workout session")
+lifting = Training.create!(name: "Weight lifting", cn_name: "CHINESE Weight lifting", calories: 700, duration: 90, capacity: 10, class_type: free, cn_description: "CHINESE Free and powerful workout session", description: "Free and powerful workout session")
 
 puts "Created Training #{lifting.name}"
 
@@ -72,13 +72,13 @@ end
 puts "=============================================="
 # Create 4 MembershipTypes
 puts "Creating Membership Types"
-membership = MembershipType.create!(name: "6 weeks unlimited", duration: 42)
+membership = MembershipType.create!(name: "6 weeks unlimited", cn_name: "CHINESE 6 weeks unlimited", duration: 42)
 puts "Created membership: #{membership.name}"
-membership = MembershipType.create!(name: "12 weeks unlimited", duration: 84)
+membership = MembershipType.create!(name: "12 weeks unlimited", cn_name: "CHINESE 12 weeks unlimited", duration: 84)
 puts "Created membership: #{membership.name}"
-membership = MembershipType.create!(name: "6 weeks unlimited and smoothie", duration: 42)
+membership = MembershipType.create!(name: "6 weeks unlimited and smoothie", cn_name: "CHINESE 6 weeks unlimited and smoothie", duration: 42)
 puts "Created membership: #{membership.name}"
-membership = MembershipType.create!(name: "12 weeks unlimited and smoothie", duration: 84)
+membership = MembershipType.create!(name: "12 weeks unlimited and smoothie", cn_name: "CHINESE 12 weeks unlimited and smoothie", duration: 84)
 puts "Created membership: #{membership.name}"
 
 puts "=============================================="
