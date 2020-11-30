@@ -1,6 +1,8 @@
 # Destroy old stuff
 
 puts "Destroying Data..."
+Booking.destroy_all
+User.destroy_all
 TrainingSession.destroy_all
 Training.destroy_all
 ClassType.destroy_all
@@ -30,16 +32,33 @@ puts "Creating Trainings and Training Sessions"
 yoga = Training.create!(name: "Yoga", cn_name: "CHINESE Yoga", calories: 200, duration: 90, capacity: 6, class_type: premium, description: "Stretch your body and mind with us", cn_description: "CHINESE Stretch your body and mind with us")
 
 puts "Created Training #{yoga.name}"
+
+# Up-coming sessions
 5.times do
   session = TrainingSession.create!(begins_at: rand(DateTime.now..DateTime.now + 14.days), training: yoga)
+  puts "Created seession for #{session.training.name} at #{session.begins_at}"
+end
+
+# Past sessions
+
+5.times do
+  session = TrainingSession.create!(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: yoga)
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
 body_pump = Training.create!(name: "Body Pump", cn_name: "CHINESE Body Pump", calories: 300, duration: 60, capacity: 30, class_type: standard, description: "Go crazy with Body Pump", cn_description: "CHINESE Go crazy with Body Pump")
 puts "Created Training #{body_pump.name}"
 
+# Up-coming sessions
 5.times do
   session = TrainingSession.create!(begins_at: rand(DateTime.now..DateTime.now + 14.days), training: body_pump)
+  puts "Created seession for #{session.training.name} at #{session.begins_at}"
+end
+
+# Past sessions
+
+5.times do
+  session = TrainingSession.create!(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: body_pump)
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
@@ -47,28 +66,52 @@ stretching = Training.create!(name: "Stretching", cn_name: "CHINESE Stretching",
 
 puts "Created Training #{stretching.name}"
 
+# Up-comming sessions
 5.times do
   session = TrainingSession.create!(begins_at: rand(DateTime.now..DateTime.now + 14.days), training: stretching)
+  puts "Created seession for #{session.training.name} at #{session.begins_at}"
+end
+
+# Past sessions
+
+5.times do
+  session = TrainingSession.create!(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: stretching)
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
 abs = Training.create!(name: "Abs workout", cn_name: "CHINESE Abs workout", calories: 400, duration: 80, capacity: 30, class_type: standard, description: "Go get that 6-pack", cn_description: "CHINESE Go get that 6-pack")
 
 puts "Created Training #{abs.name}"
-
+# Up-comming sessions
 5.times do
   session = TrainingSession.create!(begins_at: rand(DateTime.now..DateTime.now + 14.days), training: abs)
+  puts "Created seession for #{session.training.name} at #{session.begins_at}"
+end
+
+# Past sessions
+
+5.times do
+  session = TrainingSession.create!(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: abs)
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
 lifting = Training.create!(name: "Weight lifting", cn_name: "CHINESE Weight lifting", calories: 700, duration: 90, capacity: 10, class_type: free, cn_description: "CHINESE Free and powerful workout session", description: "Free and powerful workout session")
 
 puts "Created Training #{lifting.name}"
-
+# Up-comming sessions
 5.times do
   session = TrainingSession.create!(begins_at: rand(DateTime.now..DateTime.now + 14.days), training: lifting)
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
+
+# Past sessions
+
+5.times do
+  session = TrainingSession.create!(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: lifting)
+  puts "Created seession for #{session.training.name} at #{session.begins_at}"
+end
+
+
 puts "=============================================="
 # Create 4 MembershipTypes
 puts "Creating Membership Types"
@@ -82,8 +125,38 @@ membership = MembershipType.create!(name: "12 weeks unlimited and smoothie", cn_
 puts "Created membership: #{membership.name}"
 
 puts "=============================================="
+
+# # Create Test Users
+puts "Creating Test Users"
+5.times do |n|
+  user = User.create!(name: "Test User #{n + 1}")
+
+  # Attended bookings
+  rand(1..20).times  do
+    ts = TrainingSession.where(begins_at: 28.days.ago..Date.yesterday).sample
+
+
+    Booking.create!(user: user, training_session: ts, cancelled: false, attended: true)
+  end
+  attended = user.bookings.count
+
+  puts "Created #{attended} attended bookings for #{user.name}"
+  # Cancelled bookings
+  rand(0..5).times do
+    ts = TrainingSession.where(begins_at: 28.days.ago..Date.yesterday).sample
+
+    Booking.create!(user: user, training_session: ts, cancelled: true, cancelled_at: ts.begins_at - rand(2..6).hours, attended: false)
+  end
+
+  puts "Created #{user.bookings.count - attended} cancelled bookings for #{user.name}"
+end
+
+puts "=============================================="
 puts "Seeding is completed"
 puts "Created #{ClassType.count} Class Types"
 puts "Created #{Training.count} Trainings"
 puts "Created #{TrainingSession.count} Training Sessions"
 puts "Created #{MembershipType.count} Membership Types"
+puts "Created #{MembershipType.count} Membership Types"
+puts "Created #{User.count} Users"
+puts "Created #{Booking.count} Bookings"
