@@ -5,11 +5,13 @@ class TrainingSession < ApplicationRecord
   has_many :users, through: :bookings
 
   def index_hash
-
+    standard_hash
   end
 
   def show_hash
-    standard_hash
+    h = standard_hash
+    h[:description] = I18n.locale == :'zh-CN' ? training.cn_description : training.description
+    h
   end
 
   private
@@ -21,10 +23,9 @@ class TrainingSession < ApplicationRecord
       calories: training.calories,
       duration: training.duration,
       capacity: training.capacity,
-      name: I18n.locale == 'zh-CN' ? training.cn_name : training.name,
-      class_type: training.class_type.kind
-
-
+      name: I18n.locale == :'zh-CN' ? training.cn_name : training.name,
+      class_type: training.class_type.kind,
+      training_id: training.id
     }
   end
 end

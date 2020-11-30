@@ -43,6 +43,24 @@ class User < ApplicationRecord
     }
   end
 
+  def prices
+    {
+      1 => 'price_1_cents',
+      2 => calc_standard_price,
+      3 => 'price_1_cents'
+    }
+  end
+
+  private
+
+  def calc_standard_price
+    return 'price_1_cents' if average_attendence <= 1
+
+    return "price_#{average_attendence}_cents" if (2..6).include?(average_attendence)
+
+    'price_7_cents'
+  end
+
   def average_attendence
     attended = bookings.where(attended: true)
     range = 28.days.ago..Date.yesterday
@@ -50,7 +68,6 @@ class User < ApplicationRecord
     count / 4
   end
 
-  private
 
   def set_defaults
     self.name = DEFAULT_NAME if self.name.blank?

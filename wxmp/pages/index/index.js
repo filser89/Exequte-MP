@@ -67,5 +67,16 @@ Page({
       fail: e => console.log("Failed!!!", e),
       complete: () => console.log("Completed")
     })
+  },
+  getSessions() {
+    const page = this
+    wxp.request({
+      url: `${app.globalData.BASE_URL}/training_sessions`,
+      header: app.globalData.headers,
+      success: res => page.setData({sessions: res.data.data}),
+      fail: e => console.log("Failed!!!", e),
+      complete: () => console.log("Completed")
+
+    })
   }
 })
