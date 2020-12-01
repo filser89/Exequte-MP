@@ -57,6 +57,11 @@ class User < ApplicationRecord
     save
   end
 
+  def return_voucher!
+    self.voucher_count += 1
+    save
+  end
+
   private
 
   def calc_standard_price

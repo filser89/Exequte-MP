@@ -10,9 +10,9 @@ Rails.application.routes.draw do
       resources :training_sessions, only: [:index, :show] do
         resources :bookings, only: [:create]
       end
-      resources :bookings, only: [:index] do
+      resources :bookings, only: [] do
         member do
-          post :cancel
+          put :cancel
         end
       end
     end
