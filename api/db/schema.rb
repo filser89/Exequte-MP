@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_30_043530) do
+ActiveRecord::Schema.define(version: 2020_12_01_041131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_043530) do
     t.bigint "training_session_id", null: false
     t.integer "price_cents", default: 0, null: false
     t.string "price_currency", default: "CNY", null: false
-    t.boolean "cancelled"
+    t.boolean "cancelled", default: false, null: false
     t.datetime "cancelled_at"
     t.boolean "attended"
     t.string "booked_with"
