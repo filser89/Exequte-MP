@@ -37,8 +37,7 @@ module Api
           user.update(wx_session_key: result['session_key'])
         else
           puts "CREATING"
-          user = User.create!(wx_open_id: result['openid'], wx_session_key: result['session_key'])
-          p user
+          user = User.create(wx_open_id: result['openid'], wx_session_key: result['session_key'])
         end
 
         auth_token = issue_jwt_token(user)

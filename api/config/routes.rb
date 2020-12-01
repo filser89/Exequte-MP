@@ -7,7 +7,14 @@ Rails.application.routes.draw do
         end
       end
       post 'pages', to: "pages#make_strings"
-      resources :training_sessions, only: [:index, :show]
+      resources :training_sessions, only: [:index, :show] do
+        resources :bookings, only: [:create]
+      end
+      resources :bookings, only: [:index] do
+        member do
+          post :cancel
+        end
+      end
     end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

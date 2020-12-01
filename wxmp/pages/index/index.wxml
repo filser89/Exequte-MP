@@ -13,6 +13,7 @@
   <button bindtap="setStrings">Set strings</button>
   <button bindtap="getSessions">Get sessions</button>
   <button bindtap="getSession">Get session</button>
+  <button bindtap="createBooking">Create booking</button>
 </view>
 <view wx:if="{{strings}}">
   <view>{{strings.title}}</view>

@@ -19,7 +19,7 @@ module Api
       def show
         @training_session = TrainingSession.find(params[:id])
         h = training_session_to_hash(@training_session)
-        h[:description] = @training_session.localize_description
+        h[:description] = @training_session.training.localize_description
         render_success(h)
       end
 

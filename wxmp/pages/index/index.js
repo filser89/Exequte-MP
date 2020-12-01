@@ -82,13 +82,26 @@ Page({
   getSession(){
     const page = this
     wxp.request({
-      url: `${app.globalData.BASE_URL}/training_sessions/345`,
+      url: `${app.globalData.BASE_URL}/training_sessions/40`,
       header: app.globalData.headers,
       success: res => page.setData({session: res.data.data}),
       fail: e => console.log("Failed!!!", e),
       complete: () => console.log("Completed")
 
     })
+  },
+  createBooking(){
+    const page = this
+    wxp.request({
+      url: `${app.globalData.BASE_URL}/training_sessions/50/bookings`,
+      method: 'post',
+      header: app.globalData.headers,
+      data: {"booked_with": "voucher"},
+      success: res => console.log("Booking created!", res),
+      fail: e => console.log("Failed!!!", e),
+      complete: () => console.log("Completed")
+    })
   }
+  
 
 })
