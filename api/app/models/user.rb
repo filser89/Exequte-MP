@@ -39,7 +39,8 @@ class User < ApplicationRecord
       phone: phone,
       email: email,
       gender: gender,
-      admin: admin
+      admin: admin,
+      voucher_count: voucher_count
     }
   end
 
@@ -49,6 +50,11 @@ class User < ApplicationRecord
       2 => calc_standard_price,
       3 => 'price_1_cents'
     }
+  end
+
+  def use_voucher!
+    self.voucher_count -= 1
+    save
   end
 
   private
