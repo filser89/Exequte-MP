@@ -82,7 +82,7 @@ Page({
   getSession(){
     const page = this
     wxp.request({
-      url: `${app.globalData.BASE_URL}/training_sessions/40`,
+      url: `${app.globalData.BASE_URL}/training_sessions/34`,
       header: app.globalData.headers,
       success: res => page.setData({session: res.data.data}),
       fail: e => console.log("Failed!!!", e),
@@ -93,11 +93,23 @@ Page({
   createBooking(){
     const page = this
     wxp.request({
-      url: `${app.globalData.BASE_URL}/training_sessions/50/bookings`,
+      url: `${app.globalData.BASE_URL}/training_sessions/22/bookings`,
       method: 'post',
       header: app.globalData.headers,
       data: {"booked_with": "voucher"},
       success: res => console.log("Booking created!", res),
+      fail: e => console.log("Failed!!!", e),
+      complete: () => console.log("Completed")
+    })
+  },
+
+  cancelBooking() {
+    wxp.request({
+      url: `${app.globalData.BASE_URL}/bookings/82/cancel`,
+      method: 'put',
+      header: app.globalData.headers,
+      data: {},
+      success: res => console.log("Booking canceled!", res),
       fail: e => console.log("Failed!!!", e),
       complete: () => console.log("Completed")
     })

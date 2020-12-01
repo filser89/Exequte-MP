@@ -2,7 +2,6 @@ module Api
   module V1
     class BookingsController < Api::BaseController
       def index
-
       end
 
       def create
@@ -11,27 +10,32 @@ module Api
         @booking.user = current_user
         @booking.training_session = training_session
         if @booking.save
-          p @booking.user.voucher_count
-          p @booking.booked_with
-
           @booking.user.use_voucher! if @booking.booked_with == "voucher"
-
-          p @booking.user.voucher_count
           render_success(@booking.standard_hash)
         else
-          #  render error
+          # render error
         end
       end
 
       def cancel
-
+        @booking = Booking.find(params[:id])
+        @booking.cancelled = true
+        @booking.cancelled_at = DateTime.now
+        if @booking.save
+          if @booking.cancelled_on_time? && %w[voucher drop-in].include?(@booking.booked_with)
+            @booking.user.return_voucher!
+          end
+          render_success(@booking)
+        else
+          # render error
+        end
       end
 
       private
+
       def permitted_params
         params.require(:booking).permit(:booked_with)
       end
-
     end
   end
 end
