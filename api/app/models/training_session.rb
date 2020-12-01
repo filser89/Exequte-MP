@@ -4,17 +4,7 @@ class TrainingSession < ApplicationRecord
   has_many :bookings
   has_many :users, through: :bookings
 
-  def index_hash
-    standard_hash
-  end
 
-  def show_hash
-    h = standard_hash
-    h[:description] = I18n.locale == :'zh-CN' ? training.cn_description : training.description
-    h
-  end
-
-  private
 
   def standard_hash
     {
@@ -23,9 +13,22 @@ class TrainingSession < ApplicationRecord
       calories: training.calories,
       duration: training.duration,
       capacity: training.capacity,
-      name: I18n.locale == :'zh-CN' ? training.cn_name : training.name,
+      name: localize_name,
       class_type: training.class_type.kind,
-      training_id: training.id
+      bookable: can_book?
+
     }
+  end
+
+  def localize_name
+    I18n.locale == :'zh-CN' ? training.cn_name : training.name
+  end
+
+  def localize_description
+    I18n.locale == :'zh-CN' ? training.cn_description : training.description
+  end
+
+  def can_book?
+    training.capacity > bookings.where(cancelled: false).count
   end
 end
