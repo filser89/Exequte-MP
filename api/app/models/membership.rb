@@ -2,7 +2,7 @@ class Membership < ApplicationRecord
   belongs_to :membership_type
   belongs_to :user
 
-  def valid?
+  def is_valid?
     days_since_created <= membership_type.duration
   end
 
@@ -13,7 +13,7 @@ class Membership < ApplicationRecord
   def standard_hash
     {
       id: id,
-      name: membership_type.name,
+      name: membership_type.localize_name,
       days_left: days_left
     }
   end

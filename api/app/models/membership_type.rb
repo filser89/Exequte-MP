@@ -5,4 +5,12 @@ class MembershipType < ApplicationRecord
   validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   has_many :memberships
   has_many :users, through: :memberships
+
+  def standard_hash
+    {
+      id: id,
+      name: localize_name,
+      duration: duration
+    }
+  end
 end

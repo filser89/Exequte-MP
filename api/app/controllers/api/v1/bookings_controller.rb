@@ -5,6 +5,8 @@ module Api
       end
 
       def create
+
+        # Add that if the user is in queue for this TS, he should be removed from queue
         training_session = TrainingSession.find(params[:training_session_id])
         @booking = Booking.new(permitted_params)
         @booking.user = current_user

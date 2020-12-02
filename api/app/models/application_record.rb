@@ -6,6 +6,12 @@ class ApplicationRecord < ActiveRecord::Base
     (DateTime.now.midnight - created_at_mndt).to_i + 1
   end
 
+  def localize_name
+    return unless name && cn_name
+
+    I18n.locale == :'zh-CN' ? cn_name : name
+  end
+
   def created_at_mndt
     created_at.midnight.to_datetime
   end

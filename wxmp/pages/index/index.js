@@ -1,7 +1,7 @@
 //index.js
 //获取应用实例
 // import { promisifyAll, promisify } from 'miniprogram-api-promise';
-import { setStrings, getCurrentUser } from '../../utils/requests';
+import { setStrings, getCurrentUser, getMembershipTypes, buyMembership, addUserToQueue } from '../../utils/requests';
 
 // const wxp = {}
 const app = getApp()
@@ -52,6 +52,8 @@ Page({
     
     this.setData({strings: await setStrings(this.data.keys)})
     this.setData({user: await getCurrentUser()})
+    this.setData({membershipTypes: await getMembershipTypes()})
+
 
   },
   getUserInfo: function(e) {
@@ -117,5 +119,13 @@ Page({
       fail: e => console.log("Failed!!!", e),
       complete: () => console.log("Completed")
     })
+  },
+
+  buyMembership(){
+    buyMembership()
+  },
+  async queueUp(){
+   const res = await addUserToQueue()
+   console.log(res)
   }
 })

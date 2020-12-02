@@ -38,7 +38,34 @@ const getCurrentUser = async () => {
 return request(options)
 }
 
+const getMembershipTypes = () => {
+  const options = {
+    method: 'get',
+    url: '/membership_types',
+  }
+  return request(options)
+}
+
+const buyMembership = () => {
+  const options = {
+    method: 'post',
+    url: '/membership_types/1/memberships',
+  }
+  return request(options)
+}
+
+const addUserToQueue = () => {
+  const options = {
+    method: 'put',
+    url: '/training_sessions/1/add_user_to_queue',
+  }
+  return request(options)
+}
+
 module.exports = {
   setStrings, 
-  getCurrentUser
+  getCurrentUser,
+  getMembershipTypes,
+  buyMembership,
+  addUserToQueue
 }

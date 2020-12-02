@@ -11,9 +11,7 @@ class Training < ApplicationRecord
   has_many :training_sessions
   has_many :bookings, through: :training_sessions
 
-  def localize_name
-    I18n.locale == :'zh-CN' ? cn_name : name
-  end
+
 
   def localize_description
     I18n.locale == :'zh-CN' ? cn_description : description
