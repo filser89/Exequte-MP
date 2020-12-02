@@ -15,12 +15,15 @@ class TrainingSession < ApplicationRecord
       capacity: training.capacity,
       name: training.localize_name,
       class_type: training.class_type.kind,
-      bookable: can_book?
-
+      bookable: can_book?,
+      begins_in_days: begins_in_days
     }
   end
 
+  def begins_in_days
+    (begins_at.midnight.to_datetime - DateTime.now.midnight).to_i
 
+  end
 
   def can_book?
     training.capacity > bookings.where(cancelled: false).count

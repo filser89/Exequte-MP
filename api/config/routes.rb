@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       resources :users, only: [:index, :show] do
         collection do
           post :wx_login
+          get :info
         end
       end
       post 'pages', to: "pages#make_strings"

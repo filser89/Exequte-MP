@@ -1,8 +1,9 @@
 //index.js
 //获取应用实例
-import { promisifyAll, promisify } from 'miniprogram-api-promise';
+// import { promisifyAll, promisify } from 'miniprogram-api-promise';
+import { setStrings, getCurrentUser } from '../../utils/requests';
 
-const wxp = {}
+// const wxp = {}
 const app = getApp()
 
 Page({
@@ -10,7 +11,8 @@ Page({
     motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    keys: ['title', 'dog', 'focus']
   },
   //事件处理函数
   bindViewTap: function() {
@@ -18,8 +20,8 @@ Page({
       url: '../logs/logs'
     })
   },
-  onLoad: function () {
-    promisifyAll(wx, wxp)
+  async onLoad() {
+    // promisifyAll(wx, wxp)
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -47,6 +49,10 @@ Page({
         }
       })
     }
+    
+    this.setData({strings: await setStrings(this.data.keys)})
+    this.setData({user: await getCurrentUser()})
+
   },
   getUserInfo: function(e) {
     console.log(e)
@@ -56,18 +62,7 @@ Page({
       hasUserInfo: true
     })
   },
-  setStrings() {
-    const page = this
-    wxp.request({
-      url: `${app.globalData.BASE_URL}/pages`,
-      method: 'post',
-      header: app.globalData.headers,
-      data: ['title', 'dog', 'focus'],
-      success: res => page.setData({strings: res.data.data}),
-      fail: e => console.log("Failed!!!", e),
-      complete: () => console.log("Completed")
-    })
-  },
+
   getSessions() {
     const page = this
     wxp.request({
@@ -102,7 +97,6 @@ Page({
       complete: () => console.log("Completed")
     })
   },
-
   cancelBooking() {
     wxp.request({
       url: `${app.globalData.BASE_URL}/bookings/82/cancel`,
@@ -113,7 +107,15 @@ Page({
       fail: e => console.log("Failed!!!", e),
       complete: () => console.log("Completed")
     })
-  }
-  
+  },
+  getCurrentUser() {
+    wxp.request({
+      url: `${app.globalData.BASE_URL}/users/info`,
+      header: app.globalData.headers,
 
+      success: res => wx.setStorageSync('current_user', res.data.data),
+      fail: e => console.log("Failed!!!", e),
+      complete: () => console.log("Completed")
+    })
+  }
 })

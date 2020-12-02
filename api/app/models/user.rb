@@ -16,6 +16,10 @@ class User < ApplicationRecord
     TokenService.encode('user' => id)
   end
 
+  def info_hash
+    standard_hash
+  end
+
   def index_hash
     h = standard_hash
     # Add new attributes here as shown below:
@@ -40,8 +44,13 @@ class User < ApplicationRecord
       email: email,
       gender: gender,
       admin: admin,
-      voucher_count: voucher_count
+      voucher_count: voucher_count,
+      membership: valid_membership ? valid_membership.standard_hash : ''
     }
+  end
+
+  def valid_membership
+    memberships.find(&:valid?)
   end
 
   def prices
@@ -73,12 +82,14 @@ class User < ApplicationRecord
   end
 
   def average_attendence
-    attended = bookings.where(attended: true)
-    range = 28.days.ago..Date.yesterday
-    count = attended.count { |a| range.include?(a.training_session.begins_at) }
-    count / 4
-  end
 
+    days_to_count = days_since_created < 28 ? days_since_created : 28
+
+    attended = bookings.where(attended: true)
+    range = days_to_count.days.ago..Date.yesterday
+    count = attended.count { |a| range.include?(a.training_session.begins_at.to_datetime) }
+    count / days_to_count * 7
+  end
 
   def set_defaults
     self.name = DEFAULT_NAME if self.name.blank?
