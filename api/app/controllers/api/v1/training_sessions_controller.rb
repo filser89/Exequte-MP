@@ -23,6 +23,12 @@ module Api
         render_success(h)
       end
 
+      def add_user_to_queue
+        training_session = TrainingSession.find(params[:id])
+        training_session.queue << current_user
+        render_success(training_session.standard_hash)
+      end
+
       private
 
       def training_session_to_hash(training_session)

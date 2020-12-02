@@ -50,7 +50,7 @@ class User < ApplicationRecord
   end
 
   def valid_membership
-    memberships.find(&:valid?)
+    memberships.find(&:is_valid?)
   end
 
   def prices

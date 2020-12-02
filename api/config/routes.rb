@@ -10,11 +10,17 @@ Rails.application.routes.draw do
       post 'pages', to: "pages#make_strings"
       resources :training_sessions, only: [:index, :show] do
         resources :bookings, only: [:create]
+        member do
+          put :add_user_to_queue
+        end
       end
       resources :bookings, only: [] do
         member do
           put :cancel
         end
+      end
+      resources :membership_types, only: [:index] do
+        resources :memberships, only: [:create]
       end
     end
   end
