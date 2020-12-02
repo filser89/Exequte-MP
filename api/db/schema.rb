@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_01_053010) do
+ActiveRecord::Schema.define(version: 2020_12_02_122506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,7 +90,9 @@ ActiveRecord::Schema.define(version: 2020_12_01_053010) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "begins_at", null: false
+    t.bigint "user_id", null: false
     t.index ["training_id"], name: "index_training_sessions_on_training_id"
+    t.index ["user_id"], name: "index_training_sessions_on_user_id"
   end
 
   create_table "trainings", force: :cascade do |t|
@@ -133,6 +135,7 @@ ActiveRecord::Schema.define(version: 2020_12_01_053010) do
     t.string "sports"
     t.text "favorite_food"
     t.integer "voucher_count", default: 5, null: false
+    t.boolean "instructor", default: false, null: false
   end
 
   add_foreign_key "bodies", "users"
@@ -141,5 +144,6 @@ ActiveRecord::Schema.define(version: 2020_12_01_053010) do
   add_foreign_key "memberships", "membership_types"
   add_foreign_key "memberships", "users"
   add_foreign_key "training_sessions", "trainings"
+  add_foreign_key "training_sessions", "users"
   add_foreign_key "trainings", "class_types"
 end

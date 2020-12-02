@@ -29,6 +29,11 @@ module Api
         render_success(training_session.standard_hash)
       end
 
+      # def instructor_index
+      #   @training_sessions = current_user.training_sessions_as_instructor.where(begins_at: )
+      #   render_success()
+      # end
+
       private
 
       def training_session_to_hash(training_session)
