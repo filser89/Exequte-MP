@@ -1,9 +1,9 @@
 //index.js
 //获取应用实例
-import { promisifyAll, promisify } from 'miniprogram-api-promise';
+// import { promisifyAll, promisify } from 'miniprogram-api-promise';
 import { setStrings, getCurrentUser } from '../../utils/requests';
 
-const wxp = {}
+// const wxp = {}
 const app = getApp()
 
 Page({
@@ -21,7 +21,7 @@ Page({
     })
   },
   async onLoad() {
-    promisifyAll(wx, wxp)
+    // promisifyAll(wx, wxp)
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -49,8 +49,7 @@ Page({
         }
       })
     }
-    // const strings = await setStrings()
-    // console.log(await strings)
+    
     this.setData({strings: await setStrings(this.data.keys)})
     this.setData({user: await getCurrentUser()})
 
