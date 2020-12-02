@@ -2,6 +2,7 @@ class TrainingSession < ApplicationRecord
   serialize :queue, Array
   validates :begins_at, presence: true
   belongs_to :training
+  belongs_to :instructor, class_name: "User", foreign_key: :user_id
   has_many :bookings
   has_many :users, through: :bookings
 

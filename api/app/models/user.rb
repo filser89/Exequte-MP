@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_one :body
   has_many :bookings
   has_many :training_sessions, through: :bookings
+  has_many :training_sessions_as_instructor, class_name: "TrainingSession"
   has_many :memberships
   has_many :membership_types, through: :memberships
 
