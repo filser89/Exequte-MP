@@ -6,8 +6,9 @@ module Api
       def index
         # only for Admin user to check the users
         return render_success([]) unless current_user.admin
+
         @users = User.offset(offset_param).limit(per_param)
-        render_success(@users.map{|x| x.show_hash})
+        render_success(@users.map(&:show_hash))
       end
 
       def show
@@ -15,10 +16,12 @@ module Api
         render_success(@user.show_hash)
       end
 
+      def info
+        render_success(current_user.info_hash)
+      end
+
       def wx_login
         # every new user will login here and create a new user and issue an auth token
-        puts "Inside login"
-        p params
         js_code = params[:code]
 
         return render_error(I18n.t('errors.wechat.js_code_missing'), nil) unless js_code

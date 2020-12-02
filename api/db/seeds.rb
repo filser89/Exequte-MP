@@ -151,12 +151,16 @@ puts "Creating Test Users"
   puts "Created #{user.bookings.count - attended} cancelled bookings for #{user.name}"
 end
 
+Membership.create!(membership_type: MembershipType.first, user: User.first)
+
+puts "Created a membership it belongs to User.first "
+
 puts "=============================================="
 puts "Seeding is completed"
 puts "Created #{ClassType.count} Class Types"
 puts "Created #{Training.count} Trainings"
 puts "Created #{TrainingSession.count} Training Sessions"
 puts "Created #{MembershipType.count} Membership Types"
-puts "Created #{MembershipType.count} Membership Types"
+puts "Created #{Membership.count} Membership"
 puts "Created #{User.count} Users"
 puts "Created #{Booking.count} Bookings"
