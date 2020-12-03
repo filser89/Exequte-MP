@@ -1,24 +1,43 @@
 Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
+
+      # PAGES
+      post 'pages', to: "pages#make_strings"
+      # USERS
       resources :users, only: [:index, :show] do
         collection do
           post :wx_login
           get :info
         end
       end
-      post 'pages', to: "pages#make_strings"
+
+      # TRAINING_SESSIONS
       resources :training_sessions, only: [:index, :show] do
-        resources :bookings, only: [:create]
+        resources :bookings, only: [:create] do
+          collection do
+            get :attendance_list
+          end
+        end
         member do
           put :add_user_to_queue
         end
+        collection do
+          get :instructor_sessions
+        end
       end
+
+      # BOOKINGS
       resources :bookings, only: [] do
         member do
           put :cancel
         end
+        collection do
+          put :take_attendance
+        end
       end
+
+      # MEMBERSHIP_TYPES
       resources :membership_types, only: [:index] do
         resources :memberships, only: [:create]
       end
