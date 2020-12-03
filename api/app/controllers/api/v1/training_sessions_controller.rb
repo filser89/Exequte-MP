@@ -1,6 +1,8 @@
 module Api
   module V1
     class TrainingSessionsController < Api::BaseController
+      before_action :find_training_session, only: [:show, :add_user_to_queue]
+
       def index
         # need to add check that the current_user has no booking on this training session.
         # If has => don't add it to the array
@@ -17,24 +19,32 @@ module Api
       end
 
       def show
-        @training_session = TrainingSession.find(params[:id])
         h = training_session_to_hash(@training_session)
         h[:description] = @training_session.training.localize_description
         render_success(h)
       end
 
       def add_user_to_queue
-        training_session = TrainingSession.find(params[:id])
-        training_session.queue << current_user
-        render_success(training_session.standard_hash)
+        @training_session.queue << current_user
+        render_success(@training_session.standard_hash)
       end
 
-      # def instructor_index
-      #   @training_sessions = current_user.training_sessions_as_instructor.where(begins_at: )
-      #   render_success()
-      # end
+      # do I need to have a clouse that current_user.instructor
+      def instructor_sessions
+        history_ts = current_user.training_sessions_as_instructor.where('begins_at <= ?', DateTime.now).order(begins_at: :desc)
+        upcoming_ts = current_user.training_sessions_as_instructor.where('begins_at >= ?', DateTime.now).order(:begins_at)
+        sessions = {
+          history: history_ts.map(&:standard_hash),
+          upcoming: upcoming_ts.map(&:standard_hash)
+        }
+        render_success(sessions)
+      end
 
       private
+
+      def find_training_session
+        @training_session = TrainingSession.find(params[:id])
+      end
 
       def training_session_to_hash(training_session)
         h = training_session.standard_hash

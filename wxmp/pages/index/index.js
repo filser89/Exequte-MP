@@ -1,9 +1,22 @@
 //index.js
 //获取应用实例
-// import { promisifyAll, promisify } from 'miniprogram-api-promise';
-import { setStrings, getCurrentUser, getMembershipTypes, buyMembership, addUserToQueue } from '../../utils/requests';
 
-// const wxp = {}
+import {
+  setStrings,
+  getCurrentUser,
+  getMembershipTypes,
+  buyMembership,
+  addUserToQueue,
+  getInstructorSessions,
+  getAttendanceList,
+  createBooking,
+  cancelBooking,
+  getSession,
+  getSessions,
+  takeAttendance
+} from '../../utils/requests';
+
+
 const app = getApp()
 
 Page({
@@ -15,19 +28,18 @@ Page({
     keys: ['title', 'dog', 'focus']
   },
   //事件处理函数
-  bindViewTap: function() {
+  bindViewTap: function () {
     wxp.navigateTo({
       url: '../logs/logs'
     })
   },
   async onLoad() {
-    // promisifyAll(wx, wxp)
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
         hasUserInfo: true
       })
-    } else if (this.data.canIUse){
+    } else if (this.data.canIUse) {
       // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
       // 所以此处加入 callback 以防止这种情况
       app.userInfoReadyCallback = res => {
@@ -49,14 +61,26 @@ Page({
         }
       })
     }
-    
-    this.setData({strings: await setStrings(this.data.keys)})
-    this.setData({user: await getCurrentUser()})
-    this.setData({membershipTypes: await getMembershipTypes()})
 
+    this.setData({
+      strings: await setStrings(this.data.keys)
+    })
+    this.setData({
+      user: await getCurrentUser()
+    })
+    this.setData({
+      membershipTypes: await getMembershipTypes()
+    })
+    this.setData({
+      instructorSessions: await getInstructorSessions()
+    })
+    this.setData({
+      attendanceList: await getAttendanceList()
+    })
 
+    getAttendanceList
   },
-  getUserInfo: function(e) {
+  getUserInfo: function (e) {
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
@@ -66,66 +90,28 @@ Page({
   },
 
   getSessions() {
-    const page = this
-    wxp.request({
-      url: `${app.globalData.BASE_URL}/training_sessions`,
-      header: app.globalData.headers,
-      success: res => page.setData({sessions: res.data.data}),
-      fail: e => console.log("Failed!!!", e),
-      complete: () => console.log("Completed")
-
-    })
+    getSessions()
   },
-  getSession(){
-    const page = this
-    wxp.request({
-      url: `${app.globalData.BASE_URL}/training_sessions/34`,
-      header: app.globalData.headers,
-      success: res => page.setData({session: res.data.data}),
-      fail: e => console.log("Failed!!!", e),
-      complete: () => console.log("Completed")
-
-    })
+  getSession() {
+    getSession()
   },
-  createBooking(){
-    const page = this
-    wxp.request({
-      url: `${app.globalData.BASE_URL}/training_sessions/22/bookings`,
-      method: 'post',
-      header: app.globalData.headers,
-      data: {"booked_with": "voucher"},
-      success: res => console.log("Booking created!", res),
-      fail: e => console.log("Failed!!!", e),
-      complete: () => console.log("Completed")
-    })
+  createBooking() {
+    createBooking()
   },
   cancelBooking() {
-    wxp.request({
-      url: `${app.globalData.BASE_URL}/bookings/82/cancel`,
-      method: 'put',
-      header: app.globalData.headers,
-      data: {},
-      success: res => console.log("Booking canceled!", res),
-      fail: e => console.log("Failed!!!", e),
-      complete: () => console.log("Completed")
-    })
-  },
-  getCurrentUser() {
-    wxp.request({
-      url: `${app.globalData.BASE_URL}/users/info`,
-      header: app.globalData.headers,
-
-      success: res => wx.setStorageSync('current_user', res.data.data),
-      fail: e => console.log("Failed!!!", e),
-      complete: () => console.log("Completed")
-    })
+    cancelBooking()
   },
 
-  buyMembership(){
+  buyMembership() {
     buyMembership()
   },
-  async queueUp(){
-   const res = await addUserToQueue()
-   console.log(res)
+  async queueUp() {
+    const res = await addUserToQueue()
+    console.log(res)
+  },
+
+  takeAttendance() {
+    takeAttendance()
   }
+
 })

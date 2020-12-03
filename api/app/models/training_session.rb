@@ -6,8 +6,6 @@ class TrainingSession < ApplicationRecord
   has_many :bookings
   has_many :users, through: :bookings
 
-
-
   def standard_hash
     {
       id: id,
@@ -25,9 +23,7 @@ class TrainingSession < ApplicationRecord
 
   def begins_in_days
     (begins_at.midnight.to_datetime - DateTime.now.midnight).to_i
-
   end
-
 
   def can_book?
     training.capacity > bookings.where(cancelled: false).count
