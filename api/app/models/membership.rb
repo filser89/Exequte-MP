@@ -6,6 +6,10 @@ class Membership < ApplicationRecord
     days_since_created <= membership_type.duration
   end
 
+  def valid_till
+    created_at + membership_type.duration.days
+  end
+
   def days_left
     membership_type.duration - days_since_created
   end

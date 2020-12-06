@@ -44,14 +44,34 @@ puts "Created Training #{yoga.name}"
 
 # Up-coming sessions
 5.times do
-  session = TrainingSession.create!(begins_at: rand(DateTime.now..DateTime.now + 14.days), training: yoga, user: instructor)
+  session = TrainingSession.new(begins_at: rand(DateTime.now..DateTime.now + 14.days), training: yoga, instructor: instructor)
+  t = session.training
+  session.update!(duration: t.duration, capacity: t.capacity, calories: t.calories, name: t.name, cn_name: t.cn_name, description: t.description, cn_description: t.cn_description, class_kind: t.class_type.kind, cancel_before: t.class_type.cancel_before)
+  session.price_1 = t.class_type.price_1
+  session.price_2 = t.class_type.price_2
+  session.price_3 = t.class_type.price_3
+  session.price_4 = t.class_type.price_4
+  session.price_5 = t.class_type.price_5
+  session.price_6 = t.class_type.price_6
+  session.price_7 = t.class_type.price_7
+  session.save!
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
 # Past sessions
 
 5.times do
-  session = TrainingSession.create!(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: yoga, user: instructor)
+  session = TrainingSession.new(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: yoga, instructor: instructor)
+  t = session.training
+  session.update!(duration: t.duration, capacity: t.capacity, calories: t.calories, name: t.name, cn_name: t.cn_name, description: t.description, cn_description: t.cn_description, class_kind: t.class_type.kind, cancel_before: t.class_type.cancel_before)
+  session.price_1 = t.class_type.price_1
+  session.price_2 = t.class_type.price_2
+  session.price_3 = t.class_type.price_3
+  session.price_4 = t.class_type.price_4
+  session.price_5 = t.class_type.price_5
+  session.price_6 = t.class_type.price_6
+  session.price_7 = t.class_type.price_7
+  session.save!
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
@@ -60,14 +80,34 @@ puts "Created Training #{body_pump.name}"
 
 # Up-coming sessions
 5.times do
-  session = TrainingSession.create!(begins_at: rand(DateTime.now..DateTime.now + 14.days), training: body_pump, user: instructor)
+  session = TrainingSession.new(begins_at: rand(DateTime.now..DateTime.now + 14.days), training: body_pump, instructor: instructor)
+  t = session.training
+  session.update!(duration: t.duration, capacity: t.capacity, calories: t.calories, name: t.name, cn_name: t.cn_name, description: t.description, cn_description: t.cn_description, class_kind: t.class_type.kind, cancel_before: t.class_type.cancel_before)
+  session.price_1 = t.class_type.price_1
+  session.price_2 = t.class_type.price_2
+  session.price_3 = t.class_type.price_3
+  session.price_4 = t.class_type.price_4
+  session.price_5 = t.class_type.price_5
+  session.price_6 = t.class_type.price_6
+  session.price_7 = t.class_type.price_7
+  session.save!
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
 # Past sessions
 
 5.times do
-  session = TrainingSession.create!(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: body_pump, user: instructor)
+  session = TrainingSession.new(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: body_pump, instructor: instructor)
+  t = session.training
+  session.update!(duration: t.duration, capacity: t.capacity, calories: t.calories, name: t.name, cn_name: t.cn_name, description: t.description, cn_description: t.cn_description, class_kind: t.class_type.kind, cancel_before: t.class_type.cancel_before)
+  session.price_1 = t.class_type.price_1
+  session.price_2 = t.class_type.price_2
+  session.price_3 = t.class_type.price_3
+  session.price_4 = t.class_type.price_4
+  session.price_5 = t.class_type.price_5
+  session.price_6 = t.class_type.price_6
+  session.price_7 = t.class_type.price_7
+  session.save!
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
@@ -77,14 +117,34 @@ puts "Created Training #{stretching.name}"
 
 # Up-comming sessions
 5.times do
-  session = TrainingSession.create!(begins_at: rand(DateTime.now..DateTime.now + 14.days), training: stretching, user: instructor)
+  session = TrainingSession.new(begins_at: rand(DateTime.now..DateTime.now + 14.days), training: stretching, instructor: instructor)
+  t = session.training
+  session.update!(duration: t.duration, capacity: t.capacity, calories: t.calories, name: t.name, cn_name: t.cn_name, description: t.description, cn_description: t.cn_description, class_kind: t.class_type.kind, cancel_before: t.class_type.cancel_before)
+  session.price_1 = t.class_type.price_1
+  session.price_2 = t.class_type.price_2
+  session.price_3 = t.class_type.price_3
+  session.price_4 = t.class_type.price_4
+  session.price_5 = t.class_type.price_5
+  session.price_6 = t.class_type.price_6
+  session.price_7 = t.class_type.price_7
+  session.save!
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
 # Past sessions
 
 5.times do
-  session = TrainingSession.create!(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: stretching, user: instructor)
+  session = TrainingSession.new(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: stretching, instructor: instructor)
+  t = session.training
+  session.update!(duration: t.duration, capacity: t.capacity, calories: t.calories, name: t.name, cn_name: t.cn_name, description: t.description, cn_description: t.cn_description, class_kind: t.class_type.kind, cancel_before: t.class_type.cancel_before)
+  session.price_1 = t.class_type.price_1
+  session.price_2 = t.class_type.price_2
+  session.price_3 = t.class_type.price_3
+  session.price_4 = t.class_type.price_4
+  session.price_5 = t.class_type.price_5
+  session.price_6 = t.class_type.price_6
+  session.price_7 = t.class_type.price_7
+  session.save!
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
@@ -93,14 +153,34 @@ abs = Training.create!(name: "Abs workout", cn_name: "CHINESE Abs workout", calo
 puts "Created Training #{abs.name}"
 # Up-comming sessions
 5.times do
-  session = TrainingSession.create!(begins_at: rand(DateTime.now..DateTime.now + 14.days), user: instructor, training: abs)
+  session = TrainingSession.new(begins_at: rand(DateTime.now..DateTime.now + 14.days), instructor: instructor, training: abs)
+  t = session.training
+  session.update!(duration: t.duration, capacity: t.capacity, calories: t.calories, name: t.name, cn_name: t.cn_name, description: t.description, cn_description: t.cn_description, class_kind: t.class_type.kind, cancel_before: t.class_type.cancel_before)
+  session.price_1 = t.class_type.price_1
+  session.price_2 = t.class_type.price_2
+  session.price_3 = t.class_type.price_3
+  session.price_4 = t.class_type.price_4
+  session.price_5 = t.class_type.price_5
+  session.price_6 = t.class_type.price_6
+  session.price_7 = t.class_type.price_7
+  session.save!
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
 # Past sessions
 
 5.times do
-  session = TrainingSession.create!(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: abs, user: instructor)
+  session = TrainingSession.new(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: abs, instructor: instructor)
+  t = session.training
+  session.update!(duration: t.duration, capacity: t.capacity, calories: t.calories, name: t.name, cn_name: t.cn_name, description: t.description, cn_description: t.cn_description, class_kind: t.class_type.kind, cancel_before: t.class_type.cancel_before)
+  session.price_1 = t.class_type.price_1
+  session.price_2 = t.class_type.price_2
+  session.price_3 = t.class_type.price_3
+  session.price_4 = t.class_type.price_4
+  session.price_5 = t.class_type.price_5
+  session.price_6 = t.class_type.price_6
+  session.price_7 = t.class_type.price_7
+  session.save!
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
@@ -109,14 +189,34 @@ lifting = Training.create!(name: "Weight lifting", cn_name: "CHINESE Weight lift
 puts "Created Training #{lifting.name}"
 # Up-comming sessions
 5.times do
-  session = TrainingSession.create!(begins_at: rand(DateTime.now..DateTime.now + 14.days), training: lifting, user: instructor)
+  session = TrainingSession.new(begins_at: rand(DateTime.now..DateTime.now + 14.days), training: lifting, instructor: instructor)
+  t = session.training
+  session.update!(duration: t.duration, capacity: t.capacity, calories: t.calories, name: t.name, cn_name: t.cn_name, description: t.description, cn_description: t.cn_description, class_kind: t.class_type.kind, cancel_before: t.class_type.cancel_before)
+  session.price_1 = t.class_type.price_1
+  session.price_2 = t.class_type.price_2
+  session.price_3 = t.class_type.price_3
+  session.price_4 = t.class_type.price_4
+  session.price_5 = t.class_type.price_5
+  session.price_6 = t.class_type.price_6
+  session.price_7 = t.class_type.price_7
+  session.save!
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 
 # Past sessions
 
 5.times do
-  session = TrainingSession.create!(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: lifting, user: instructor)
+  session = TrainingSession.new(begins_at: rand(DateTime.now - 28.days..DateTime.now), training: lifting, instructor: instructor)
+  t = session.training
+  session.update!(duration: t.duration, capacity: t.capacity, calories: t.calories, name: t.name, cn_name: t.cn_name, description: t.description, cn_description: t.cn_description, class_kind: t.class_type.kind, cancel_before: t.class_type.cancel_before)
+  session.price_1 = t.class_type.price_1
+  session.price_2 = t.class_type.price_2
+  session.price_3 = t.class_type.price_3
+  session.price_4 = t.class_type.price_4
+  session.price_5 = t.class_type.price_5
+  session.price_6 = t.class_type.price_6
+  session.price_7 = t.class_type.price_7
+  session.save!
   puts "Created seession for #{session.training.name} at #{session.begins_at}"
 end
 

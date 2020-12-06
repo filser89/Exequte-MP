@@ -20,16 +20,17 @@ module Api
 
       def show
         h = training_session_to_hash(@training_session)
-        h[:description] = @training_session.training.localize_description
+        h[:description] = @training_session.localize_description
         render_success(h)
       end
 
       def add_user_to_queue
         @training_session.queue << current_user
+        @training_session.save
         render_success(@training_session.standard_hash)
       end
 
-      # do I need to have a clouse that current_user.instructor
+      # do I need to have a closure that current_user.instructor
       def instructor_sessions
         history_ts = current_user.training_sessions_as_instructor.where('begins_at <= ?', DateTime.now).order(begins_at: :desc)
         upcoming_ts = current_user.training_sessions_as_instructor.where('begins_at >= ?', DateTime.now).order(:begins_at)
@@ -53,10 +54,9 @@ module Api
       end
 
       def training_session_price(training_session)
-        class_type = training_session.training.class_type
-        kind = class_type.kind
+        kind = training_session.class_kind
         prices = current_user.prices
-        class_type.attributes[prices[kind]].fdiv(100)
+        training_session.attributes[prices[kind]].fdiv(100)
       end
     end
   end
