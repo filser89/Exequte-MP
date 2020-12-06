@@ -77,6 +77,9 @@ Page({
     this.setData({
       attendanceList: await getAttendanceList()
     })
+    this.setData({
+      sessions: await getSessions()
+    })
 
     getAttendanceList
   },
@@ -89,9 +92,6 @@ Page({
     })
   },
 
-  getSessions() {
-    getSessions()
-  },
   getSession() {
     getSession()
   },
@@ -106,8 +106,7 @@ Page({
     buyMembership()
   },
   async queueUp() {
-    const res = await addUserToQueue()
-    console.log(res)
+    addUserToQueue()
   },
 
   takeAttendance() {

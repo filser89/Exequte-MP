@@ -57,7 +57,7 @@ const buyMembership = () => {
 const addUserToQueue = () => {
   const options = {
     method: 'put',
-    url: '/training_sessions/1/add_user_to_queue',
+    url: '/training_sessions/32/add_user_to_queue',
   }
   return request(options)
 }

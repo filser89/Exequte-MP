@@ -10,7 +10,6 @@
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
   </view>
-  <button bindtap="getSessions">Get sessions</button>
   <button bindtap="getSession">Get session</button>
   <button bindtap="createBooking">Create booking</button>
   <button bindtap="cancelBooking">Cancel booking</button>

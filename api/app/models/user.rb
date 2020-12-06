@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   DEFAULT_NAME = "#{Rails.application.class.module_parent} User".freeze
-  ACTIVITY_LEVELS = [nil, "worker", "desk"]
+  ACTIVITY_LEVELS = [nil, "worker", "desk"].freeze
   validates :profession_activity_level, inclusion: { in: ACTIVITY_LEVELS }
   serialize :music_styles, Array
   has_one :body
@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_many :training_sessions, through: :bookings
   has_many :training_sessions_as_instructor, class_name: "TrainingSession"
   has_many :memberships
-  has_many :membership_types, through: :memberships
+  # has_many :membership_types, through: :memberships
 
 
   before_validation :set_defaults

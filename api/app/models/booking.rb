@@ -1,4 +1,5 @@
 class Booking < ApplicationRecord
+  monetize :price_cents
   belongs_to :user
   belongs_to :training_session
 
@@ -7,12 +8,13 @@ class Booking < ApplicationRecord
       id: id,
       name: user.name,
       date: training_session.begins_at,
-      training: training_session.training.localize_name,
+      training_session_id: training_session.id,
+      training: training_session.localize_name,
       booked_with: booked_with
     }
   end
 
   def cancelled_on_time?
-    ((training_session.begins_at - cancelled_at) * 24).to_i > training_session.training.class_type.cancel_before
+    ((training_session.begins_at - cancelled_at) * 24).to_i > training_session.cancel_before
   end
 end

@@ -1,4 +1,5 @@
 class TrainingSession < ApplicationRecord
+  monetize :price_1_cents, :price_2_cents, :price_3_cents, :price_4_cents, :price_5_cents, :price_6_cents, :price_7_cents
   serialize :queue, Array
   validates :begins_at, presence: true
   belongs_to :training
@@ -6,14 +7,19 @@ class TrainingSession < ApplicationRecord
   has_many :bookings
   has_many :users, through: :bookings
 
+  def show_hash
+    h = standard_hash
+    h[:description] = localize_description
+  end
+
   def standard_hash
     {
       id: id,
       begins_at: begins_at,
-      calories: training.calories,
-      duration: training.duration,
-      capacity: training.capacity,
-      name: training.localize_name,
+      calories: calories,
+      duration: duration,
+      capacity: capacity,
+      name: localize_name,
       class_type: training.class_type.kind,
       bookable: can_book?,
       begins_in_days: begins_in_days,

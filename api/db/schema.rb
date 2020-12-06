@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_02_122506) do
+ActiveRecord::Schema.define(version: 2020_12_06_063635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,29 @@ ActiveRecord::Schema.define(version: 2020_12_02_122506) do
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "begins_at", null: false
     t.bigint "user_id", null: false
+    t.integer "duration", null: false
+    t.integer "capacity", null: false
+    t.integer "calories"
+    t.string "name", null: false
+    t.string "cn_name", null: false
+    t.integer "price_1_cents", default: 0, null: false
+    t.string "price_1_currency", default: "CNY", null: false
+    t.integer "price_2_cents", default: 0, null: false
+    t.string "price_2_currency", default: "CNY", null: false
+    t.integer "price_3_cents", default: 0, null: false
+    t.string "price_3_currency", default: "CNY", null: false
+    t.integer "price_4_cents", default: 0, null: false
+    t.string "price_4_currency", default: "CNY", null: false
+    t.integer "price_5_cents", default: 0, null: false
+    t.string "price_5_currency", default: "CNY", null: false
+    t.integer "price_6_cents", default: 0, null: false
+    t.string "price_6_currency", default: "CNY", null: false
+    t.integer "price_7_cents", default: 0, null: false
+    t.string "price_7_currency", default: "CNY", null: false
+    t.string "description", null: false
+    t.string "cn_description", null: false
+    t.integer "class_kind", null: false
+    t.integer "cancel_before", null: false
     t.index ["training_id"], name: "index_training_sessions_on_training_id"
     t.index ["user_id"], name: "index_training_sessions_on_user_id"
   end

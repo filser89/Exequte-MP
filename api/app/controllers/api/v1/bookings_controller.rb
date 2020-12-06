@@ -6,13 +6,15 @@ module Api
       end
 
       def create
-        # Add that if the user is in queue for this TS, he should be removed from queue
         @booking = Booking.new(permitted_params)
         @booking.user = current_user
         @booking.training_session = @training_session
         if @booking.save
+          @training_session.queue.delete(current_user)
+          @training_session.save
           @booking.user.use_voucher! if @booking.booked_with == "voucher"
           render_success(@booking.standard_hash)
+
         else
           # render error
         end
