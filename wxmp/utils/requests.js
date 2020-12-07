@@ -15,10 +15,15 @@ const request = async (options) => {
       header: app.globalData.headers,
       data: options.data
     })
-    console.log(resp.data.data)
-    return resp.data.data
+    // return resp.statusCode === '200' ? resp.data.data : resp.data.error
+    if (resp.statusCode === 200) {
+      console.log(resp.data.data)
+      return resp.data.data
+    } else {
+      throw new Error(resp.data.error.message)
+    }
   } catch (e) {
-    console.log('fail:', e)
+    console.error(e.message)
   }
 }
 const setStrings = (keys) => {
@@ -35,7 +40,7 @@ const getCurrentUser = async () => {
     method: 'get',
     url: '/users/info',
   }
-return request(options)
+  return request(options)
 }
 
 const getMembershipTypes = () => {
@@ -50,6 +55,9 @@ const buyMembership = () => {
   const options = {
     method: 'post',
     url: '/membership_types/1/memberships',
+    data: {
+      start_date: new Date()
+    }
   }
   return request(options)
 }
@@ -81,8 +89,11 @@ const getAttendanceList = () => {
 const createBooking = () => {
   const options = {
     method: 'post',
-    url: '/training_sessions/32/bookings',
-    data: {"booked_with": "voucher"}
+    url: '/training_sessions/206/bookings',
+    data: {
+      booked_with: "membership",
+      membership_id: 3
+    }
   }
   return request(options)
 }
@@ -115,13 +126,16 @@ const takeAttendance = () => {
   const options = {
     method: 'put',
     url: '/bookings/take_attendance',
-    data: [{id: 62, attended: true}]
+    data: [{
+      id: 62,
+      attended: true
+    }]
   }
   return request(options)
 }
 
 module.exports = {
-  setStrings, 
+  setStrings,
   getCurrentUser,
   getMembershipTypes,
   buyMembership,

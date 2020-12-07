@@ -12,7 +12,7 @@ App({
   },
   onLaunch: function () {
 
-
+    promisifyAll(wx, wxp)
     const BASE_URL = 'http://localhost:3000/api/v1'
     const HEADERS = {
       'API-Key': 'ExeQuteapikey'
@@ -27,6 +27,8 @@ App({
     } else {
       this.login()
     }
+    this.getPhoneLanguage()
+    
     // // 获取用户信息
     // wx.getSetting({
     //   success: res => {
@@ -75,5 +77,12 @@ App({
     wx.reLaunch({
       url: '/pages/index/index',
     })
-  }
+  },
+  // get the user's phone language
+async getPhoneLanguage() {
+  const { language } = await wxp.getSystemInfo()
+  console.log('lang:', language)
+  return language
+}
+
 })

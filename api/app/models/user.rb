@@ -45,13 +45,9 @@ class User < ApplicationRecord
       email: email,
       gender: gender,
       admin: admin,
-      voucher_count: voucher_count,
-      membership: valid_membership ? valid_membership.standard_hash : ''
-    }
-  end
+      voucher_count: voucher_count
 
-  def valid_membership
-    memberships.find(&:is_valid?)
+    }
   end
 
   def prices
