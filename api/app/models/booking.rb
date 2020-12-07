@@ -2,6 +2,7 @@ class Booking < ApplicationRecord
   monetize :price_cents
   belongs_to :user
   belongs_to :training_session
+  belongs_to :membership, optional: true
 
   def standard_hash
     {

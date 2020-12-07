@@ -6,6 +6,8 @@ module Api
       end
 
       def create
+        return render_error('The class is full, please queue up') unless @training_session.can_book?
+
         @booking = Booking.new(permitted_params)
         @booking.user = current_user
         @booking.training_session = @training_session
@@ -52,7 +54,7 @@ module Api
       end
 
       def permitted_params
-        params.require(:booking).permit(:booked_with)
+        params.require(:booking).permit(:booked_with, :membership_id)
       end
     end
   end

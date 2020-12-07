@@ -164,7 +164,7 @@ mt_arr.each do |mt|
   puts "Created membership: #{membership_type.name}"
 end
 
-Membership.create!(membership_type: MembershipType.first, user: User.second)
+# Membership.create!(membership_type: MembershipType.first, user: User.second)
 
 puts "Created a membership it belongs to User.second "
 

@@ -24,6 +24,7 @@ class TrainingSession < ApplicationRecord
       bookable: can_book?,
       begins_in_days: begins_in_days,
       queue: queue.map(&:standard_hash)
+      # can_book_with: {'drop-in', 'voucher', 'membership' or membership: membership_hash}'}
     }
   end
 
@@ -32,6 +33,7 @@ class TrainingSession < ApplicationRecord
   end
 
   def can_book?
-    training.capacity > bookings.where(cancelled: false).count
+    capacity > bookings.where(cancelled: false).count
   end
+
 end

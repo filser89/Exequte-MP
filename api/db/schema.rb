@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_06_063635) do
+ActiveRecord::Schema.define(version: 2020_12_07_140206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(version: 2020_12_06_063635) do
     t.string "booked_with"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "membership_id"
+    t.index ["membership_id"], name: "index_bookings_on_membership_id"
     t.index ["training_session_id"], name: "index_bookings_on_training_session_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
@@ -80,6 +82,10 @@ ActiveRecord::Schema.define(version: 2020_12_06_063635) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "name", null: false
+    t.string "cn_name", null: false
+    t.integer "duration", null: false
+    t.date "start_date", null: false
     t.index ["membership_type_id"], name: "index_memberships_on_membership_type_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
@@ -162,6 +168,7 @@ ActiveRecord::Schema.define(version: 2020_12_06_063635) do
   end
 
   add_foreign_key "bodies", "users"
+  add_foreign_key "bookings", "memberships"
   add_foreign_key "bookings", "training_sessions"
   add_foreign_key "bookings", "users"
   add_foreign_key "memberships", "membership_types"

@@ -1,24 +1,23 @@
 class Membership < ApplicationRecord
   belongs_to :membership_type
   belongs_to :user
+  has_many :bookings
+  has_many :training_sessions, through: :bookings
 
-  def is_valid?
-    days_since_created <= membership_type.duration
+  def start_date
+    ts = training_sessions.order(:begins_at).first
+    ts.begins_at.midnight
   end
 
   def valid_till
-    created_at + membership_type.duration.days
-  end
-
-  def days_left
-    membership_type.duration - days_since_created
+    # -1 is minus 1 second so that the date valid_till displayed on frontend is last day of validity
+    start_date + duration.days - 1
   end
 
   def standard_hash
     {
       id: id,
-      name: membership_type.localize_name,
-      days_left: days_left
+      name: localize_name
     }
   end
 end
