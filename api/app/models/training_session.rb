@@ -23,7 +23,8 @@ class TrainingSession < ApplicationRecord
       class_type: training.class_type.kind,
       bookable: can_book?,
       begins_in_days: begins_in_days,
-      queue: queue.map(&:standard_hash)
+      queue: queue.map(&:standard_hash),
+      image_url: training.photo.service_url
       # can_book_with: {'drop-in', 'voucher', 'membership' or membership: membership_hash}'}
     }
   end
@@ -36,4 +37,7 @@ class TrainingSession < ApplicationRecord
     capacity > bookings.where(cancelled: false).count
   end
 
+  def localize_description
+    I18n.locale == :'zh-CN' ? cn_description : description
+  end
 end

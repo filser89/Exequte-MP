@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :trainings, only: %i[new create show]
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
 

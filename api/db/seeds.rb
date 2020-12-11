@@ -1,5 +1,6 @@
 # Destroy old stuff
-
+require 'open-uri'
+puts "#{Rails.application.config.active_job.queue_adapter}"
 puts "Destroying Data..."
 Booking.destroy_all
 TrainingSession.destroy_all
@@ -94,6 +95,7 @@ puts "Created ClassType #{free.name}"
 puts "=============================================="
 
 # Traiings and Training Sessions
+
 trainings_arr = [
   { name: "Yoga", description: "Stretch your body and mind with us", class_type: premium },
   { name: "Body Pump", description: "Go crazy with Body Pump", class_type: standard },
@@ -103,9 +105,20 @@ trainings_arr = [
 ]
 
 puts "Creating Trainings and Training Sessions"
+# require 'open-uri'
+url =
+  'https://s5o.ru/storage/simple/ru/edt/90/50/f5/37/rue5f231c5949.jpg'
+file = URI.open(url)
+
+def filename
+  "#{SecureRandom.hex(10)}.jpeg"
+end
+
+photo = { io: file, filename: filename }
 
 trainings_arr.each do |t|
   training = Training.create!(t_options(t))
+  training.photo.attach(photo)
 
   puts "Created Training #{training.name}"
 

@@ -10,12 +10,9 @@ class Training < ApplicationRecord
   belongs_to :class_type
   has_many :training_sessions
   has_many :bookings, through: :training_sessions
-
-
+  has_one_attached :photo
 
   def localize_description
     I18n.locale == :'zh-CN' ? cn_description : description
   end
-
-
 end

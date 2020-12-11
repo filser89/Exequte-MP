@@ -10,21 +10,31 @@
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
   </view>
+<view>
+  <!-- <Calendar dates="{{sessions.dates}}"/> -->
+</view>
+
+
+
+
+
   <button bindtap="getSession">Get session</button>
   <button bindtap="createBooking">Create booking</button>
   <button bindtap="cancelBooking">Cancel booking</button>
   <button bindtap="buyMembership">Buy Membership</button>
   <button bindtap="queueUp">QUEUE UP</button>
   <button bindtap="takeAttendance">Take attendance</button>
-
-  
+  <button open-type="getUserInfo" bindtap="getUserImage">User Image</button>
+  <view>{{upcase('test')}}</view>
+  <view>
+    
+  </view>
 </view>
 <view wx:if="{{strings}}">
   <view>{{strings.title}}</view>
   <view>{{strings.dog}}</view>
   <view>{{strings.focus}}</view>
-
-
-
-
 </view>
+<!-- <view wx:for="{{sessions.dates}}" wx:for-item="date" wx:for-index="idx">
+<view>{{date}}</view>
+</view> -->

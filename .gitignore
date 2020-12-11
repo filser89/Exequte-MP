@@ -36,3 +36,5 @@ api/yarn-debug.log*
 # Ignore Mac and Linux file system files
 *.swp
 .DS_Store
+
+api/downloaded_file
