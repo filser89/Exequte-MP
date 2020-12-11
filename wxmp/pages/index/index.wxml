@@ -16,8 +16,12 @@
   <button bindtap="buyMembership">Buy Membership</button>
   <button bindtap="queueUp">QUEUE UP</button>
   <button bindtap="takeAttendance">Take attendance</button>
-
-  
+  <button open-type="getUserInfo" bindtap="getUserImage">User Image</button>
+  <view>{{upcase('test')}}</view>
+  <view>
+    <image src="https://exequte-test.oss-cn-shanghai.aliyuncs.com/e5a72021163fbfb0876b02863d142d1b.jpeg">
+    </image>
+  </view>
 </view>
 <view wx:if="{{strings}}">
   <view>{{strings.title}}</view>

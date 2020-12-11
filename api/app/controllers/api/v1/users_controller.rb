@@ -47,6 +47,7 @@ module Api
         render_success({ user: user.show_hash, auth_token: auth_token })
       end
 
+
       private
 
       def permitted_params

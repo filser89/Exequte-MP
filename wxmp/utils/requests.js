@@ -7,6 +7,15 @@ const app = getApp()
 const wxp = {}
 promisifyAll(wx, wxp)
 
+const handleResponse = (resp) => {
+  if (resp.statusCode === 200) {
+    console.log(resp.data.data)
+    return resp.data.data
+  } else {
+    throw new Error(resp.data.error.message)
+  }
+}
+
 const request = async (options) => {
   try {
     let resp = await wxp.request({
@@ -15,13 +24,7 @@ const request = async (options) => {
       header: app.globalData.headers,
       data: options.data
     })
-    // return resp.statusCode === '200' ? resp.data.data : resp.data.error
-    if (resp.statusCode === 200) {
-      console.log(resp.data.data)
-      return resp.data.data
-    } else {
-      throw new Error(resp.data.error.message)
-    }
+    handleResponse(resp)
   } catch (e) {
     console.error(e.message)
   }

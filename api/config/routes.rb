@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
+  resources :trainings, only: %i[index show new create]
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-
       # PAGES
       post 'pages', to: "pages#make_strings"
       # USERS

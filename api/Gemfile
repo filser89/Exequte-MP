@@ -27,6 +27,8 @@ gem 'money-rails', '~>1.12'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
+
+gem 'simple_form'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
@@ -34,9 +36,10 @@ gem 'autoprefixer-rails'
 gem 'sidekiq'
 gem 'redis'
 gem 'httparty' # HTTP requests, API calls
-gem 'jwt' #authentication
+gem 'jwt' # authentication
 
 gem 'aliyun-sdk'
+gem 'activestorage-aliyun', '0.6.4'
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'

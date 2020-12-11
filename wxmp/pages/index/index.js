@@ -1,5 +1,12 @@
 //index.js
 //获取应用实例
+import {
+  promisifyAll,
+  promisify
+} from 'miniprogram-api-promise';
+
+
+const wxp = {}
 
 import {
   setStrings,
@@ -34,6 +41,7 @@ Page({
     })
   },
   async onLoad() {
+    promisifyAll(wx, wxp)
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -60,6 +68,7 @@ Page({
           })
         }
       })
+  
     }
 
     this.setData({
@@ -111,6 +120,16 @@ Page({
 
   takeAttendance() {
     takeAttendance()
+  },
+
+  async getUserImage(){
+   const {userInfo} = await wxp.getUserInfo()
+   console.log(userInfo.avatarUrl)
+  },
+
+  upcase(str){
+    return str.toUpperCase()
   }
+
 
 })
