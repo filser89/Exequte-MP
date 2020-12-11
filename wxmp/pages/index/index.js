@@ -65,18 +65,18 @@ Page({
     this.setData({
       strings: await setStrings(this.data.keys)
     })
-    this.setData({
-      user: await getCurrentUser()
-    })
-    this.setData({
-      membershipTypes: await getMembershipTypes()
-    })
-    this.setData({
-      instructorSessions: await getInstructorSessions()
-    })
-    this.setData({
-      attendanceList: await getAttendanceList()
-    })
+    // this.setData({
+    //   user: await getCurrentUser()
+    // })
+    // this.setData({
+    //   membershipTypes: await getMembershipTypes()
+    // })
+    // this.setData({
+    //   instructorSessions: await getInstructorSessions()
+    // })
+    // this.setData({
+    //   attendanceList: await getAttendanceList()
+    // })
     this.setData({
       sessions: await getSessions()
     })
