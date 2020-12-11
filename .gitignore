@@ -10,29 +10,28 @@ api/.bundle
 # Ignore all logfiles and tempfiles.
 api/log/*
 api/tmp/*
-!/log/.keep
-!/tmp/.keep
+!/api/log/.keep
 
 # Ignore pidfiles, but keep the directory.
-/tmp/pids/*
-!/tmp/pids/
-!/tmp/pids/.keep
+api/tmp/pids/*
+!/api//tmp/pids/
+!/api//tmp/pids/.keep
 
 # Ignore uploaded files in development.
 api/storage/*
 !/storage/.keep
 
-/public/assets
+api/public/assets
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
 api/config/master.key
 
-/public/packs
-/public/packs-test
-/node_modules
-/yarn-error.log
-yarn-debug.log*
+api/public/packs
+api/public/packs-test
+api/node_modules
+yarn-error.log
+api/yarn-debug.log*
 .yarn-integrity
 # Ignore Mac and Linux file system files
 *.swp
