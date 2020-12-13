@@ -1,2 +1,16 @@
 <!--pages/index/components/Schedule/Schedule.wxml-->
 <text>pages/index/components/Schedule/Schedule.wxml</text>
+<view>Dates:</view>
+<view wx:for="{{sessions.dates}}" wx:for-item="date" wx:for-index="i" wx:key="*this">
+  <view data-index="{{i}}" bindtap="toggleCurrent">
+    {{date}}
+  </view>
+</view>
+<view wx:for="{{sessions.sessions}}" wx:for-item="date" wx:for-index="i" wx:key="unique">
+  <view wx:if="{{current == i}}">
+    <DateSessions sessions="{{date}}" />
+    <!-- <view wx:for="{{date}}" wx:for-item="session" wx:for-index="n" wx:key="unique">
+      {{n}}:{{session.id}}
+    </view> -->
+  </view>
+</view>

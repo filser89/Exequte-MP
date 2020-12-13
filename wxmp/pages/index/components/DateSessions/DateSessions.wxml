@@ -1,0 +1,8 @@
+<!--pages/index/components/DateSessions/DateSessions.wxml-->
+<!-- <text>pages/index/components/DateSessions/DateSessions.wxml</text> -->
+<view>
+  <view wx:for="{{sessions}}" wx:for-item="session" wx:for-index="i" wx:key="unique">
+      {{i}}:{{session.name}}
+      <SessionItem />
+    </view>
+</view>
