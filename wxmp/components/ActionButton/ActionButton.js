@@ -28,6 +28,7 @@ Component({
       if(action == "bookClass"){
         this.bookClass()
       } else if(action == "queueUp"){
+        
         this.queueUp()
       }
 
