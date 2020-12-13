@@ -36,6 +36,14 @@ const getCurrentUser = async () => {
   return request(options)
 }
 
+const getBanner = async () => {
+  const options = {
+    method: 'get',
+    url: '/banners',
+  }
+  return request(options)
+}
+
 module.exports = {
   getStrings,
   getCurrentUser,
@@ -48,5 +56,6 @@ module.exports = {
   cancelBooking,
   getSession,
   getSessions,
-  takeAttendance
+  takeAttendance,
+  getBanner
 }

@@ -1,4 +1,7 @@
 <!--index.wxml-->
 <view class="container">
-  
+  <Banner url="{{banner.url}}" />
+</view>
+<view>
+  <Schedule sessions="{{sessions}}" />
 </view>

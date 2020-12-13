@@ -1,0 +1,5 @@
+<!--pages/index/components/Banner/Banner.wxml-->
+<text>pages/index/components/Banner/Banner.wxml</text>
+<view>
+  <image src="{{url}}"></image>
+</view>

@@ -42,6 +42,8 @@ Rails.application.routes.draw do
       resources :membership_types, only: [:index] do
         resources :memberships, only: [:create]
       end
+
+      resources :banners, only: [:index]
     end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

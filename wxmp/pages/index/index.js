@@ -61,7 +61,7 @@ Page({
       user: await getCurrentUser()
     })
     this.setData({
-      banner: await getBanner
+      banner: await getBanner()
     })
   
     this.setData({
