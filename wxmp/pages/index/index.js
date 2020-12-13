@@ -2,19 +2,11 @@
 //获取应用实例
 
 import {
-  setStrings,
+  getStrings,
   getCurrentUser,
-  getMembershipTypes,
-  buyMembership,
-  addUserToQueue,
-  getInstructorSessions,
-  getAttendanceList,
-  createBooking,
-  cancelBooking,
-  getSession,
-  getSessions,
-  takeAttendance
-} from '../../utils/requests';
+  getBanner,
+  getSessions
+} from '../../utils/requests/index';
 
 
 const app = getApp()
@@ -63,25 +55,18 @@ Page({
     }
 
     this.setData({
-      strings: await setStrings(this.data.keys)
+      strings: await getStrings(this.data.keys)
     })
-    // this.setData({
-    //   user: await getCurrentUser()
-    // })
-    // this.setData({
-    //   membershipTypes: await getMembershipTypes()
-    // })
-    // this.setData({
-    //   instructorSessions: await getInstructorSessions()
-    // })
-    // this.setData({
-    //   attendanceList: await getAttendanceList()
-    // })
+    this.setData({
+      user: await getCurrentUser()
+    })
+    this.setData({
+      banner: await getBanner
+    })
+  
     this.setData({
       sessions: await getSessions()
     })
-
-    getAttendanceList
   },
   getUserInfo: function (e) {
     console.log(e)
@@ -90,27 +75,6 @@ Page({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
-  },
-
-  getSession() {
-    getSession()
-  },
-  createBooking() {
-    createBooking()
-  },
-  cancelBooking() {
-    cancelBooking()
-  },
-
-  buyMembership() {
-    buyMembership()
-  },
-  async queueUp() {
-    addUserToQueue()
-  },
-
-  takeAttendance() {
-    takeAttendance()
   }
 
 })
