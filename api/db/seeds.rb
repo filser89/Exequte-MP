@@ -1,6 +1,5 @@
 # Destroy old stuff
 require 'open-uri'
-puts "#{Rails.application.config.active_job.queue_adapter}"
 puts "Destroying Data..."
 Booking.destroy_all
 TrainingSession.destroy_all
@@ -9,6 +8,7 @@ ClassType.destroy_all
 Membership.destroy_all
 User.destroy_all
 MembershipType.destroy_all
+Banner.destroy_all
 puts "=============================================="
 
 # Past and Future ranges
@@ -177,7 +177,18 @@ mt_arr.each do |mt|
   puts "Created membership: #{membership_type.name}"
 end
 
-# Membership.create!(membership_type: MembershipType.first, user: User.second)
+# Banner
+
+url =
+  'https://images.unsplash.com/photo-1607625004976-be5d015ed235?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'
+
+file = URI.open(url)
+
+photo = { io: file, filename: filename }
+
+banner = Banner.create!
+banner.photo.attach(photo)
+puts "Created a banner"
 
 puts "Created a membership it belongs to User.second "
 
@@ -190,3 +201,4 @@ puts "Created #{MembershipType.count} Membership Types"
 puts "Created #{Membership.count} Membership"
 puts "Created #{User.count} Users"
 puts "Created #{Booking.count} Bookings"
+puts "Created #{Banner.count} Banners"
