@@ -1,8 +1,10 @@
 <!--pages/index/components/DateSessions/DateSessions.wxml-->
 <!-- <text>pages/index/components/DateSessions/DateSessions.wxml</text> -->
 <view>
-  <view wx:for="{{sessions}}" wx:for-item="session" wx:for-index="i" wx:key="unique">
-      {{i}}:{{session.name}}
-      <SessionItem />
+  <view wx:if="{{sessions.length}}">
+    <view wx:for="{{sessions}}" wx:for-item="session" wx:for-index="i" wx:key="unique">
+      <SessionItem session="{{session}}" />
     </view>
+  </view>
+  <view wx:else> No sessions today </view>
 </view>

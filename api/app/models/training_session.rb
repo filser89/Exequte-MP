@@ -22,9 +22,10 @@ class TrainingSession < ApplicationRecord
       name: localize_name,
       class_type: training.class_type.kind,
       bookable: can_book?,
-      begins_in_days: begins_in_days,
       queue: queue.map(&:standard_hash),
-      image_url: training.photo.service_url
+      image_url: training.photo.service_url,
+      from: DateTimeService.time_24_h_m(begins_at),
+      to: DateTimeService.time_24_h_m(begins_at + duration.minutes)
       # can_book_with: {'drop-in', 'voucher', 'membership' or membership: membership_hash}'}
     }
   end
