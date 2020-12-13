@@ -1,15 +1,19 @@
 <!--pages/index/components/SessionItem/SessionItem.wxml-->
 <!-- <text>pages/index/components/SessionItem/SessionItem.wxml</text> -->
 <view>
-  <view bindtap="navigateToBooking">
+  <view data-id="{{session.id}}" bindtap="navigateToClassInfo">
   <image src="{{session.image_url}}"></image>
+  ID: {{session.id}}
   Name: {{session.name}}
   From: {{session.from}}
   To: {{session.to}}
   Duration: {{session.duration}}
   Calories: {{session.calories}}
   <view wx:if="{{session.bookable}}">
-  <button bindtap="createBooking">BOOK {{session.price}}</button>
+  <!-- <button bindtap="createBooking">BOOK {{session.price}}</button> -->
+  <ActionButton>
+    BOOK {{session.price}}
+  </ActionButton>
   </view>
   <view wx:else>
     <button bindtap="queueUp">QUEUE {{session.price}}</button>
