@@ -1,5 +1,19 @@
 <!--pages/index/components/SessionItem/SessionItem.wxml-->
-<text>pages/index/components/SessionItem/SessionItem.wxml</text>
+<!-- <text>pages/index/components/SessionItem/SessionItem.wxml</text> -->
 <view>
-  
+  <view bindtap="navigateToBooking">
+  <image src="{{session.image_url}}"></image>
+  Name: {{session.name}}
+  From: {{session.from}}
+  To: {{session.to}}
+  Duration: {{session.duration}}
+  Calories: {{session.calories}}
+  <view wx:if="{{session.bookable}}">
+  <button bindtap="createBooking">BOOK {{session.price}}</button>
+  </view>
+  <view wx:else>
+    <button bindtap="queueUp">QUEUE {{session.price}}</button>
+  </view>
 </view>
+</view>
+

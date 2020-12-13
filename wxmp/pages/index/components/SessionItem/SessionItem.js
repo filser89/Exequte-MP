@@ -4,7 +4,7 @@ Component({
    * Component properties
    */
   properties: {
-
+    session: Object
   },
 
   /**
@@ -18,6 +18,14 @@ Component({
    * Component methods
    */
   methods: {
+    navigateToBooking(){
 
+    },
+    queueUp(){
+
+    },
+    createBooking(){
+      
+    }
   }
 })

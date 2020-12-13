@@ -15,7 +15,7 @@ module Api
           training_sessions = sessions.map { |ts| training_session_to_hash(ts) }
           sessions_array << training_sessions
         end
-        render_success({sessions: sessions_array, dates: date_range.to_a})
+        render_success({ sessions: sessions_array, dates: date_range.to_a.map { |d| DateTimeService.date_wd_d_m(d) } })
       end
 
       def show
