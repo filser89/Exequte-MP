@@ -1,0 +1,3 @@
+<!--pages/class-info/class-info.wxml-->
+<text>pages/class-info/class-info.wxml</text>
+{{session.name}}

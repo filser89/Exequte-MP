@@ -8,10 +8,10 @@ const getInstructorSessions = () => {
   return request(options)
 }
 
-const getSession = () => {
+const getSession = (id) => {
   const options = {
     method: 'get',
-    url: '/training_sessions/34',
+    url: `/training_sessions/${id}`,
   }
   return request(options)
 }
