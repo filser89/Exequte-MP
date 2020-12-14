@@ -8,10 +8,10 @@ const getAttendanceList = () => {
   return request(options)
 }
 
-const createBooking = () => {
+const createBooking = (sessionId) => {
   const options = {
     method: 'post',
-    url: '/training_sessions/206/bookings',
+    url: `/training_sessions/${sessionId}/bookings`,
     data: {
       booked_with: "membership",
       membership_id: 3
