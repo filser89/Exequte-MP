@@ -15,6 +15,11 @@ puts "=============================================="
 past_range = DateTime.now - 28.days..DateTime.now
 future_range = DateTime.now..DateTime.now + 14.days
 
+# used to name files in cloud
+def filename
+  "#{SecureRandom.hex(10)}.jpeg"
+end
+
 # Options hashes for models
 
 
@@ -65,7 +70,22 @@ puts "Created #{users.count} Users"
 # Instructor
 puts "Creating Instructor"
 
-instructor = User.create!(name: "Mr. Instructor", instructor: true)
+url =
+  'https://i.pinimg.com/originals/b1/94/82/b19482a076bc6a51f713c37a54e7b615.jpg'
+file = URI.open(url)
+
+
+photo = { io: file, filename: filename }
+
+instructor = User.create!(
+  name: "Mr. Instructor",
+  instructor: true,
+  first_name: "Ekaterina",
+  last_name: "Gorbacheva",
+  instructor_bio: "This is bio",
+  cn_instructor_bio: "Chinese This is bio"
+)
+instructor.instructor_photo.attach(photo)
 
 puts "Created a coach: #{instructor.name}"
 
@@ -110,9 +130,6 @@ url =
   'https://s5o.ru/storage/simple/ru/edt/90/50/f5/37/rue5f231c5949.jpg'
 file = URI.open(url)
 
-def filename
-  "#{SecureRandom.hex(10)}.jpeg"
-end
 
 photo = { io: file, filename: filename }
 

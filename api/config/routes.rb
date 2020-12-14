@@ -11,6 +11,9 @@ Rails.application.routes.draw do
           post :wx_login
           get :info
         end
+        member do
+          get :instructor
+        end
       end
 
       # TRAINING_SESSIONS
@@ -24,6 +27,7 @@ Rails.application.routes.draw do
           put :add_user_to_queue
         end
         collection do
+          get :dates_list
           get :instructor_sessions
         end
       end

@@ -10,6 +10,14 @@ class TrainingSession < ApplicationRecord
   def show_hash
     h = standard_hash
     h[:description] = localize_description
+    h[:cancel_before] = cancel_before
+    h
+  end
+
+  def date_list_hash
+    h = standard_hash
+    h[:date] = DateTimeService.date_d_m_wd(begins_at)
+    h
   end
 
   def standard_hash
@@ -25,7 +33,11 @@ class TrainingSession < ApplicationRecord
       queue: queue.map(&:standard_hash),
       image_url: training.photo.service_url,
       from: DateTimeService.time_24_h_m(begins_at),
-      to: DateTimeService.time_24_h_m(begins_at + duration.minutes)
+      to: DateTimeService.time_24_h_m(begins_at + duration.minutes),
+      instructor_id: instructor.id,
+      training_id: training.id,
+      date: DateTimeService.date_long_wd_m_d_y(begins_at)
+
       # can_book_with: {'drop-in', 'voucher', 'membership' or membership: membership_hash}'}
     }
   end

@@ -1,0 +1,18 @@
+<!--pages/class-info/components/ClassDescription/ClassDescription.wxml-->
+<view>
+  <view>
+    <image src="{{session.image_url}}"></image>
+    Name: {{session.name}}
+    Description: {{session.description}}
+    Duration: {{session.duration}}
+    Calories: {{session.calories}}
+  </view>
+  <slot />
+  <view>
+    Cancel {{session.cancel_before}} hours
+    From: {{session.from}}
+    To: {{session.to}}
+    Price: {{session.price}}
+    Date: {{session.date}}
+  </view>
+</view>

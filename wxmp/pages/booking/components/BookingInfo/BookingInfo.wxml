@@ -1,0 +1,10 @@
+<!--pages/booking/components/BookingInfo/BookingInfo.wxml-->
+<view>
+  <image src="{{session.image_url}}"></image>
+  Name: {{session.name}}
+  Duration: {{session.duration}}
+  Date: {{session.date}}
+  From: {{session.from}}
+  To: {{session.to}}
+  Cancel: {{session.cancel_before}} hours
+</view>

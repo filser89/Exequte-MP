@@ -19,9 +19,9 @@ Component({
    */
   methods: {
     navigateToClassInfo(e) {
-      const id = e.currentTarget.dataset.id
+      const {sessionId, instructorId} = e.currentTarget.dataset  
       wx.navigateTo({
-        url: `../class-info/class-info?id=${id}`,
+        url: `../class-info/class-info?sessionId=${sessionId}&instructorId=${instructorId}`,
       })
     }
   }

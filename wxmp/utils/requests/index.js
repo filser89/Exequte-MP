@@ -4,7 +4,8 @@ import {
   getInstructorSessions,
   getSession,
   getSessions,
-  addUserToQueue
+  addUserToQueue,
+  getSessionDates
 } from './sessions'
 
 import {
@@ -19,6 +20,11 @@ import {
   buyMembership
 } from './memberships.js'
 
+import {
+  getInstructor,
+  getCurrentUser
+} from './users.js'
+
 const getStrings = (keys) => {
   const options = {
     method: 'post',
@@ -28,13 +34,7 @@ const getStrings = (keys) => {
   return request(options)
 }
 
-const getCurrentUser = async () => {
-  const options = {
-    method: 'get',
-    url: '/users/info',
-  }
-  return request(options)
-}
+
 
 const getBanner = async () => {
   const options = {
@@ -47,6 +47,7 @@ const getBanner = async () => {
 module.exports = {
   getStrings,
   getCurrentUser,
+  getInstructor,
   getMembershipTypes,
   buyMembership,
   addUserToQueue,
@@ -57,5 +58,6 @@ module.exports = {
   getSession,
   getSessions,
   takeAttendance,
-  getBanner
+  getBanner,
+  getSessionDates
 }

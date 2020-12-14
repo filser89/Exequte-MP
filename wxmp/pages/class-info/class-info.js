@@ -1,5 +1,8 @@
 // pages/class-info/class-info.js
-import {getSession} from  '../../utils/requests/index'
+import {
+  getSession,
+  getInstructor
+} from '../../utils/requests/index'
 Page({
 
   /**
@@ -13,57 +16,30 @@ Page({
    * Lifecycle function--Called when page load
    */
   async onLoad(options) {
-    console.log('options', options)
-    const sessionId = options.id
-    this.setData({session: await getSession(sessionId) })
+    // const {
+    //   sessionId,
+    //   instructorId,
+    //   trainingId
+    // } = options
+    // console.log(options)
+    // this.setData({
+    //   session: await getSession(sessionId),
+    //   instructor: await getInstructor(instructorId)
+    // })
+    this.setPageData(options)   
   },
-
-  /**
-   * Lifecycle function--Called when page is initially rendered
-   */
-  onReady: function () {
-
+ async updateSession({detail}){
+    console.log("updateSession", detail)
+    // const {newSessionId, newInstructorId} = detail
+    this.setPageData(detail)
   },
-
-  /**
-   * Lifecycle function--Called when page show
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page hide
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page unload
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * Page event handler function--Called when user drop down
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * Called when page reach bottom
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * Called when user click on the top right corner to share
-   */
-  onShareAppMessage: function () {
-
+  async setPageData(obj){
+    const {sessionId, instructorId} = obj
+    console.log(obj)
+    this.setData({
+      session: await getSession(sessionId),
+      instructor: await getInstructor(instructorId)
+    })
   }
+
 })
