@@ -1,0 +1,16 @@
+<!--pages/class-info/components/OtherDates/OtherDates.wxml-->
+<button data-training-id="{{session.training_id}}" bindtap="showOtherDates">Show dates</button>
+Current Session ID: {{session.id}} (can use it show selected item)
+<view wx:if="{{datesShown}}">
+<view bindtap="hideOtherDates">
+  <view wx:for="{{dates}}" wx:for-item="date" wx:for-index="i" wx:key="unique">
+    <view data-session-id="{{date.id}}" data-instructor-id="{{date.instructor_id}}" catchtap="switchSelectedDate" style="margin: 20px">
+      {{i}}
+      ID: {{date.id}}
+      Date: {{date.date}}
+      From: {{date.from}}
+      To: {{date.to}} 
+    </view>
+  </view>
+</view>
+</view>

@@ -25,17 +25,14 @@ Component({
   methods: {
     takeAction(e){
       const action =  e.currentTarget.dataset.action
-      if(action == "bookClass"){
-        this.bookClass()
+      if(action == "navigateToBooking"){
+        this.navigateToBooking()
       } else if(action == "queueUp"){
-
         this.queueUp()
       }
-      return false
-
     },
     
-    bookClass(){
+    navigateToBooking(){
       wx.navigateTo({
         url: `../../pages/booking/booking?id=${this.properties.itemId}`,
       })

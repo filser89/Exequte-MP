@@ -32,9 +32,18 @@ const addUserToQueue = (sessionId) => {
   return request(options)
 }
 
+const getSessionDates = (trainingId) =>{
+  const options = {
+    method: 'get',
+    url: `/training_sessions/dates_list?training_id=${trainingId}`,
+  }
+  return request(options)
+}
+
 module.exports = {
   getInstructorSessions,
   getSession,
   getSessions,
-  addUserToQueue
+  addUserToQueue,
+  getSessionDates
 }

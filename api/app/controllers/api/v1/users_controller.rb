@@ -2,7 +2,7 @@ module Api
   module V1
     class UsersController < Api::BaseController
       skip_before_action :authenticate_user_from_token!, only: [:wx_login]
-
+      before_action :find_user, only: %i[show instructor]
       def index
         # only for Admin user to check the users
         return render_success([]) unless current_user.admin
@@ -18,6 +18,10 @@ module Api
 
       def info
         render_success(current_user.info_hash)
+      end
+
+      def instructor
+        render_success(@user.instructor_hash)
       end
 
       def wx_login
@@ -48,6 +52,10 @@ module Api
       end
 
       private
+
+      def find_user
+        @user = User.find_by(id: params[:id])
+      end
 
       def permitted_params
         params.require(:user).permit(:name, :email, :city, :phone, :wechat, :gender)

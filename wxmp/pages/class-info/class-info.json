@@ -1,3 +1,9 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "ClassDescription": "./components/ClassDescription/ClassDescription",
+    "CoachCard": "./components/CoachCard/CoachCard",
+    "ClassDetails": "./components/ClassDetails/ClassDetails",
+    "ActionButton": "../../../../components/ActionButton/ActionButton",
+    "OtherDates": "./components/OtherDates/OtherDates"
+  }
 }

@@ -1,3 +1,10 @@
 <!--pages/class-info/class-info.wxml-->
 <text>pages/class-info/class-info.wxml</text>
-{{session.name}}
+<ClassDescription session="{{session}}">
+  <CoachCard instructor="{{instructor}}" />
+    <view>
+ <OtherDates bindchangedate="updateSession" session="{{session}}" selectedDateId="{{session.id}}" selectedInstructorId="{{session.instructor_id}}" />
+    </view>
+</ClassDescription>
+
+

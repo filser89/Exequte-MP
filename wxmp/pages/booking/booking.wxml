@@ -1,2 +1,6 @@
 <!--pages/booking/booking.wxml-->
-<text>pages/booking/booking.wxml</text>
+<BookingInfo session="{{session}}" />
+<view>
+  <view>Access Options</view>
+  
+</view>

@@ -2,7 +2,13 @@
   "pages":[
     "pages/index/index",
     "pages/booking/booking",
-    "pages/class-info/class-info"
+    "pages/class-info/class-info",
+    "pages/profile-update/profile-update",
+    "pages/profile/profile",
+    "pages/buy-membership/buy-membership",
+    "pages/about/about",
+    "pages/my-classes/my-classes",
+    "pages/class-attandence/class-attandence"
 
   ],
   "window":{

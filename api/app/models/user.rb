@@ -9,7 +9,7 @@ class User < ApplicationRecord
   has_many :training_sessions_as_instructor, class_name: "TrainingSession"
   has_many :memberships
   # has_many :membership_types, through: :memberships
-
+  has_one_attached :instructor_photo
 
   before_validation :set_defaults
 
@@ -33,6 +33,16 @@ class User < ApplicationRecord
     # Add new attributes here as shown below:
     # h[:images] = images
     return h
+  end
+
+  def instructor_hash
+    {
+      first_name: first_name,
+      last_name: last_name,
+      bio: localize_instructor_bio,
+      image_url: instructor_photo.service_url
+    }
+
   end
 
   def standard_hash
@@ -66,6 +76,10 @@ class User < ApplicationRecord
   def return_voucher!
     self.voucher_count += 1
     save
+  end
+
+  def localize_instructor_bio
+    I18n.locale == :'zh-CN' ? cn_instructor_bio : instructor_bio
   end
 
   private

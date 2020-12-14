@@ -1,4 +1,5 @@
 // pages/booking/booking.js
+import {getSession} from '../../utils/requests/index.js'
 Page({
 
   /**
@@ -11,9 +12,10 @@ Page({
   /**
    * Lifecycle function--Called when page load
    */
-  onLoad: function (options) {
-    
-   
+ async onLoad (options) {
+    console.log(options)
+    const {sessionId} = options
+    this.setData({session: await getSession(sessionId)})
   },
 
   /**
