@@ -11,12 +11,15 @@
   Calories: {{session.calories}}
   <view wx:if="{{session.bookable}}">
   <!-- <button bindtap="createBooking">BOOK {{session.price}}</button> -->
-  <ActionButton>
+  <ActionButton action="bookClass">
     BOOK {{session.price}}
   </ActionButton>
   </view>
   <view wx:else>
-    <button bindtap="queueUp">QUEUE {{session.price}}</button>
+    <!-- <button bindtap="queueUp">QUEUE {{session.price}}</button> -->
+    <ActionButton action="queueUp">
+    QUEUE {{session.price}}
+  </ActionButton>
   </view>
 </view>
 </view>

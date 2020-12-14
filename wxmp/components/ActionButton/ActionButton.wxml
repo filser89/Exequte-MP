@@ -1,5 +1,5 @@
 <!--components/ActionButton/ActionButton.wxml-->
 <!-- <text>components/ActionButton/ActionButton.wxml</text> -->
 <view>
-  <button bindtap="takeAction"> <slot /> </button>
+  <button data-action="{{action}}" bindtap="takeAction"> <slot /> </button>
 </view>
