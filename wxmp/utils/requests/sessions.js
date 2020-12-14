@@ -24,10 +24,10 @@ const getSessions = () => {
   return request(options)
 }
 
-const addUserToQueue = () => {
+const addUserToQueue = (sessionId) => {
   const options = {
     method: 'put',
-    url: '/training_sessions/32/add_user_to_queue',
+    url: `/training_sessions/${sessionId}/add_user_to_queue`,
   }
   return request(options)
 }

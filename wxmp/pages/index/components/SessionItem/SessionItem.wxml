@@ -2,25 +2,15 @@
 <!-- <text>pages/index/components/SessionItem/SessionItem.wxml</text> -->
 <view>
   <view data-id="{{session.id}}" bindtap="navigateToClassInfo">
-  <image src="{{session.image_url}}"></image>
-  ID: {{session.id}}
-  Name: {{session.name}}
-  From: {{session.from}}
-  To: {{session.to}}
-  Duration: {{session.duration}}
-  Calories: {{session.calories}}
-  <view wx:if="{{session.bookable}}">
-  <!-- <button bindtap="createBooking">BOOK {{session.price}}</button> -->
-  <ActionButton action="bookClass">
-    BOOK {{session.price}}
-  </ActionButton>
-  </view>
-  <view wx:else>
-    <!-- <button bindtap="queueUp">QUEUE {{session.price}}</button> -->
-    <ActionButton action="queueUp">
-    QUEUE {{session.price}}
-  </ActionButton>
+    <image src="{{session.image_url}}"></image>
+    ID: {{session.id}}
+    Name: {{session.name}}
+    From: {{session.from}}
+    To: {{session.to}}
+    Duration: {{session.duration}}
+    Calories: {{session.calories}}
+    <ActionButton itemId="{{session.id}}" action="{{session.bookable ? 'bookClass' : 'queueUp'}}">
+        {{session.bookable ? 'BOOK' : 'QUEUE'}} {{session.price}}
+      </ActionButton>
   </view>
 </view>
-</view>
-

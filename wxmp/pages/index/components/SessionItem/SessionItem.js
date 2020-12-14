@@ -18,17 +18,11 @@ Component({
    * Component methods
    */
   methods: {
-    navigateToClassInfo(e){
+    navigateToClassInfo(e) {
       const id = e.currentTarget.dataset.id
       wx.navigateTo({
         url: `../class-info/class-info?id=${id}`,
       })
-    },
-    queueUp(){
-
-    },
-    createBooking(){
-
     }
   }
 })

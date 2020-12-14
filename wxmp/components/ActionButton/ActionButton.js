@@ -1,10 +1,12 @@
 // components/ActionButton/ActionButton.js
+import {createBooking, addUserToQueue} from '../../utils/requests/index'
 Component({
   /**
    * Component properties
    */
   properties: {
-    action: String
+    action: String,
+    itemId: Number
   },
 
   /**
@@ -14,9 +16,7 @@ Component({
 
   },
   lifetimes: {
-    attached(){
-      console.log("properties", this.properties)
-    }
+    attached(){}
   },
 
   /**
@@ -28,19 +28,21 @@ Component({
       if(action == "bookClass"){
         this.bookClass()
       } else if(action == "queueUp"){
-        
+
         this.queueUp()
       }
+      return false
 
     },
     
     bookClass(){
-      console.log("BOOK CLASS!!!")
-
+      wx.navigateTo({
+        url: `../../pages/booking/booking?id=${this.properties.itemId}`,
+      })
     },
 
     queueUp(){
-      console.log("QUEUE UP!!")
+      addUserToQueue(this.properties.itemId)
     }
   }
 })
