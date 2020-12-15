@@ -6,7 +6,8 @@ Component({
    */
   properties: {
     action: String,
-    itemId: Number
+    itemId: Number,
+    btnDisabled: Boolean
   },
 
   /**
@@ -24,7 +25,8 @@ Component({
    */
   methods: {
     takeAction(e){
-      const action =  e.currentTarget.dataset.action
+      const {action} =  e.currentTarget.dataset
+      console.log("in action", e.currentTarget.dataset)
       if(action == "navigateToBooking"){
         this.navigateToBooking()
       } else if(action == "queueUp"){
@@ -38,8 +40,10 @@ Component({
       })
     },
 
-    queueUp(){
-      addUserToQueue(this.properties.itemId)
+    async queueUp(){
+      const session = await addUserToQueue(this.properties.itemId)
+      console.log(session)
+      this.triggerEvent('queuedup', session)
     }
   }
 })

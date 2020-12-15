@@ -1,6 +1,3 @@
 <!--pages/booking/booking.wxml-->
 <BookingInfo session="{{session}}" />
-<view>
-  <view>Access Options</view>
-  
-</view>
+<AccessOptions session="{{session}}" />

@@ -9,22 +9,20 @@ module Api
         @date_range.each do |date|
           time_range = date == Date.today ? Time.now..date.end_of_day : date.beginning_of_day..date.end_of_day
           sessions = TrainingSession.includes(:training, training: [:class_type]).where(begins_at: time_range)
-          training_sessions = sessions.map { |ts| training_session_to_hash(ts) }
+          training_sessions = sessions.map { |ts| ts_to_hash(ts) }
           sessions_array << training_sessions
         end
         render_success({ sessions: sessions_array, dates: @date_range.to_a.map { |d| DateTimeService.date_wd_d_m(d) } })
       end
 
       def show
-        h = training_session_to_hash(@training_session)
-        h.merge!(@training_session.show_hash)
-        render_success(h)
+        render_success(ts_to_show_hash(@training_session))
       end
 
       def add_user_to_queue
         @training_session.queue << current_user
         @training_session.save
-        render_success(@training_session.standard_hash)
+        render_success(ts_to_show_hash(@training_session))
       end
 
       # do I need to have a closure that current_user.instructor
@@ -49,7 +47,7 @@ module Api
           training_id: params[:training_id],
           begins_at: @date_range
         ).order(begins_at: :asc)
-        render_success(@training_sessions.map { |ts| training_session_to_hash(ts).merge!(ts.date_list_hash) })
+        render_success(@training_sessions.map { |ts| ts_to_hash(ts).merge!(ts.date_list_hash) })
       end
 
       private
@@ -58,13 +56,18 @@ module Api
         @date_range = (Date.today..13.days.from_now)
       end
 
+      def ts_to_show_hash(training_session)
+        ts_to_hash(training_session).merge!(training_session.show_hash)
+      end
+
       def find_training_session
         @training_session = TrainingSession.find(params[:id])
       end
 
-      def training_session_to_hash(training_session)
+      def ts_to_hash(training_session)
         h = training_session.standard_hash
         h[:price] = training_session_price(training_session)
+        h[:btn_pattern] = btn_pattern(training_session)
         h
       end
 
@@ -73,6 +76,28 @@ module Api
         prices = current_user.prices
         training_session.attributes[prices[kind]].fdiv(100)
       end
+
+      def btn_pattern(training_session)
+        booked = current_user.bookings.any? { |b| b.training_session.id == training_session.id && !b.cancelled }
+        queued_up = training_session.queue.include?(current_user)
+
+        return { disabled: true, action: nil, text: "BOOKED" } if booked
+        return { disabled: false, action: 'navigateToBooking', text: "BOOK" } if training_session.can_book? && !booked
+        return { disabled: true, action: nil, text: "WAITING" } if queued_up
+
+        { disabled: false, action: 'queueUp', text: "QUEUE UP" }
+      end
+
+      # def access_options(training_session)
+      #   return ['free'] if training_session.class_kind == 3
+
+      #   options = ['drop-in']
+      #   return options if training_session.class_kind == 1
+
+      #   options << 'voucher' if current_user.voucher_count.zero?
+      #   options << 'membership'
+      #   options
+      # end
     end
   end
 end

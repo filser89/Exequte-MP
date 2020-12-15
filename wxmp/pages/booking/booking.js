@@ -18,6 +18,8 @@ Page({
     this.setData({session: await getSession(sessionId)})
   },
 
+  
+
   /**
    * Lifecycle function--Called when page is initially rendered
    */

@@ -6,5 +6,7 @@
  <OtherDates bindchangedate="updateSession" session="{{session}}" selectedDateId="{{session.id}}" selectedInstructorId="{{session.instructor_id}}" />
     </view>
 </ClassDescription>
-
+<ActionButton bindqueuedup="handleQueuedUp" action="{{session.btn_pattern.action}}" itemId="{{session.id}}" btnDisabled="{{session.btn_pattern.disabled}}">
+  {{session.btn_pattern.text}}
+</ActionButton>
 
