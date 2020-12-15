@@ -16,21 +16,9 @@ Page({
    * Lifecycle function--Called when page load
    */
   async onLoad(options) {
-    // const {
-    //   sessionId,
-    //   instructorId,
-    //   trainingId
-    // } = options
-    // console.log(options)
-    // this.setData({
-    //   session: await getSession(sessionId),
-    //   instructor: await getInstructor(instructorId)
-    // })
     this.setPageData(options)   
   },
  async updateSession({detail}){
-    console.log("updateSession", detail)
-    // const {newSessionId, newInstructorId} = detail
     this.setPageData(detail)
   },
   async setPageData(obj){
@@ -40,6 +28,10 @@ Page({
       session: await getSession(sessionId),
       instructor: await getInstructor(instructorId)
     })
+  },
+  handleQueuedUp({detail}){
+    const session = detail
+    this.setData({session})
+    console.log(this.data.session)
   }
-
 })

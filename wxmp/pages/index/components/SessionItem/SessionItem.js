@@ -23,6 +23,11 @@ Component({
       wx.navigateTo({
         url: `../class-info/class-info?sessionId=${sessionId}&instructorId=${instructorId}`,
       })
+    },
+    handleQueuedUp({detail}){
+      const session = detail
+      this.setData({session})
+      console.log(this.data.session)
     }
   }
 })

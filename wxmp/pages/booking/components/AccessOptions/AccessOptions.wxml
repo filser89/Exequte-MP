@@ -1,2 +1,5 @@
 <!--pages/booking/components/AccessOptions/AccessOptions.wxml-->
-<text>pages/booking/components/AccessOptions/AccessOptions.wxml</text>
+<view>
+  <view>Access Options</view>
+    
+</view>
