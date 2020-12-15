@@ -1,3 +1,6 @@
 <!--pages/booking/booking.wxml-->
 <BookingInfo session="{{session}}" />
-<AccessOptions session="{{session}}" />
+<AccessOptions bindoptionchanged="handleOptionChange" session="{{session}}" membershipTypes="{{membershipTypes}}" selected="{{selected}}"/> 
+<ActionButton bindqueuedup="handleBooked" action="{{btnPattern.action}}" itemId="{{selected}}">
+  {{btnPattern.text}}
+</ActionButton>

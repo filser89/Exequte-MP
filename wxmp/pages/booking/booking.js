@@ -1,12 +1,17 @@
 // pages/booking/booking.js
-import {getSession} from '../../utils/requests/index.js'
+import {getSession, getMembershipTypes} from '../../utils/requests/index.js'
+const app = getApp()
 Page({
 
   /**
    * Page initial data
    */
   data: {
-
+    selected: 'drop-in',
+    btnPattern: {
+      action: 'navigateToPayment',
+      text: 'PAY'
+    }
   },
 
   /**
@@ -15,57 +20,14 @@ Page({
  async onLoad (options) {
     console.log(options)
     const {sessionId} = options
-    this.setData({session: await getSession(sessionId)})
+    this.setData({
+      session: await getSession(sessionId),
+      membershipTypes: await getMembershipTypes()
+    })
   },
-
   
-
-  /**
-   * Lifecycle function--Called when page is initially rendered
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page show
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page hide
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page unload
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * Page event handler function--Called when user drop down
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * Called when page reach bottom
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * Called when user click on the top right corner to share
-   */
-  onShareAppMessage: function () {
-
+  handleOptionChange({detail}){
+    this.setData(detail)
+    console.log("selected", this.data.selected)
   }
 })

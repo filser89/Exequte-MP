@@ -36,7 +36,7 @@ Component({
     
     navigateToBooking(){
       wx.navigateTo({
-        url: `../../pages/booking/booking?id=${this.properties.itemId}`,
+        url: `../../pages/booking/booking?sessionId=${this.properties.itemId}`,
       })
     },
 

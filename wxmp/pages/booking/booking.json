@@ -2,6 +2,7 @@
   "usingComponents": {
     "BookingInfo": "./components/BookingInfo/BookingInfo",
     "AccessOptions": "./components/AccessOptions/AccessOptions",
-    "PromoCode": "../../../../components/PromoCode/PromoCode"
+    "PromoCode": "../../../../components/PromoCode/PromoCode",
+    "ActionButton": "../../../../components/ActionButton/ActionButton"
   }
 }

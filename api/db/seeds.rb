@@ -179,10 +179,10 @@ puts "=============================================="
 puts "Creating Membership Types"
 
 mt_arr = [
-  { name:  "6 weeks unlimited", duration: 42 },
-  { name:  "6 weeks unlimited with smoothie", duration: 42 },
-  { name:  "12 weeks unlimited", duration: 84 },
-  { name:  "12 weeks unlimited with smoothie", duration: 84 }
+  { name:  "6 weeks unlimited", duration: 42, price: 1600 },
+  { name:  "6 weeks unlimited with smoothie", duration: 42, price: 2000 },
+  { name:  "12 weeks unlimited", duration: 84, price: 2600 },
+  { name:  "12 weeks unlimited with smoothie", duration: 84, price: 4500 }
 ]
 
 mt_arr.each do |mt|
