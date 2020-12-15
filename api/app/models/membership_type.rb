@@ -1,4 +1,5 @@
 class MembershipType < ApplicationRecord
+  monetize :price_cents
   validates :name, presence: true, uniqueness: true
   validates :cn_name, presence: true, uniqueness: true
   validates :duration, presence: true
@@ -10,7 +11,8 @@ class MembershipType < ApplicationRecord
     {
       id: id,
       name: localize_name,
-      duration: duration
+      duration: duration,
+      price: price.to_i
     }
   end
 end

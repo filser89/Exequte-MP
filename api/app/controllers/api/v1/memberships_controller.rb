@@ -6,8 +6,9 @@ module Api
         @membership = Membership.new(permitted_params)
         @membership.name = @membership_type.name
         @membership.cn_name = @membership_type.cn_name
-        @membership.duration = @membership_type.duration
+        @membership.end_date = end_date
         @membership.membership_type = @membership_type
+        @membership.price = @membership_type.price
         @membership.user = current_user
 
         if @membership.save
@@ -18,6 +19,10 @@ module Api
       end
 
       private
+
+      def end_date
+        @membership.start_date.midnight + @membership_type.duration.days - 1.second
+      end
 
       def permitted_params
         params.require(:membership).permit(:start_date)

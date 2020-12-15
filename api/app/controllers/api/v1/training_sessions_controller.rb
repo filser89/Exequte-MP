@@ -53,7 +53,9 @@ module Api
       private
 
       def choose_date_range
-        @date_range = (Date.today..13.days.from_now)
+        today = DateTime.now.midnight
+        last_day = today + 14.days - 1.second
+        @date_range = (today..last_day)
       end
 
       def ts_to_show_hash(training_session)
@@ -68,6 +70,8 @@ module Api
         h = training_session.standard_hash
         h[:price] = training_session_price(training_session)
         h[:btn_pattern] = btn_pattern(training_session)
+        h[:access_options] = access_options(training_session)
+        h[:usable_membership] = usable_membership(training_session)
         h
       end
 
@@ -88,16 +92,24 @@ module Api
         { disabled: false, action: 'queueUp', text: "QUEUE UP" }
       end
 
-      # def access_options(training_session)
-      #   return ['free'] if training_session.class_kind == 3
+      def access_options(training_session)
+        return { free: true } if training_session.class_kind == 3
 
-      #   options = ['drop-in']
-      #   return options if training_session.class_kind == 1
+        options = { drop_in: true }
+        return options if training_session.class_kind == 1
 
-      #   options << 'voucher' if current_user.voucher_count.zero?
-      #   options << 'membership'
-      #   options
-      # end
+        options[:voucher] = true unless current_user.voucher_count.zero?
+        options[:membership] = (usable_membership(training_session) ? 'membership' : 'buy-membership')
+        options
+      end
+
+      def usable_membership(training_session)
+        current_user.memberships.find_by(
+          'start_date <= ? AND end_date > ?',
+          training_session.begins_at,
+          training_session.begins_at
+        )
+      end
     end
   end
 end
