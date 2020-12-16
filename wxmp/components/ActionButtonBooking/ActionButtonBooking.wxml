@@ -1,0 +1,4 @@
+<!--components/ActionButtonBooking/ActionButtonBooking.wxml-->
+<view>
+  <button data-action="{{action}}" disabled="{{btnDisabled}}" catchtap="takeAction"> <slot /> </button>
+</view>

@@ -1,6 +1,12 @@
 <!--pages/booking/booking.wxml-->
 <BookingInfo session="{{session}}" />
-<AccessOptions bindoptionchanged="handleOptionChange" session="{{session}}" membershipTypes="{{membershipTypes}}" selected="{{selected}}"/> 
-<ActionButton bindqueuedup="handleBooked" action="{{btnPattern.action}}" itemId="{{selected}}">
+<AccessOptions bindoptionchanged="handleOptionChange" session="{{session}}" membershipTypes="{{membershipTypes}}" selected="{{selected}}"/>
+<view wx:if="{{selected == 'buy-membership' || selected == 'drop-in'}}" >
+  <PromoCode />
+</view>
+<view wx:if="{{selected == 'buy-membership'}}" >
+  <DateForm dates="{{session.dates_array}}" binddatechanged="handleDateChange"/>
+</view>
+<ActionButtonBooking bindqueuedup="handleBooked" action="{{btnPattern.action}}" params="{{btnPattern.params}}" itemId="{{selectedMembershipTypeId}}" >
   {{btnPattern.text}}
-</ActionButton>
+</ActionButtonBooking>

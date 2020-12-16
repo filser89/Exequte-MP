@@ -31,6 +31,12 @@ Component({
         this.navigateToBooking()
       } else if(action == "queueUp"){
         this.queueUp()
+      } else if (action == "makePayment"){
+        this.makePayment()
+      } else if (action == "bookClass"){
+        this.bookClass()
+      } else {
+        console.log("Unknow action")
       }
     },
     
@@ -44,6 +50,10 @@ Component({
       const session = await addUserToQueue(this.properties.itemId)
       console.log(session)
       this.triggerEvent('queuedup', session)
-    }
+    },
+    async makePayment(){
+      console.log("Payment is made")
+      this.triggerEvent('classbooked')
+    },
   }
 })

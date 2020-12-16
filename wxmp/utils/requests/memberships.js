@@ -8,12 +8,12 @@ const getMembershipTypes = () => {
   return request(options)
 }
 
-const buyMembership = () => {
+const buyMembership = (membershipTypeId, params) => {
   const options = {
     method: 'post',
-    url: '/membership_types/1/memberships',
+    url: `/membership_types/${membershipTypeId}/memberships`,
     data: {
-      start_date: new Date()
+      params
     }
   }
   return request(options)
