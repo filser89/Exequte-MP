@@ -1,0 +1,3 @@
+<!--pages/booking/components/PromoCodeInput/PromoCodeInput.wxml-->
+<input placeholder="Enter Promo Code" value="{{value}}" bindinput="onChange" ></input>
+

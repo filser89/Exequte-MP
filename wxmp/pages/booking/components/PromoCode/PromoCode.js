@@ -18,6 +18,11 @@ Component({
    * Component methods
    */
   methods: {
-
+    formSubmit ({detail}) {
+      console.info( "Promocode", detail.value)
+      const {promoCode} = detail.value
+      console.log("Promocode logic goes here")
+      // submit promocode to backend
+    },
   }
 })

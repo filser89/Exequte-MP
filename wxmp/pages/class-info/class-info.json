@@ -3,7 +3,7 @@
     "ClassDescription": "./components/ClassDescription/ClassDescription",
     "CoachCard": "./components/CoachCard/CoachCard",
     "ClassDetails": "./components/ClassDetails/ClassDetails",
-    "ActionButton": "../../../../components/ActionButton/ActionButton",
+    "ActionButtonSession": "../../../../components/ActionButtonSession/ActionButtonSession",
     "OtherDates": "./components/OtherDates/OtherDates"
   }
 }

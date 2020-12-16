@@ -1,0 +1,6 @@
+<!--components/PromoCode/PromoCode.wxml-->
+<form bindsubmit="formSubmit">
+  <text>Add Promo Code</text>
+  <PromoCodeInput name="promoCode"></PromoCodeInput>
+  <button form-type="submit">Use Promo Code</button>
+</form>

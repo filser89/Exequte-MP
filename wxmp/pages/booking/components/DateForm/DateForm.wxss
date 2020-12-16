@@ -1,0 +1,6 @@
+/* pages/booking/components/DateForm/DateForm.wxss */
+
+.picker{
+    padding: 13px;
+    background-color: #FFFFFF;
+}

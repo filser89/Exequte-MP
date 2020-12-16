@@ -1,0 +1,18 @@
+<!--pages/booking/components/DateForm/DateForm.wxml-->
+<!-- <view class="section">
+  <view class="section__title">Choose Date</view>
+  <picker mode="date" value="{{date}}" start="2020-09-01" end="2017-09-01" bindchange="bindDateChange">
+    <view class="picker">
+      Date: {{date}}
+    </view>
+  </picker>
+</view> -->
+
+<view class="section">
+  <view class="section__title">Choose Date</view>
+  <picker bindchange="bindPickerChange" value="{{index}}" range="{{dates}}">
+    <view class="picker">
+      Date：{{dates[index]}}
+    </view>
+  </picker>
+</view>
