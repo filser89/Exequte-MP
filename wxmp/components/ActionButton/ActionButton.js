@@ -1,5 +1,5 @@
-// components/ActionButtonBooking/ActionButtonBooking.js
-import {createBooking, buyMembership} from '../../utils/requests/index'
+// components/ActionButton/ActionButton.js
+import {createBooking, buyMembership, addUserToQueue, } from '../../utils/requests/index'
 Component({
   /**
    * Component properties
@@ -22,7 +22,7 @@ Component({
   },
   lifetimes: {
     attached(){
-      console.log(this.data)
+      // console.log(this.data)
     }
   },
 
@@ -37,13 +37,17 @@ Component({
         this.buyMembership()
       } else if(action == "bookClass"){
         this.bookClass()
-      }  else {
+      } else if(action == "queueUp"){
+        this.queueUp()
+      } else if(action == "navigateToBooking"){
+        this.navigateToBooking()
+      } else if(action == "reLaunchToMyClasses"){
+        this.reLaunchToMyClasses()
+      } else {
         console.log("Unknow action")
       }
     },
     
-
-
     async buyMembership(){
       console.log("buyMembership",this.data.params)
       const membership = await buyMembership(this.data.itemId, this.data.params)
@@ -57,6 +61,24 @@ Component({
  wx.redirectTo({
    url: `../../pages/booking-confirmation/booking-confirmation?bookingId=${booking.id}`,
  })
+    },
+
+    async queueUp(){
+      const session = await addUserToQueue(this.properties.itemId)
+      console.log(session)
+      this.triggerEvent('queuedup', session)
+    },
+
+    navigateToBooking(){
+      wx.navigateTo({
+        url: `../../pages/booking/booking?sessionId=${this.properties.itemId}`,
+      })
+    },
+
+    reLaunchToMyClasses(){
+      wx.reLaunch({
+        url: '../../pages/my-classes/my-classes'
+      })
     }
 
   }

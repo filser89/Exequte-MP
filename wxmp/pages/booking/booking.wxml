@@ -1,12 +1,17 @@
 <!--pages/booking/booking.wxml-->
-<BookingInfo session="{{session}}" />
-<AccessOptions bindoptionchanged="handleOptionChange" session="{{session}}" membershipTypes="{{membershipTypes}}" selected="{{selected}}"/>
-<view wx:if="{{selected == 'buy-membership' || selected == 'drop-in'}}" >
-  <PromoCode />
+<view class="container">
+  <BookingInfo session="{{session}}" />
+  <AccessOptions bindoptionchanged="handleOptionChange" session="{{session}}" membershipTypes="{{membershipTypes}}"
+    selected="{{selected}}" />
+  <view wx:if="{{selected == 'buy-membership' || selected == 'drop-in'}}">
+    <PromoCode />
+  </view>
+  <view wx:if="{{selected == 'buy-membership'}}">
+    <DateForm dates="{{session.dates_array}}" binddatechanged="handleDateChange" />
+  </view>
+  <ActionButton bindclassbooked="handleClassBooked" bindmembershipbought="handleMembershipBought"
+    action="{{btnPattern.action}}" params="{{btnPattern.params}}"
+    itemId="{{selected == 'buy-membership' ? selectedMembershipTypeId : session.id}}">
+    {{btnPattern.text}}
+  </ActionButton>
 </view>
-<view wx:if="{{selected == 'buy-membership'}}" >
-  <DateForm dates="{{session.dates_array}}" binddatechanged="handleDateChange"/>
-</view>
-<ActionButtonBooking bindclassbooked="handleClassBooked" bindmembershipbought="handleMembershipBought" action="{{btnPattern.action}}" params="{{btnPattern.params}}" itemId="{{selected == 'buy-membership' ? selectedMembershipTypeId : session.id}}" >
-  {{btnPattern.text}}
-</ActionButtonBooking>

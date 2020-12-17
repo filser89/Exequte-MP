@@ -1,4 +1,7 @@
 <!--pages/booking-confirmation/booking-confirmation.wxml-->
 <BookingInfo session="{{booking.session}}" />
 <view>Class Booked</view>
+<ActionButton action="reLaunchToMyClasses">
+  Go to my classes
+</ActionButton>
 <TabBar />

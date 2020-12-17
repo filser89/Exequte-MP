@@ -4,6 +4,6 @@
     "AccessOptions": "./components/AccessOptions/AccessOptions",
     "PromoCode": "./components/PromoCode/PromoCode",
     "DateForm": "./components/DateForm/DateForm",
-    "ActionButtonBooking": "../../../../components/ActionButtonBooking/ActionButtonBooking"
+    "ActionButton": "../../../../components/ActionButton/ActionButton"
   }
 }
