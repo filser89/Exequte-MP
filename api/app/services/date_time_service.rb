@@ -14,4 +14,8 @@ class DateTimeService
   def self.date_d_m_wd(datetime)
     datetime.strftime("%e/%-m %a") # "14/7 Tue"
   end
+
+  def self.date_y_m_d(datetime)
+    datetime.strftime("%Y-%m-%d")
+  end
 end

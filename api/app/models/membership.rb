@@ -5,10 +5,6 @@ class Membership < ApplicationRecord
   has_many :bookings
   has_many :training_sessions, through: :bookings
 
-  def valid_till
-    # -1 is minus 1 second so that the date valid_till displayed on frontend is last day of validity
-    start_date + duration.days - 1
-  end
 
   def standard_hash
     {
@@ -16,7 +12,7 @@ class Membership < ApplicationRecord
       name: localize_name,
       price: price.to_i,
       start_date: start_date,
-      valid_till: valid_till
+      end_date: end_date
     }
   end
 end

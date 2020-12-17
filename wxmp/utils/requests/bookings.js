@@ -1,5 +1,13 @@
 import {request} from './request'
 
+const getBooking = (bookingId) => {
+  const options = {
+    method: 'get',
+    url: `/bookings/${bookingId}`,
+  }
+  return request(options)
+}
+
 const getAttendanceList = () => {
   const options = {
     method: 'get',
@@ -8,13 +16,12 @@ const getAttendanceList = () => {
   return request(options)
 }
 
-const createBooking = (sessionId) => {
+const createBooking = (sessionId, params) => {
   const options = {
     method: 'post',
     url: `/training_sessions/${sessionId}/bookings`,
     data: {
-      booked_with: "membership",
-      membership_id: 3
+      ...params
     }
   }
   return request(options)
@@ -39,6 +46,7 @@ const takeAttendance = () => {
   return request(options)
 }
 module.exports = {
+  getBooking,
   getAttendanceList,
   createBooking,
   cancelBooking,

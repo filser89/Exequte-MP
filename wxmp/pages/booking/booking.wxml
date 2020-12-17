@@ -7,6 +7,6 @@
 <view wx:if="{{selected == 'buy-membership'}}" >
   <DateForm dates="{{session.dates_array}}" binddatechanged="handleDateChange"/>
 </view>
-<ActionButtonBooking bindqueuedup="handleBooked" action="{{btnPattern.action}}" params="{{btnPattern.params}}" itemId="{{selectedMembershipTypeId}}" >
+<ActionButtonBooking bindclassbooked="handleClassBooked" bindmembershipbought="handleMembershipBought" action="{{btnPattern.action}}" params="{{btnPattern.params}}" itemId="{{selected == 'buy-membership' ? selectedMembershipTypeId : session.id}}" >
   {{btnPattern.text}}
 </ActionButtonBooking>

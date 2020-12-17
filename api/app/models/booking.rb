@@ -4,6 +4,12 @@ class Booking < ApplicationRecord
   belongs_to :training_session
   belongs_to :membership, optional: true
 
+  def show_hash
+    h = standard_hash
+    h[:session] = training_session.show_hash
+    h
+  end
+
   def standard_hash
     {
       id: id,
