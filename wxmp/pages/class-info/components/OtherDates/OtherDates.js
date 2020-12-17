@@ -36,7 +36,7 @@ Component({
         sessionId: this.data.selectedDateId,
         instructorId: this.data.selectedInstructorId
       }
-      this.triggerEvent('changedate', detail)
+      this.triggerEvent('changeddate', detail)
       this.setData({datesShown: false})
     }
   }

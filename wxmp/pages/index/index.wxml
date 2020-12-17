@@ -1,8 +1,8 @@
 <!--index.wxml-->
-<view class="container">
+<view class="container" style="margin-bottom: 10px">
   <Banner url="{{banner.url}}" />
+  <view>
+    <Schedule sessions="{{sessions}}" />
+  </view>
+  <TabBar />
 </view>
-<view>
-  <Schedule sessions="{{sessions}}" />
-</view>
-<TabBar />

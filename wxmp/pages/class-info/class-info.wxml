@@ -3,10 +3,10 @@
 <ClassDescription session="{{session}}">
   <CoachCard instructor="{{instructor}}" />
     <view>
- <OtherDates bindchangedate="updateSession" session="{{session}}" selectedDateId="{{session.id}}" selectedInstructorId="{{session.instructor_id}}" />
+ <OtherDates bindchangeddate="handleChangedDate" session="{{session}}" selectedDateId="{{session.id}}" selectedInstructorId="{{session.instructor_id}}" />
     </view>
 </ClassDescription>
-<ActionButtonSession bindqueuedup="handleQueuedUp" action="{{session.btn_pattern.action}}" itemId="{{session.id}}" btnDisabled="{{session.btn_pattern.disabled}}">
-  {{session.btn_pattern.text}}
-</ActionButtonSession>
+<ActionButton bindqueuedup="handleQueuedUp" action="{{btnPattern.action}}" itemId="{{btnPattern.sessionId}}" btnDisabled="{{btnPattern.disabled}}">
+  {{btnPattern.text}}
+</ActionButton>
 

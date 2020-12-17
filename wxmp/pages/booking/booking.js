@@ -28,6 +28,7 @@ Page({
     } = options
 
     const session = await getSession(sessionId)
+    const membershipTypes = await getMembershipTypes()
     const selected = this.setSelected(session.access_options)
     const btnPattern = this.setBtnPattern(selected)
     const membershipDate = session.membership_date
@@ -36,7 +37,7 @@ Page({
       selected,
       btnPattern,
       membershipDate,
-      membershipTypes: await getMembershipTypes(),
+      membershipTypes
     })
   },
 
@@ -78,6 +79,7 @@ Page({
     console.log("setBtnPattern", accessOption)
     switch (accessOption) {
       case 'free':
+        console.log('in free')
         this.setData({
           btnPattern: {
             action: 'bookClass',
@@ -87,9 +89,9 @@ Page({
             }
           }
         })
-        this.
         break
       case 'drop-in':
+        console.log('in drop-in')
         this.setData({
           btnPattern: {
             action: 'bookClass',

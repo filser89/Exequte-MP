@@ -70,7 +70,13 @@
         {
           "name": "pages/booking/booking",
           "pathName": "pages/booking/booking",
-          "query": "sessionId=539",
+          "query": "sessionId=589",
+          "scene": null
+        },
+        {
+          "name": "pages/booking-confirmation/booking-confirmation",
+          "pathName": "pages/booking-confirmation/booking-confirmation",
+          "query": "bookingId=1549",
           "scene": null
         }
       ]
