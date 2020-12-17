@@ -1,3 +1,4 @@
 <!--pages/booking-confirmation/booking-confirmation.wxml-->
 <BookingInfo session="{{booking.session}}" />
 <view>Class Booked</view>
+<TabBar />

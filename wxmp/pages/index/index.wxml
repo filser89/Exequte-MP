@@ -5,3 +5,4 @@
 <view>
   <Schedule sessions="{{sessions}}" />
 </view>
+<TabBar />
