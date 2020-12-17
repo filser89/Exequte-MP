@@ -36,10 +36,14 @@ class TrainingSession < ApplicationRecord
       to: DateTimeService.time_24_h_m(begins_at + duration.minutes),
       instructor_id: instructor.id,
       training_id: training.id,
-      date: DateTimeService.date_long_wd_m_d_y(begins_at)
-
-      # can_book_with: {'drop-in', 'voucher', 'membership' or membership: membership_hash}'}
+      date: DateTimeService.date_long_wd_m_d_y(begins_at),
+      dates_array: dates_for_membership,
+      membership_date: begins_at.midnight
     }
+  end
+
+  def dates_for_membership
+    (DateTime.now.midnight..begins_at).to_a.reverse.map { |d| DateTimeService.date_y_m_d(d) }
   end
 
   def begins_in_days

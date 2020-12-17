@@ -33,7 +33,7 @@ Rails.application.routes.draw do
       end
 
       # BOOKINGS
-      resources :bookings, only: [] do
+      resources :bookings, only: [:show] do
         member do
           put :cancel
         end

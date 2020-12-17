@@ -1,8 +1,13 @@
 module Api
   module V1
     class BookingsController < Api::BaseController
-      before_action :find_training_session, only: [:create, :attendance_list]
+      before_action :find_training_session, only: %i[create attendance_list]
+      before_action :find_booking, only: %i[show cancel]
       def index
+      end
+
+      def show
+        render_success(@booking.show_hash)
       end
 
       def create
@@ -23,7 +28,6 @@ module Api
       end
 
       def cancel
-        @booking = Booking.find(params[:id])
         @booking.cancelled = true
         @booking.cancelled_at = DateTime.now
         if @booking.save
@@ -48,6 +52,10 @@ module Api
       end
 
       private
+
+      def find_booking
+        @booking = Booking.find(params[:id])
+      end
 
       def find_training_session
         @training_session = TrainingSession.find(params[:training_session_id])

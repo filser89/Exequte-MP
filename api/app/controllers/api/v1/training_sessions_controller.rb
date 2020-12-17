@@ -99,7 +99,7 @@ module Api
         return options if training_session.class_kind == 1
 
         options[:voucher] = true unless current_user.voucher_count.zero?
-        options[:membership] = (usable_membership(training_session) ? 'membership' : 'buy-membership')
+        options[:membership] = membership_option(training_session)
         options
       end
 
@@ -109,6 +109,20 @@ module Api
           training_session.begins_at,
           training_session.begins_at
         )
+      end
+
+      def upcoming_membership(training_session)
+        current_user.memberships.find_by(
+          'start_date >  ?',
+          training_session.begins_at
+        )
+      end
+
+      def membership_option(training_session)
+        return 'membership' if usable_membership(training_session)
+
+        'buy-membership' unless upcoming_membership(training_session)
+
       end
     end
   end

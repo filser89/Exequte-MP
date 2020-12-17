@@ -40,6 +40,7 @@ Page({
     })
   },
 
+ //event handlers
   handleOptionChange({
     detail
   }) {
@@ -47,20 +48,30 @@ Page({
     console.log("detail", detail)
     this.setBtnPattern(detail.selected)
   },
-  setSelected(accessOptions) {
-    return accessOptions.hasOwnProperty('drop-in') ? 'drop-in' : 'free'
-  },
+
   handleDateChange({
     detail
   }) {
     console.log("handleDateChange", detail)
-    const {
-      membershipDateString
-    } = detail
+    const membershipDate = JSON.stringify(new Date(detail.membershipDateString))
+    console.log("handleDateChange", membershipDate)
     this.setData({
-      membershipDate: new Date(membershipDateString)
+      membershipDate,
     })
+    this.setBtnPattern(this.data.selected)
     console.log("handleDateChange", this.data.membershipDate)
+  },
+
+  handleMembershipBought(){
+    wx.redirectTo({
+      url: `booking?sessionId=${this.data.session.id}`
+    })
+  },
+
+  // data setters
+  setSelected(accessOptions) {
+    console.log(accessOptions)
+    return accessOptions.hasOwnProperty('drop_in') ? 'drop-in' : 'free'
   },
 
   setBtnPattern(accessOption) {
@@ -124,5 +135,6 @@ Page({
           }
         })
     }
+    console.log('btnPattern', this.data.btnPattern)
   }
 })

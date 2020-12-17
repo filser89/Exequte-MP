@@ -13,7 +13,7 @@ const buyMembership = (membershipTypeId, params) => {
     method: 'post',
     url: `/membership_types/${membershipTypeId}/memberships`,
     data: {
-      params
+      ...params
     }
   }
   return request(options)

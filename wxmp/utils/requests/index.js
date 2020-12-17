@@ -9,6 +9,7 @@ import {
 } from './sessions'
 
 import {
+  getBooking,
   getAttendanceList,
   createBooking,
   cancelBooking,
@@ -52,6 +53,7 @@ module.exports = {
   buyMembership,
   addUserToQueue,
   getInstructorSessions,
+  getBooking,
   getAttendanceList,
   createBooking,
   cancelBooking,

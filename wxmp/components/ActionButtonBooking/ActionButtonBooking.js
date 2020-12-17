@@ -48,11 +48,15 @@ Component({
       console.log("buyMembership",this.data.params)
       const membership = await buyMembership(this.data.itemId, this.data.params)
       console.log("buyMembership", membership)
+      this.triggerEvent('membershipbought')
     },
 
     async bookClass(){
-      console.log("bookClass" ,this.data)
-      // createBooking()
+      console.log("bookClass", this.data)
+      const booking = await createBooking(this.data.itemId, this.data.params)
+ wx.redirectTo({
+   url: `../../pages/booking-confirmation/booking-confirmation?bookingId=${booking.id}`,
+ })
     }
 
   }

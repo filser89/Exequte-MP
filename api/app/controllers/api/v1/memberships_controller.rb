@@ -2,6 +2,7 @@ module Api
   module V1
     class MembershipsController < Api::BaseController
       def create
+
         @membership_type = MembershipType.find(params[:membership_type_id])
         @membership = Membership.new(permitted_params)
         @membership.name = @membership_type.name
@@ -25,6 +26,8 @@ module Api
       end
 
       def permitted_params
+        pars = params.require(:membership)
+        pars.each { |par| puts "param: #{par[1]} class: #{par[1].class}" }
         params.require(:membership).permit(:start_date)
       end
     end
