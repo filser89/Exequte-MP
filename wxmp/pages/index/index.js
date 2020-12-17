@@ -53,7 +53,9 @@ Page({
         }
       })
     }
-
+    wx.setStorageSync('selectedTab', 1)
+    console.log('index page', wx.getStorageSync('selectedTab'))
+    
     this.setData({
       strings: await getStrings(this.data.keys)
     })
@@ -67,6 +69,10 @@ Page({
     this.setData({
       sessions: await getSessions()
     })
+  },
+
+  onShow() {
+
   },
   getUserInfo: function (e) {
     console.log(e)

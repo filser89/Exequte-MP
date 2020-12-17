@@ -1,6 +1,7 @@
 {
   "usingComponents": {
     "Banner": "./components/Banner/Banner",
-    "Schedule": "./components/Schedule/Schedule"
+    "Schedule": "./components/Schedule/Schedule",
+    "TabBar": "../../components/TabBar/TabBar"
   }
 }
