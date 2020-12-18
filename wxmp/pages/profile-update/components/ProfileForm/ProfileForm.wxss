@@ -1,0 +1,18 @@
+/* pages/profile-update/components/ProfileForm/ProfileForm.wxss */
+view {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 30rpx;
+}
+text {
+  margin-right: 30rpx;
+}
+input {
+  padding-bottom: 1px;
+  border-bottom: 1px solid gray;
+}
+.picker{
+  padding: 13px;
+  background-color: #FFFFFF;
+}
