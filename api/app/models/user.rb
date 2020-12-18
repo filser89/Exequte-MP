@@ -30,9 +30,21 @@ class User < ApplicationRecord
 
   def show_hash
     h = standard_hash
-    # Add new attributes here as shown below:
-    # h[:images] = images
-    return h
+    h[:workout_name] = workout_name
+    h[:emergency_name] = emergency_name
+    h[:emergency_phone] = emergency_phone
+    h[:birthday] = birthday
+    h[:nationality] = nationality
+    h[:profession] = profession
+    h[:profession_activity_level] = profession_activity_level
+    h[:favorite_song] = favorite_song
+    h[:music_styles] = music_styles
+    h[:sports] = sports
+    h[:favorite_food] = favorite_food
+    h[:instructor] = instructor
+    h[:instructor_bio] = instructor_bio
+    h[:cn_instructor_bio] = cn_instructor_bio
+    h
   end
 
   def instructor_hash
@@ -49,6 +61,8 @@ class User < ApplicationRecord
     {
       id: id,
       name: name,
+      first_name: first_name,
+      last_name: last_name,
       city: city,
       wechat: wechat,
       phone: phone,
