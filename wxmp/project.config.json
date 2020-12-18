@@ -78,6 +78,11 @@
           "pathName": "pages/booking-confirmation/booking-confirmation",
           "query": "bookingId=1549",
           "scene": null
+        },
+        {
+          "name": "pages/my-classes/my-classes",
+          "pathName": "pages/my-classes/my-classes",
+          "scene": null
         }
       ]
     }

@@ -4,6 +4,19 @@ module Api
       before_action :find_training_session, only: %i[create attendance_list]
       before_action :find_booking, only: %i[show cancel]
       def index
+        history = Booking.includes(:training_session, :user)
+        .where(user: current_user)
+        .references(:training_sessions)
+        .where('training_sessions.begins_at <= ?', DateTime.now)
+        .order('training_sessions.begins_at DESC')
+        .map(&:history_hash)
+        upcoming = Booking.includes(:training_session, :user)
+        .where(user: current_user)
+        .references(:training_sessions)
+        .where('training_sessions.begins_at > ?', DateTime.now)
+        .order('training_sessions.begins_at ASC')
+        .map(&:upcoming_hash)
+        render_success([upcoming, history])
       end
 
       def show

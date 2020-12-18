@@ -43,6 +43,8 @@ Component({
         this.navigateToBooking()
       } else if(action == "reLaunchToMyClasses"){
         this.reLaunchToMyClasses()
+      } else if(action == "reLaunchToIndexPage"){
+        this.navigateToIndexPage()
       } else {
         console.log("Unknow action")
       }
@@ -78,6 +80,11 @@ Component({
     reLaunchToMyClasses(){
       wx.reLaunch({
         url: '../../pages/my-classes/my-classes'
+      })
+    },
+    reLaunchToIndexPage(){
+      wx.reLaunch({
+        url: '../../pages/index/index',
       })
     }
 

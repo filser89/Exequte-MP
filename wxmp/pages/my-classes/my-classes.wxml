@@ -1,2 +1,17 @@
 <!--pages/my-classes/my-classes.wxml-->
-<text>pages/my-classes/my-classes.wxml</text>
+<view class="container">
+  <view>
+    <button bindtap="switchTab" data-selected="0">Upcoing</button>
+    <button bindtap="switchTab" data-selected="1">History</button>
+  </view>
+  <view wx:if="{{bookings[selected].length}}">
+    <BookingsList bookings="{{bookings}}" />
+  </view>
+  <view wx:else>
+    <view>What are you waiting for?</view>
+    <ActionButton action="reLaunchToIndexPage">
+      BOOK NOW
+    </ActionButton>
+  </view>
+</view>
+<TabBar />

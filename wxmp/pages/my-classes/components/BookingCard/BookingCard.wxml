@@ -1,0 +1,17 @@
+<!--pages/my-classes/components/BookingCard/BookingCard.wxml-->
+<view>
+  <view>
+    <view>{{booking.session.name}}</view>
+    <view>{{booking.session.duration}}</view>
+    <view>{{booking.session.date}}</view>
+    <view>{{booking.session.from}} - {{booking.session.to}}</view>
+    <view wx:if="{{selected == 1}}">
+      <view>{{booking.attended ? 'COMPLETED' : 'NO SHOW'}}</view>
+    </view>
+
+    
+    
+    
+    
+  </view>
+</view>

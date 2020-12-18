@@ -45,10 +45,19 @@ const takeAttendance = () => {
   }
   return request(options)
 }
+
+const getUsersBookings = () => {
+  const options = {
+    method: 'get',
+    url: `/bookings`,
+  }
+  return request(options)
+}
 module.exports = {
   getBooking,
   getAttendanceList,
   createBooking,
   cancelBooking,
-  takeAttendance
+  takeAttendance,
+  getUsersBookings
 }
