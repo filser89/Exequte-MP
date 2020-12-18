@@ -6,7 +6,8 @@ Component({
    * Component properties
    */
   properties: {
-    user: Object
+    user: Object,
+    birthday: String
   },
 
   /**
@@ -33,12 +34,12 @@ Component({
   methods: {
     bindDateChange({detail}) {
       console.log('date-picker', detail.value)
-      this.data.user.birthday = detail.value
+      // this.data.user.birthday = detail.value
   
-      console.log("birthday", this.properties.user.birthday)
-      console.log("user", this.properties.user)
-      this.triggerEvent("birthdaychanged", {birthday: detail.value})
-
+      // console.log("birthday", this.properties.user.birthday)
+      // console.log("user", this.properties.user)
+      // this.triggerEvent("birthdaychanged", {birthday: detail.value})
+      this.setData({birthday: detail.value})
 
     },
   }

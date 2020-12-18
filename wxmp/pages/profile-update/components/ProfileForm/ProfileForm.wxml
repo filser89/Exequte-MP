@@ -28,7 +28,7 @@
 
   <picker name="birthday" mode="date" value="{{user.birthday}}" start="1940-01-01" end="2020-09-01" bindchange="bindDateChange">
     <view class="picker">
-     Birthday: {{user.birthday}}
+     Birthday: {{birthday}}
     </view>
   </picker>
 </view>

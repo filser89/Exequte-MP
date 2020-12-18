@@ -1,6 +1,6 @@
 <!--pages/profile-update/profile-update.wxml-->
 <form bindsubmit="formSubmit">
-  <ProfileForm user="{{user}}" bindbirthdaychanged="handleBirthdayChange" />
+  <ProfileForm user="{{user}}" birthday="{{user.birthday}}" bindbirthdaychanged="handleBirthdayChange" />
   
   <button type="primary" form-type="submit">Submit</button>
 </form>
