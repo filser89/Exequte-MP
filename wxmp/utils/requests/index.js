@@ -13,7 +13,8 @@ import {
   getAttendanceList,
   createBooking,
   cancelBooking,
-  takeAttendance
+  takeAttendance,
+  getUsersBookings
 } from './bookings.js'
 
 import {
@@ -54,6 +55,7 @@ module.exports = {
   addUserToQueue,
   getInstructorSessions,
   getBooking,
+  getUsersBookings,
   getAttendanceList,
   createBooking,
   cancelBooking,
@@ -61,5 +63,5 @@ module.exports = {
   getSessions,
   takeAttendance,
   getBanner,
-  getSessionDates
+  getSessionDates,
 }

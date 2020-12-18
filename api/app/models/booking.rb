@@ -4,6 +4,17 @@ class Booking < ApplicationRecord
   belongs_to :training_session
   belongs_to :membership, optional: true
 
+  def upcoming_hash
+    h = show_hash
+    h[:session][:date] = DateTimeService.date_wd_d_m(training_session.begins_at)
+    h
+  end
+
+  def history_hash
+    h = show_hash
+    h[:session][:date] = DateTimeService.date_d_m_y(training_session.begins_at)
+    h
+  end
   def show_hash
     h = standard_hash
     h[:session] = training_session.show_hash

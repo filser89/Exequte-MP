@@ -33,7 +33,7 @@ Rails.application.routes.draw do
       end
 
       # BOOKINGS
-      resources :bookings, only: [:show] do
+      resources :bookings, only: %i[index show] do
         member do
           put :cancel
         end

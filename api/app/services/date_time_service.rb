@@ -16,6 +16,10 @@ class DateTimeService
   end
 
   def self.date_y_m_d(datetime)
-    datetime.strftime("%Y-%m-%d")
+    datetime.strftime("%Y-%m-%d") # "2020-12-27"
+  end
+
+  def self.date_d_m_y(datetime)
+    datetime.strftime("%d/%m/%Y") # "27/12/2020"
   end
 end

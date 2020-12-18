@@ -1,3 +1,4 @@
+import {getUsersBookings} from "../../utils/requests/index"
 // pages/my-classes/my-classes.js
 Page({
 
@@ -5,62 +6,24 @@ Page({
    * Page initial data
    */
   data: {
-
+    bookings: [],
+    selected: 0
   },
 
   /**
    * Lifecycle function--Called when page load
    */
-  onLoad: function (options) {
+  async onLoad(options) {
+    wx.setStorageSync('selectedTab', -1)
+    console.log('non-tabbar page', wx.getStorageSync('selectedTab'))
 
+    this.setData({bookings: await getUsersBookings()})
+    console.log("On load", this.data.bookings)
   },
 
-  /**
-   * Lifecycle function--Called when page is initially rendered
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page show
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page hide
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page unload
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * Page event handler function--Called when user drop down
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * Called when page reach bottom
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * Called when user click on the top right corner to share
-   */
-  onShareAppMessage: function () {
-
+  switchTab({currentTarget}){
+    const {selected} = currentTarget.dataset
+    this.setData({selected})
   }
+
 })
