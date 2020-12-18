@@ -1,66 +1,29 @@
 // pages/profile-update/profile-update.js
+
+import {getUserDetails} from '../../utils/requests/index'
 Page({
 
   /**
    * Page initial data
    */
-  data: {
-
-  },
+  data: {},
 
   /**
    * Lifecycle function--Called when page load
    */
-  onLoad: function (options) {
-
+  async onLoad (options) {
+    const user = wx.getStorageSync('current_user')
+    console.log('id', user.user.id)
+    this.setData({user: await getUserDetails(user.user.id)})
   },
-
-  /**
-   * Lifecycle function--Called when page is initially rendered
-   */
-  onReady: function () {
-
+  formSubmit: function(e) {
+    console.log('Submit!')
+    console.info('value:', e.detail.value)
   },
-
-  /**
-   * Lifecycle function--Called when page show
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page hide
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page unload
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * Page event handler function--Called when user drop down
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * Called when page reach bottom
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * Called when user click on the top right corner to share
-   */
-  onShareAppMessage: function () {
-
+  handleBirthdayChange({detail}){
+    console.log('bd changed', detail)
+    this.data.user.birthday = detail.birthday
+    console.log('bd changed', this.data.user)
+  
   }
 })

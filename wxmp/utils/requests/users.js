@@ -16,7 +16,16 @@ const getInstructor = async (id) => {
   return request(options)
 }
 
+const getUserDetails = async (id) => {
+  const options = {
+    method: 'get',
+    url: `/users/${id}`,
+  }
+  return request(options)
+}
+
 module.exports = {
   getCurrentUser,
-  getInstructor
+  getInstructor,
+  getUserDetails
 }

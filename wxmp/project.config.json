@@ -82,6 +82,12 @@
         {
           "name": "pages/my-classes/my-classes",
           "pathName": "pages/my-classes/my-classes",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/profile-update/profile-update",
+          "pathName": "pages/profile-update/profile-update",
           "scene": null
         }
       ]
