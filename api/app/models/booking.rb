@@ -32,6 +32,7 @@ class Booking < ApplicationRecord
     }
   end
 
+
   def cancelled_on_time?
     ((training_session.begins_at - cancelled_at) * 24).to_i > training_session.cancel_before
   end

@@ -12,7 +12,6 @@ module Api
       end
 
       def show
-        @user = User.find_by(id: params[:id])
         render_success(@user.show_hash)
       end
 
