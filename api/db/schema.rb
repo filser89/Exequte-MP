@@ -10,25 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_19_095951) do
+ActiveRecord::Schema.define(version: 2020_12_19_134148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "abouts", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "action_text_rich_texts", force: :cascade do |t|
-    t.string "name", null: false
-    t.text "body"
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
-  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -55,21 +40,6 @@ ActiveRecord::Schema.define(version: 2020_12_19_095951) do
     t.boolean "current", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "bodies", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.integer "height"
-    t.integer "current_weight"
-    t.integer "current_fat_percentage"
-    t.string "current_shapes"
-    t.string "target"
-    t.integer "target_weight"
-    t.integer "target_fat_percentage"
-    t.string "target_shapes"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_bodies_on_user_id"
   end
 
   create_table "bookings", force: :cascade do |t|
@@ -119,6 +89,7 @@ ActiveRecord::Schema.define(version: 2020_12_19_095951) do
     t.string "cn_name", null: false
     t.integer "price_cents", default: 0, null: false
     t.string "price_currency", default: "CNY", null: false
+    t.boolean "smoothie", null: false
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -132,6 +103,7 @@ ActiveRecord::Schema.define(version: 2020_12_19_095951) do
     t.string "price_currency", default: "CNY", null: false
     t.datetime "end_date"
     t.datetime "start_date"
+    t.boolean "smoothie", null: false
     t.index ["membership_type_id"], name: "index_memberships_on_membership_type_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
@@ -224,7 +196,6 @@ ActiveRecord::Schema.define(version: 2020_12_19_095951) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "bodies", "users"
   add_foreign_key "bookings", "memberships"
   add_foreign_key "bookings", "training_sessions"
   add_foreign_key "bookings", "users"
