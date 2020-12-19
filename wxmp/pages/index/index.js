@@ -8,67 +8,50 @@ import {
   getSessions
 } from '../../utils/requests/index';
 
-
-const app = getApp()
-
 Page({
   data: {
     motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    keys: ['title', 'dog', 'focus']
+    canIUse: false,
+    keys: ['title', 'dog', 'focus'],
   },
-  //事件处理函数
-  bindViewTap: function () {
-    wxp.navigateTo({
-      url: '../logs/logs'
-    })
-  },
+
   async onLoad() {
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-    } else if (this.data.canIUse) {
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wxp.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true,
-            wxpUsed: true
-          })
-        }
-      })
-    }
+    
     wx.setStorageSync('selectedTab', 1)
     console.log('index page', wx.getStorageSync('selectedTab'))
-    
-    this.setData({
-      strings: await getStrings(this.data.keys)
-    })
-    this.setData({
-      user: await getCurrentUser()
-    })
-    this.setData({
-      banner: await getBanner()
-    })
+
+      wx.showLoading({
+        title: 'Just a sec..',
+      })
+
+const strings = await getStrings(this.data.keys)
+const user = await getCurrentUser()
+const banner = await getBanner()
+const sessions =  await getSessions()
+Promise.all([strings, user, banner, sessions]).then((values) => {
+  console.log('values', values)
+  this.setData({strings, user, banner, sessions})
+  wx.hideLoading()
+})
+
+
+
+
+    // this.setData({
+    //   strings: await getStrings(this.data.keys)
+    // })
+    // this.setData({
+    //   user: await getCurrentUser()
+    // })
+    // this.setData({
+    //   banner: await getBanner()
+    // })
   
-    this.setData({
-      sessions: await getSessions()
-    })
+    // this.setData({
+    //   sessions: await getSessions()
+    // })
   },
 
   onShow() {
@@ -81,6 +64,14 @@ Page({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
+  },
+
+  bindGetUserInfo ({detail}) {
+    console.log(detail.userInfo)
+    wx.navigateTo({
+      url: `../../pages/profile-update/profile-update`
+    })
+
   }
 
 })

@@ -1,0 +1,4 @@
+<!--components/getInfoButton/getInfoButton.wxml-->
+<view>
+<button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" catchtap="navigateToUpdateProfile">Click</button>
+</view>
