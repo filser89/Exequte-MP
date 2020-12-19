@@ -16,3 +16,7 @@ input {
   padding: 13px;
   background-color: #FFFFFF;
 }
+textarea {
+  padding-bottom: 1px;
+  border: 1px solid gray;
+}

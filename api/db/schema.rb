@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_15_161437) do
+ActiveRecord::Schema.define(version: 2020_12_19_095951) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -213,6 +213,14 @@ ActiveRecord::Schema.define(version: 2020_12_15_161437) do
     t.boolean "instructor", default: false, null: false
     t.string "instructor_bio"
     t.string "cn_instructor_bio"
+    t.integer "height"
+    t.integer "current_weight"
+    t.integer "current_body_fat"
+    t.string "current_shapes"
+    t.string "target"
+    t.integer "target_weight"
+    t.integer "target_body_fat"
+    t.string "target_shapes"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

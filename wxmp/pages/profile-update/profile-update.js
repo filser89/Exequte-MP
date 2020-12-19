@@ -1,6 +1,9 @@
 // pages/profile-update/profile-update.js
-
-import {getUserDetails} from '../../utils/requests/index'
+import WxValidate from '../../utils/WxValidate'
+import {
+  getUserDetails,
+  updateUser
+} from '../../utils/requests/index'
 Page({
 
   /**
@@ -11,19 +14,92 @@ Page({
   /**
    * Lifecycle function--Called when page load
    */
-  async onLoad (options) {
+  async onLoad(options) {
+    this.initValidate()
     const user = wx.getStorageSync('current_user')
     console.log('id', user.user.id)
-    this.setData({user: await getUserDetails(user.user.id)})
+    this.setData({
+      user: await getUserDetails(user.user.id)
+    })
   },
-  formSubmit: function(e) {
-    console.log('Submit!')
-    console.info('value:', e.detail.value)
+  formSubmit({
+    detail
+  }) {
+    console.info('value:', detail.value)
+    const params = detail.value
+    // validation     
+    if (!this.WxValidate.checkForm(params)) {
+      this.handleValidationFailure()
+      return false
+    }
+    console.log('Authentication successful');
+    // Start submission      
+    this.submitRequest(params)
   },
-  handleBirthdayChange({detail}){
-    console.log('bd changed', detail)
-    this.data.user.birthday = detail.birthday
-    console.log('bd changed', this.data.user)
-  
+
+  async submitRequest(params) {
+    // console.log('submitRequest', params)
+    const res = await updateUser(this.data.user.id, params)
+    console.log("RES", res)
+    wx.showToast({
+        title: res,
+        icon: 'none',
+        duration: 1500,
+    })
+  },
+
+
+  handleValidationFailure() {
+    const error = this.WxValidate.errorList[0]
+    wx.showToast({
+      title: error.msg,
+      icon: 'none',
+      duration: 1000,
+    })
+  },
+
+  initValidate() {
+    const rules = {
+      first_name: {
+        required: true
+      },
+      last_name: {
+        required: true
+      },
+      phone: {
+        required: true
+      },
+      email: {
+        required: true
+      },
+      emergency_name: {
+        required: true
+      },
+      emergency_phone: {
+        required: true
+      }
+
+    }
+    const messages = {
+      first_name: {
+        required: "First Name is a required field"
+      },
+      last_name: {
+        required: "Last Name is a required field"
+      },
+      phone: {
+        required: "Phone is a required field"
+      },
+      email: {
+        required: "Email is a required field"
+      },
+      emergency_name: {
+        required: "Emergency Contact Name is a required field"
+      },
+      emergency_phone: {
+        required: "Emergency Contact  Phone is a required field"
+      }
+    }
+    this.WxValidate = new WxValidate(rules, messages)
   }
 })

@@ -2,7 +2,7 @@ module Api
   module V1
     class UsersController < Api::BaseController
       skip_before_action :authenticate_user_from_token!, only: [:wx_login]
-      before_action :find_user, only: %i[show instructor]
+      before_action :find_user, only: %i[show instructor update]
       def index
         # only for Admin user to check the users
         return render_success([]) unless current_user.admin
@@ -21,6 +21,14 @@ module Api
 
       def instructor
         render_success(@user.instructor_hash)
+      end
+
+      def update
+        if @user.update(permitted_params)
+          render_success('Profile updated!')
+        else
+          render_error('Something went wrong')
+        end
       end
 
       def wx_login
@@ -57,7 +65,7 @@ module Api
       end
 
       def permitted_params
-        params.require(:user).permit(:name, :email, :city, :phone, :wechat, :gender)
+        params.require(:user).permit(:name, :email, :city, :phone, :wechat, :gender, :first_name, :last_name, :workout_name, :emergency_name, :emergency_phone, :favorite_song, :favorite_food, :music_styles, :profession, :profession_activity_level, :sports, :birthday, :nationality, :height, :current_weight, :current_body_fat, :current_shapes, :target, :target_weight, :target_body_fat, :target_shapes)
       end
     end
   end

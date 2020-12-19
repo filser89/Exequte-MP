@@ -1,7 +1,7 @@
 // pages/profile-update/components/ProfileForm/ProfileForm.j
 const computedBehavior = require('miniprogram-computed')
 Component({
-  behaviors: ['wx://form-field-group', computedBehavior],
+  behaviors: ['wx://form-field-group'],
   /**
    * Component properties
    */
@@ -14,33 +14,25 @@ Component({
    * Component initial data
    */
   data: {
-    
+    activityLevels: ['worker', 'desk'],
+    index: 0
   },
-  // lifetimes: {
-      
-  //   attached() {
-  //     this.setData({compUser: this.data.user})
-  //     console.log("compUser", this.data.compUser)
-  //   },
-  // },
-  // computed: {
-  //   birthday(data) {
-  //     if (data.user) return data.user.birthday
-  //   },
-  // },
+  
   /**
    * Component methods
    */
   methods: {
     bindDateChange({detail}) {
       console.log('date-picker', detail.value)
-      // this.data.user.birthday = detail.value
-  
-      // console.log("birthday", this.properties.user.birthday)
-      // console.log("user", this.properties.user)
-      // this.triggerEvent("birthdaychanged", {birthday: detail.value})
+
       this.setData({birthday: detail.value})
 
     },
+    bindActivityLevelChange(e) {
+      console.log('Activity Level', e.detail.value)
+      this.setData({
+        index: e.detail.value
+      })
+    }
   }
 })
