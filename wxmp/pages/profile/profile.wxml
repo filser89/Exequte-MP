@@ -1,5 +1,6 @@
 <!--pages/profile/profile.wxml-->
-<view>
+<view class="container">
+  <view>
   <image src="{{user.avatar_url}}"></image>
   <view>{{user.first_name}} {{user.last_name}}</view>
 </view>
@@ -31,4 +32,5 @@
   Carbs/Prot/Fat: {{user.carbs_prot_fat || '???'}}
 </view>
 <button bindtap="navigateToProfileUpdate" >My personal information</button>
+</view>
 <TabBar />
