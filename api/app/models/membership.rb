@@ -12,7 +12,8 @@ class Membership < ApplicationRecord
       name: localize_name,
       price: price.to_i,
       start_date: start_date,
-      end_date: end_date
+      end_date: end_date,
+      smoothie: smoothie
     }
   end
 end

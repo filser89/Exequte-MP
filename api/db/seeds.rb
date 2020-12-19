@@ -179,17 +179,18 @@ puts "=============================================="
 puts "Creating Membership Types"
 
 mt_arr = [
-  { name:  "6 weeks unlimited", duration: 42, price: 1600 },
-  { name:  "6 weeks unlimited with smoothie", duration: 42, price: 2000 },
-  { name:  "12 weeks unlimited", duration: 84, price: 2600 },
-  { name:  "12 weeks unlimited with smoothie", duration: 84, price: 4500 }
+  { name:  "6 weeks unlimited", duration: 42, price: 1600, smoothie: false },
+  { name:  "6 weeks unlimited with smoothie", duration: 42, price: 2000, smoothie: true },
+  { name:  "12 weeks unlimited", duration: 84, price: 2600, smoothie: false },
+  { name:  "12 weeks unlimited with smoothie", duration: 84, price: 4500, smoothie: true }
 ]
 
 mt_arr.each do |mt|
   membership_type = MembershipType.create!(
     name: mt[:name],
     cn_name: "CHINESE #{mt[:name]}",
-    duration: mt[:duration]
+    duration: mt[:duration],
+    smoothie: mt[:smoothie]
   )
   puts "Created membership: #{membership_type.name}"
 end

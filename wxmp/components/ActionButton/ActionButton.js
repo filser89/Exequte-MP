@@ -44,7 +44,7 @@ Component({
       } else if(action == "reLaunchToMyClasses"){
         this.reLaunchToMyClasses()
       } else if(action == "reLaunchToIndexPage"){
-        this.navigateToIndexPage()
+        this.reLaunchToIndexPage()
       } else {
         console.log("Unknow action")
       }

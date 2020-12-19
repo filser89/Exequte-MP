@@ -40,7 +40,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.14.0",
-  "appid": "wx0bdfdfe1509d510a",
+  "appid": "wx7a6bff71d529bd0e",
   "projectname": "ExeQute",
   "debugOptions": {
     "hidedInDevtools": []
@@ -88,6 +88,12 @@
         {
           "name": "pages/profile-update/profile-update",
           "pathName": "pages/profile-update/profile-update",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/profile/profile",
+          "pathName": "pages/profile/profile",
           "scene": null
         }
       ]

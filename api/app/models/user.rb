@@ -53,6 +53,12 @@ class User < ApplicationRecord
     h[:target_weight] = target_weight
     h[:target_body_fat] = target_body_fat
     h[:target_shapes] = target_shapes
+    h[:recommended_bmr] = recommended_bmr
+    h[:recommended_kcals] = recommended_kcals
+    h[:carb_prot_fat] = carb_prot_fat
+    h[:average_attendence] = average_attendence
+    h[:attended_classes] = attended_classes
+    h[:memberships] = valid_memberships
     h
   end
 
@@ -63,7 +69,6 @@ class User < ApplicationRecord
       bio: localize_instructor_bio,
       image_url: instructor_photo.service_url
     }
-
   end
 
   def standard_hash
@@ -79,8 +84,21 @@ class User < ApplicationRecord
       gender: gender,
       admin: admin,
       voucher_count: voucher_count
-
     }
+  end
+
+  def recommended_bmr; end
+
+  def recommended_kcals; end
+
+  def carb_prot_fat; end
+
+  def attended_classes
+    bookings.where(attended: true).count
+  end
+
+  def valid_memberships
+    memberships.where('end_date >= ?', DateTime.now.midnight)
   end
 
   def prices
