@@ -5,11 +5,19 @@
 </view>
 <view>
   <text>Last Name</text>
-  <input required name="last_name" value="{{user.last_name}}" />
+  <input name="last_name" value="{{user.last_name}}" />
 </view>
 <view>
   <text>Workout Name</text>
   <input name="workout_name" value="{{user.workout_name}}" />
+</view>
+<view>
+  <text>Phone</text>
+  <input name="phone" value="{{user.phone}}" />
+</view>
+<view>
+  <text>Email</text>
+  <input name="email" value="{{user.email}}" />
 </view>
 <view>
   <text>Emergency Contact Name</text>
@@ -41,8 +49,11 @@
   <input name="profession" value="{{user.profession}}" />
 </view>
 <view>
-  <text>Profession Activity Level</text>
-  <input name="profession_activity_level" value="{{user.profession_activity_level}}" />
+  <picker name="profession_activity_level" bindchange="bindActivityLevelChange" value="{{activityLevels[index]}}" range="{{activityLevels}}">
+    <view class="picker">
+      Profession Activity Level：{{activityLevels[index]}}
+    </view>
+  </picker>
 </view>
 <view>
   <text> Favorite Song </text>
@@ -58,5 +69,5 @@
 </view>
 <view>
   <text>Favorite foods</text>
-  <input name="favorite_food" value="{{user.favorite_food}}" />
+  <textarea name="favorite_food" value="{{user.favorite_food}}" />
 </view>

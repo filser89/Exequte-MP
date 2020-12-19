@@ -1,0 +1,17 @@
+<!--pages/profile-update/components/BodyNowForm/BodyNowForm.wxml-->
+<view>
+  <text>Height: </text>
+  <input type="number" name="height" value="{{user.height}}" />
+</view>
+<view>
+  <text>Current Weight: </text>
+  <input type="number" name="current_weight" value="{{user.current_weight}}" />
+</view>
+<view>
+  <text>Current Body Fat %: </text>
+  <input type="number" name="current_body_fat" value="{{user.current_body_fat}}" />
+</view>
+<view>
+  <text>Shapes: </text>
+  <input type="text" name="current_shapes" value="{{user.current_shapes}}" />
+</view>

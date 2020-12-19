@@ -1,8 +1,10 @@
 class User < ApplicationRecord
   DEFAULT_NAME = "#{Rails.application.class.module_parent} User".freeze
   ACTIVITY_LEVELS = [nil, "worker", "desk"].freeze
+  TARGETS = [nil, "lose", "gain", "maintain"].freeze
   validates :profession_activity_level, inclusion: { in: ACTIVITY_LEVELS }
-  serialize :music_styles, Array
+  validates :target, inclusion: { in: TARGETS}
+  # serialize :music_styles, Array
   has_one :body
   has_many :bookings
   has_many :training_sessions, through: :bookings
@@ -43,7 +45,14 @@ class User < ApplicationRecord
     h[:favorite_food] = favorite_food
     h[:instructor] = instructor
     h[:instructor_bio] = instructor_bio
-    h[:cn_instructor_bio] = cn_instructor_bio
+    h[:height] = height
+    h[:current_weight] = current_weight
+    h[:current_body_fat] = current_body_fat
+    h[:current_shapes] = current_shapes
+    h[:target] = target
+    h[:target_weight] = target_weight
+    h[:target_body_fat] = target_body_fat
+    h[:target_shapes] = target_shapes
     h
   end
 

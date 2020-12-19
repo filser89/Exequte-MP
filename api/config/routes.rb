@@ -6,7 +6,7 @@ Rails.application.routes.draw do
       # PAGES
       post 'pages', to: "pages#make_strings"
       # USERS
-      resources :users, only: [:index, :show] do
+      resources :users, only: %i[index show update] do
         collection do
           post :wx_login
           get :info

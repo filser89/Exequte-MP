@@ -1,0 +1,18 @@
+<!--pages/profile-update/components/BodyTargetForm/BodyTargetForm.wxml-->
+  <picker name="target" bindchange="bindTargetChange" value="{{targets[index]}}" range="{{targets}}">
+    <view class="picker">
+      My Target：{{targets[index]}}
+    </view>
+  </picker>
+<view>
+  <text>Target Weight: </text>
+  <input type="number" name="target_weight" value="{{user.target_weight}}" />
+</view>
+<view>
+  <text>Target Body Fat %: </text>
+  <input type="number" name="target_body_fat" value="{{user.target_body_fat}}" />
+</view>
+<view>
+  <text>Shapes: </text>
+  <input type="text" name="target_shapes" value="{{user.target_shapes}}" />
+</view>

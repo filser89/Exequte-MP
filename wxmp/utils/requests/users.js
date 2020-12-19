@@ -24,8 +24,18 @@ const getUserDetails = async (id) => {
   return request(options)
 }
 
+const updateUser =  async (id, params) => {
+  const options = {
+    method: 'put',
+    url: `/users/${id}`,
+    data: {...params}
+  }
+  return request(options)
+}
+
 module.exports = {
   getCurrentUser,
   getInstructor,
-  getUserDetails
+  getUserDetails,
+  updateUser
 }
