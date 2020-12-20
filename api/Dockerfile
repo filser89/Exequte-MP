@@ -1,4 +1,4 @@
-FROM ruby:2.7.1
+FROM ruby:2.6.6
 # Install NodeJS and Yarn
 RUN apt-get update
 RUN apt-get -y install curl
@@ -12,7 +12,7 @@ COPY Gemfile* /tmp/
 COPY package.json /tmp/
 COPY yarn.lock /tmp/
 WORKDIR /tmp
-RUN gem install bundler -v 2.1.4
+RUN gem install bundler -v 2.2.2
 RUN bundle install --jobs 5 --retry 5 --without development test
 RUN yarn install
 RUN mkdir /app
