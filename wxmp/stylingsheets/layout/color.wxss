@@ -7,12 +7,21 @@
   color: rgb(209, 58, 58)
 }
 
+.text-red {
+  color: #5C0C17;
+}
+
+
+.text-xq-grey {
+  color: #555555;
+}
+
 .text-grey {
-  color: #a5a5a5;
+  color: #555555;
 }
 
 .text-grey-dark {
-  color: #535353;
+  color: #18181D;
 }
 
 .text-yellow {
@@ -51,6 +60,13 @@
 .bg-white {
   background-color: white;
 }
+.bg-xq-red {
+  background-color: #5C0C17;
+}
+
+.bg-xq-green {
+  background-color: #1FDE8D;
+}
 
 .bg-teal {
   background-color: #00CEA4;
@@ -65,15 +81,15 @@
 }
 
 .bg-grey-light {
-  background-color: #efefef
+  background-color: #D8D8D8;
 }
 
 .bg-grey {
-  background-color: #a5a5a5;
+  background-color: #555555;
 }
 
 .bg-grey-dark {
-  background-color: #333333;
+  background-color: #18181D;
 }
 
 .bg-yellow {

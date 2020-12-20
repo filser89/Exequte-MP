@@ -177,3 +177,7 @@
 .invisible-footer {
   height: 140rpx;
 }
+
+.pl20 {
+  padding-left: 20px;
+}
