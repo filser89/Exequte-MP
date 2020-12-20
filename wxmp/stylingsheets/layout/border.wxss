@@ -1,0 +1,59 @@
+.border {
+  border: solid 1px;
+}
+
+.border-top {
+  border-top: solid 1px;
+}
+
+.border-left {
+  border-left: solid 1px;
+}
+
+.border-right {
+  border-right: solid 1px;
+}
+
+.border-bottom {
+  border-bottom: solid 1px;
+}
+
+.border-circle {
+  border-radius: 50%;
+}
+
+.rounded {
+  border-radius: 5px;
+}
+
+.shadow {
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+.no-border {
+  border: 0px !important;
+}
+
+.border2 {
+  border-width: 2px;
+}
+
+.border5 {
+  border-width: 5px;
+}
+
+.border10 {
+  border-width: 10px;
+}
+
+.br-pill {
+  border-radius: 9999px;
+}
+
+.br-40 {
+  border-radius: 40px;
+}
+
+.br-20 {
+  border-radius: 20px;
+}

@@ -1,0 +1,105 @@
+.box-border {
+  box-sizing: border-box;
+}
+
+.box-content {
+  box-sizing: content-box;
+}
+
+/* WIDTH */
+.w100 {
+  width: 100%;
+}
+
+.w90 {
+  width: 90%;
+}
+
+.w80 {
+  width: 80%;
+}
+
+.w70 {
+  width: 70%;
+}
+
+.w60 {
+  width: 60%;
+}
+
+.w50 {
+  width: 50%;
+}
+
+.w40 {
+  width: 40%
+}
+
+.w30 {
+  width: 30%;
+}
+
+.w25 {
+  width: 25%;
+}
+
+.w20 {
+  width: 20%;
+}
+
+.w10 {
+  width: 10%;
+}
+
+/* HEIGHT */
+.h100 {
+  height: 100%;
+}
+
+.h90 {
+  height: 90%;
+}
+
+.h80 {
+  height: 80%;
+}
+
+.h70 {
+  height: 70%;
+}
+
+.h50 {
+  height: 50%;
+}
+
+.h40 {
+  height: 40%
+}
+
+.h30 {
+  height: 30%;
+}
+
+.h20 {
+  height: 20%;
+}
+
+.h10 {
+  height: 10%;
+}
+
+.minw50 {
+  min-width: 50px;
+}
+.vh100 {
+  height: 100vh;
+}
+
+.min-vh100 {
+  min-height: 100vh;
+}
+
+.size-ranking {
+  margin:0px;
+  padding:0px;
+}

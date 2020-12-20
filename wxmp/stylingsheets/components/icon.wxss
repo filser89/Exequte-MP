@@ -1,0 +1,30 @@
+.icon {
+  height:50rpx;
+  width:50rpx;
+}
+
+.icon-micro {
+  height: 10rpx;
+  width: 15rpx;
+  margin-left: 3px;
+}
+
+.icon-mini {
+  height: 15px;
+  width: 15px;
+}
+
+.icon-sm {
+  width:20px;
+  height:20px;
+}
+
+.icon-md {
+  width: 40px;
+  height: 40px;
+}
+
+.icon-lg {
+  height:90rpx;
+  width:90rpx;
+}

@@ -15,31 +15,28 @@
   ],
   "tabBar": {
     "custom": true,
-    "color": "#7A7E83",
-    "selectedColor": "#3cc51f",
+    "color": "black",
+    "selectedColor": "#5C0C17",
     "borderStyle": "black",
-    "backgroundColor": "#ffffff",
+    "backgroundColor": "#000000",
     "list": [{
       "pagePath": "pages/about/about",
-      "iconPath": "images/icon_component.png",
-      "selectedIconPath": "images/icon_component_HL.png",
-      "text": "about"
+      "iconPath": "images/XQ-logo-white.png",
+      "selectedIconPath": "images/XQ-logo-white.png"
     }, {
       "pagePath": "pages/index/index",
-      "iconPath": "images/icon_API.png",
-      "selectedIconPath": "images/icon_API_HL.png",
-      "text": "home"
+      "iconPath": "images/schedule.png",
+      "selectedIconPath": "images/schedule.png"
     }, {
       "pagePath": "pages/profile/profile",
-      "iconPath": "images/icon_API.png",
-      "selectedIconPath": "images/icon_API_HL.png",
-      "text": "profile"
+      "iconPath": "/images/user-xq.png",
+      "selectedIconPath": "/images/user-xq.png"
     }]
   },
   "window":{
-    "backgroundTextStyle":"light",
+    "backgroundTextStyle":"dark",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Weixin",
+    "navigationBarTitleText": "#fff",
     "navigationBarTextStyle":"black"
   },
   "style": "v2",

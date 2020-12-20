@@ -1,0 +1,82 @@
+
+text {
+  color: #333333;
+}
+/* CAPITALIZE */
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+/* COLOR */
+
+.white {
+  color: #fff;
+}
+
+/* SIZE */
+.text-size-header {
+  font-size:36px;
+}
+
+.text-size-sheader {
+  font-size: 24px;
+}
+
+.text-size-theader {
+  font-size: 20px;
+}
+
+.text-size-stheader {
+  font-size: 18px;
+}
+
+.text-size-body {
+  font-size: 16px
+}
+
+.text-size-sbody {
+  font-size: 13px;
+}
+
+.text-size-mbody {
+  font-size: 12px;
+}
+.text-size-mini {
+  font-size: 10px;
+}
+
+/* WEIGHT */
+.bold {
+  font-weight: bold;
+}
+
+.text-shadow {
+  text-shadow:0 1px 3px rgba(0,0,0,0.6);
+}
+
+/* TEXT ALIGN */
+
+.tc {
+  text-align: center;
+}
+
+.tl {
+  text-align: left;
+}
+
+.tr {
+  text-align: right;
+}
+
+/* LINE HEIGHT */
+
+.lh-copy {
+  line-height: 1.1rem;
+}
+
+/* UNDERLINE */
+
+.underline {
+  border-bottom: 0.5px solid currentColor;
+}
