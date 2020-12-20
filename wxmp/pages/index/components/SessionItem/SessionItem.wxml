@@ -9,8 +9,15 @@
     To: {{session.to}}
     Duration: {{session.duration}}
     Calories: {{session.calories}}
-    <ActionButton bindqueuedup="handleQueuedUp" itemId="{{session.id}}" action="{{session.btn_pattern.action}}" btnDisabled="{{session.btn_pattern.disabled}}">
+    <view wx:if="{{user.first_name}}">
+      <ActionButton bindqueuedup="handleQueuedUp" itemId="{{session.id}}" action="{{session.btn_pattern.action}}" btnDisabled="{{session.btn_pattern.disabled}}">
       {{session.btn_pattern.text}} {{session.btn_pattern.disabled ? "" : session.price}}
     </ActionButton>
+    </view>
+    <view wx:else>
+      <GetInfoButton itemId="{{session.id}}">
+        Click
+      </GetInfoButton>
+    </view>
   </view>
 </view>

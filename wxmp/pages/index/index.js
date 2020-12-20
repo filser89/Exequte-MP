@@ -3,9 +3,9 @@
 
 import {
   getStrings,
-  getCurrentUser,
   getBanner,
-  getSessions
+  getSessions,
+  getCurrentUser,
 } from '../../utils/requests/index';
 
 Page({
@@ -18,7 +18,6 @@ Page({
   },
 
   async onLoad() {
-    
     wx.setStorageSync('selectedTab', 1)
     console.log('index page', wx.getStorageSync('selectedTab'))
 
@@ -36,22 +35,6 @@ Promise.all([strings, user, banner, sessions]).then((values) => {
   wx.hideLoading()
 })
 
-
-
-
-    // this.setData({
-    //   strings: await getStrings(this.data.keys)
-    // })
-    // this.setData({
-    //   user: await getCurrentUser()
-    // })
-    // this.setData({
-    //   banner: await getBanner()
-    // })
-  
-    // this.setData({
-    //   sessions: await getSessions()
-    // })
   },
 
   onShow() {
@@ -64,14 +47,8 @@ Promise.all([strings, user, banner, sessions]).then((values) => {
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
-  },
-
-  bindGetUserInfo ({detail}) {
-    console.log(detail.userInfo)
-    wx.navigateTo({
-      url: `../../pages/profile-update/profile-update`
-    })
-
   }
+
+  
 
 })

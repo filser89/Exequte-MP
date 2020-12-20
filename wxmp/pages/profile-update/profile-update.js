@@ -15,6 +15,8 @@ Page({
    * Lifecycle function--Called when page load
    */
   async onLoad(options) {
+    console.log('profile-update', options)
+    this.setData(options)
     this.initValidate()
     const user = wx.getStorageSync('current_user')
     console.log('id', user.user.id)
@@ -41,10 +43,22 @@ Page({
     // console.log('submitRequest', params)
     const res = await updateUser(this.data.user.id, params)
     console.log("RES", res)
-    wx.showToast({
-        title: res,
-        icon: 'none',
-        duration: 1500,
+if (this.data.sessionId){
+  this.redirectToBooking()
+} else {
+  wx.showToast({
+    title: res.message,
+    icon: 'none',
+    duration: 1500,
+})
+wx.setStorageSync('current_user.user', res.user)
+}
+
+  },
+
+  redirectToBooking(){
+    wx.redirectTo({
+      url: `../../pages/booking/booking?sessionId=${this.data.sessionId}`,
     })
   },
 
