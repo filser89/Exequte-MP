@@ -17,13 +17,16 @@ App({
     const HEADERS = {
       'API-Key': 'ExeQuteapikey'
     }
-    let data = wx.getStorageSync('current_user')
+    let user = wx.getStorageSync('user')
+    let token = wx.getStorageSync('auth_token')
+    let data = {user, token}
+    // let data = wx.getStorageSync('current_user')
     // let x = wx.getStorageSync('current_xuser')
-    if (data) {
+    if (data && token.expires > Date.now() ) {
       console.log(data)
       console.log('get user from storage, no need login')
-      this.globalData.current_user = data.user,
-      this.globalData.headers['X-Auth-Token'] = data.auth_token
+      this.globalData.user = data.user,
+      this.globalData.headers['X-Auth-Token'] = data.token.auth_token
     } else {
       this.login()
     }
@@ -63,7 +66,8 @@ App({
           data: {code: res.code},
           success: user => {
             console.log(user.data)
-            wx.setStorageSync('current_user', user.data.data)
+            wx.setStorageSync('user', user.data.data.user)
+            wx.setStorageSync('auth_token', user.data.data.auth_token)
             page.setToken(user.data.data)
           }
         })
@@ -73,7 +77,7 @@ App({
   setToken: function (data) {
     console.log(data)
     this.globalData.current_user = data.user,
-    this.globalData.headers['X-Auth-Token'] = data.auth_token
+    this.globalData.headers['X-Auth-Token'] = data.auth_token.auth_token
     wx.reLaunch({
       url: '/pages/index/index',
     })
