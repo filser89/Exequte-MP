@@ -1,4 +1,0 @@
-<!--components/ActionButton/ActionButton.wxml-->
-<view>
-  <button data-action="{{action}}" disabled="{{btnDisabled}}" catchtap="takeAction"> <slot /> </button>
-</view>

@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "ProfileForm": "./components/ProfileForm/ProfileForm",
-    "BodyNowForm": "./components/BodyNowForm/BodyNowForm",
-    "BodyTargetForm": "./components/BodyTargetForm/BodyTargetForm"
-  }
-}

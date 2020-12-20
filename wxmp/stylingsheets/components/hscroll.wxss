@@ -1,5 +1,0 @@
-/* HORIZONTAL SCROLL */
-.scroll-row {
-  display: flex;
-  flex-direction: row;
-}

@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "BookingInfo": "../../../../components/BookingInfo/BookingInfo",
-    "ActionButton": "../../../../components/ActionButton/ActionButton"
-  }
-}

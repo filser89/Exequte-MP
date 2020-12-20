@@ -1,9 +1,0 @@
-{
-  "usingComponents": {
-    "BookingInfo": "../../../../components/BookingInfo/BookingInfo",
-    "AccessOptions": "./components/AccessOptions/AccessOptions",
-    "PromoCode": "./components/PromoCode/PromoCode",
-    "DateForm": "./components/DateForm/DateForm",
-    "ActionButton": "../../../../components/ActionButton/ActionButton"
-  }
-}
