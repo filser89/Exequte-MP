@@ -1,0 +1,14 @@
+{
+  "name": "Exequte",
+  "description": "Lifestyle Studio",
+  "keywords": [
+    "dokku",
+    "rails",
+    "exequte.cn"
+  ],
+  "scripts": {
+    "dokku": {
+      "predeploy": "rails db:migrate"
+    }
+  }
+}
