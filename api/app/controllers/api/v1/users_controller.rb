@@ -55,7 +55,11 @@ module Api
         end
 
         auth_token = issue_jwt_token(user)
-        render_success({ user: user.standard_hash, auth_token: auth_token })
+        token = {
+          auth_token: auth_token,
+          expires: Rails.application.credentials.jwt_expiration_seconds.to_i.seconds.from_now.to_i * 1000
+        }
+        render_success({ user: user.standard_hash, auth_token: token })
       end
 
       private
