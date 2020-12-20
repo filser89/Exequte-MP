@@ -5,36 +5,36 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 # Ignore bundler config.
-api/.bundle
+.bundle
 
 # Ignore all logfiles and tempfiles.
-api/log/*
-api/tmp/*
-!/api/log/.keep
+log/*
+tmp/*
+!/log/.keep
 
 # Ignore pidfiles, but keep the directory.
-api/tmp/pids/*
-!/api//tmp/pids/
-!/api//tmp/pids/.keep
+tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
 
 # Ignore uploaded files in development.
-api/storage/*
+storage/*
 !/storage/.keep
 
-api/public/assets
+public/assets
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
-api/config/master.key
+config/master.key
 
-api/public/packs
-api/public/packs-test
-api/node_modules
+public/packs
+public/packs-test
+node_modules
 yarn-error.log
-api/yarn-debug.log*
+yarn-debug.log*
 .yarn-integrity
 # Ignore Mac and Linux file system files
 *.swp
 .DS_Store
 
-api/downloaded_file
+downloaded_file
