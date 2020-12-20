@@ -1,6 +1,7 @@
 {
   "component": true,
   "usingComponents": {
-    "ActionButton": "../../../../components/ActionButton/ActionButton"
+    "ActionButton": "../../../../components/ActionButton/ActionButton",
+    "GetInfoButton": "../../../../components/GetInfoButton/GetInfoButton"
   }
 }

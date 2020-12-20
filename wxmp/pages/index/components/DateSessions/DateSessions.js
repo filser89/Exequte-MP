@@ -7,7 +7,7 @@ Component({
     sessions: {
       type: Array,
       value: ['a', 'b']
-    }
+    },
   },
 
   /**

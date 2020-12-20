@@ -25,9 +25,9 @@ module Api
 
       def update
         if @user.update(permitted_params)
-          render_success('Profile updated!')
+          render_success({ message: 'Profile updated!', user: @user.standard_hash })
         else
-          render_error('Something went wrong')
+          render_error({ message: 'Something went wrong' })
         end
       end
 
@@ -55,7 +55,7 @@ module Api
         end
 
         auth_token = issue_jwt_token(user)
-        render_success({ user: user.show_hash, auth_token: auth_token })
+        render_success({ user: user.standard_hash, auth_token: auth_token })
       end
 
       private

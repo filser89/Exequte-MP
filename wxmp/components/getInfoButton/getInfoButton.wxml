@@ -1,4 +1,7 @@
 <!--components/getInfoButton/getInfoButton.wxml-->
 <view>
-<button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" catchtap="navigateToUpdateProfile">Click</button>
+  <button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" catchtap="navigateToUpdateProfile">
+    <slot />
+  </button>
+  <!-- <button data-action="{{action}}" disabled="{{btnDisabled}}" catchtap="takeAction"> <slot /> </button> -->
 </view>
