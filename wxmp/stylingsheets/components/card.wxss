@@ -1,0 +1,44 @@
+/* CARD */
+.card {
+  width:50%;
+  /* box-shadow:2px 2px 20px rgba(0,0,0,0.1); */
+  /* border-radius:5px; */
+  margin-bottom: 10px;
+}
+
+.card-h {
+  width:100%;
+  /* box-shadow:2px 2px 20px rgba(0,0,0,0.1); */
+  /* border-radius:5px; */
+  margin-bottom: 10px;
+}
+
+.card-image {
+  width: 100%;
+  height: 120px;
+  border-radius: 5px;
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-position:center;
+  margin-bottom: 5px;
+}
+
+.card-content {
+  margin:10px;
+}
+
+.card-status {
+  border-radius:8px;
+  font-size:16px;
+  padding:5px;
+}
+
+.card-search {
+  height: 240px;
+  border-radius: 6px;
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-position:center;
+  margin-bottom: 5px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}

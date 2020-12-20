@@ -1,0 +1,77 @@
+.pos-sticky-top {
+  position: sticky;
+  top: 0;
+}
+
+.pos-sticky-bottom {
+  position: sticky;
+  bottom: 0;
+}
+
+.pos-relative {
+  position: relative;
+}
+
+.pos-absolute {
+  position: absolute;
+}
+
+.pos-fixed {
+  position: fixed;
+}
+
+.pos-top {
+  position: absolute;
+  top: 0px;
+}
+
+.pos-middle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.float-right-bottom {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.float-left-bottom {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+.float-right-top {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.fixed-right-bottom {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+}
+
+.pos-flag-right-top {
+  top: -7px;
+  right: -10px;
+}
+
+.top0 {
+  top: 0;
+}
+
+.bottom0 {
+  bottom: 0;
+}
+
+.left0 {
+  left: 0;
+}
+
+.right0 {
+  right: 0;
+}

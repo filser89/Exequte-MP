@@ -1,8 +1,14 @@
 <!--index.wxml-->
-<view class="container" style="margin-bottom: 10px">
-  <Banner url="{{banner.url}}" />
+  <!-- <Banner url="{{banner.url}}" /> -->
+  <view class='banner d-flex item-center w-100 h-20' style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/images/banner.png');">
+    <image src='/images/logo.png' class="icon-lg my" />
+
+  <view class="p2">
+    <view class='text-white bold text-size-theader mb p20'>First 5 trainings for FREE<slot></slot></view>
+    <!-- <button class='btn-sm border border-white text-white text-size-sbody' style='margin: unset'>Find out more</button> -->
+  </view>
+</view>
   <view>
     <Schedule sessions="{{sessions}}" />
   </view>
   <TabBar />
-</view>
