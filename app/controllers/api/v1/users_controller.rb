@@ -2,7 +2,13 @@ module Api
   module V1
     class UsersController < Api::BaseController
       skip_before_action :authenticate_user_from_token!, only: [:wx_login]
-      before_action :find_user, only: %i[show instructor update wechat_avatar]
+      before_action :find_user, only: %i[show instructor update wechat_avatar avatar]
+
+      def avatar
+        avatar = params[:avatar]
+        @user.avatar.attach(avatar)
+        render_success("Avatar uploaded")
+      end
 
       def wechat_avatar
         avatar = { io: FileDownloaderService.download(params[:avatarUrl]), filename: FileDownloaderService.filename }
