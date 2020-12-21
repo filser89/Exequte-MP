@@ -60,7 +60,7 @@ class User < ApplicationRecord
     h[:average_attendence] = average_attendence
     h[:attended_classes] = attended_classes
     h[:memberships] = valid_memberships
-    h[:avatar_url] = avatar.service_url
+    h[:avatar_url] = avatar.service_url if avatar.attached?
     h
   end
 
