@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :memberships
   # has_many :membership_types, through: :memberships
   has_one_attached :instructor_photo
+  has_one_attached :avatar
 
   before_validation :set_defaults
 
@@ -59,6 +60,7 @@ class User < ApplicationRecord
     h[:average_attendence] = average_attendence
     h[:attended_classes] = attended_classes
     h[:memberships] = valid_memberships
+    h[:avatar_url] = avatar.service_url
     h
   end
 
