@@ -13,6 +13,7 @@ Rails.application.routes.draw do
         end
         member do
           get :instructor
+          put :wechat_avatar
         end
       end
 
