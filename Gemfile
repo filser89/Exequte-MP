@@ -38,6 +38,9 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'autoprefixer-rails'
 gem 'sidekiq'
 gem 'devise'
+gem 'faker'
+gem 'forest_liana'
+
 
 gem 'redis'
 gem 'httparty' # HTTP requests, API calls
