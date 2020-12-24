@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_22_090804) do
+ActiveRecord::Schema.define(version: 2020_12_24_141905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,8 +29,29 @@ ActiveRecord::Schema.define(version: 2020_12_22_090804) do
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
   end
 
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
   create_table "banners", force: :cascade do |t|
-    t.boolean "current"
+    t.boolean "current", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -40,11 +61,11 @@ ActiveRecord::Schema.define(version: 2020_12_22_090804) do
     t.bigint "training_session_id", null: false
     t.integer "price_cents", default: 0, null: false
     t.string "price_currency", default: "CNY", null: false
-    t.boolean "cancelled", null: false
-    t.datetime "cancelled_at", null: false
-    t.boolean "attended", null: false
+    t.boolean "cancelled", default: false, null: false
+    t.datetime "cancelled_at"
+    t.boolean "attended"
     t.string "booked_with"
-    t.bigint "membership_id", null: false
+    t.bigint "membership_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["membership_id"], name: "index_bookings_on_membership_id"
@@ -105,9 +126,9 @@ ActiveRecord::Schema.define(version: 2020_12_22_090804) do
     t.string "cn_name", null: false
     t.integer "price_cents", default: 0, null: false
     t.string "price_currency", default: "CNY", null: false
-    t.datetime "start_end"
+    t.datetime "start_date"
     t.datetime "end_date"
-    t.boolean "smoothie"
+    t.boolean "smoothie", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["membership_type_id"], name: "index_memberships_on_membership_type_id"
@@ -174,6 +195,7 @@ ActiveRecord::Schema.define(version: 2020_12_22_090804) do
     t.string "city"
     t.string "wechat"
     t.string "phone"
+    t.string "mp_email"
     t.string "gender"
     t.boolean "admin", default: false
     t.string "wx_open_id"
@@ -207,6 +229,7 @@ ActiveRecord::Schema.define(version: 2020_12_22_090804) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bookings", "memberships"
   add_foreign_key "bookings", "training_sessions"
   add_foreign_key "bookings", "users"

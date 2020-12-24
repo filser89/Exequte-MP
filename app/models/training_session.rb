@@ -21,7 +21,7 @@ class TrainingSession < ApplicationRecord
   end
 
   def standard_hash
-    {
+    h = {
       id: id,
       begins_at: begins_at,
       calories: calories,
@@ -31,7 +31,6 @@ class TrainingSession < ApplicationRecord
       class_type: training.class_type.kind,
       bookable: can_book?,
       queue: queue.map(&:standard_hash),
-      image_url: training.photo.service_url,
       from: DateTimeService.time_24_h_m(begins_at),
       to: DateTimeService.time_24_h_m(begins_at + duration.minutes),
       instructor_id: instructor.id,
@@ -40,6 +39,8 @@ class TrainingSession < ApplicationRecord
       dates_array: dates_for_membership,
       membership_date: begins_at.midnight
     }
+    h[:image_url] =  training.photo.service_url if training.photo.attached?
+    h
   end
 
   def dates_for_membership

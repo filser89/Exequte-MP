@@ -7,9 +7,9 @@ class CreateMemberships < ActiveRecord::Migration[6.0]
       t.string :cn_name, null: false
       t.integer :price_cents, default: 0, null: false
       t.string :price_currency, default: "CNY", null: false
-      t.datetime :start_end
+      t.datetime :start_date
       t.datetime :end_date
-      t.boolean :smoothie
+      t.boolean :smoothie, null: false
 
       t.timestamps
     end

@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+    :recoverable, :rememberable, :validatable
   DEFAULT_NAME = "#{Rails.application.class.module_parent} User".freeze
   ACTIVITY_LEVELS = [nil, "worker", "desk"].freeze
   TARGETS = [nil, "lose", "gain", "maintain"].freeze
@@ -63,8 +63,8 @@ class User < ApplicationRecord
     h[:carb_prot_fat] = carb_prot_fat
     h[:average_attendence] = average_attendence
     h[:attended_classes] = attended_classes
-    h[:memberships] = valid_memberships
-    h[:avatar_url] = avatar.service_url
+    h[:memberships] = valid_memberships.map(&:standard_hash)
+    h[:avatar_url] = avatar.service_url if avatar.attached?
     h
   end
 
@@ -86,7 +86,7 @@ class User < ApplicationRecord
       city: city,
       wechat: wechat,
       phone: phone,
-      email: email,
+      mp_email: mp_email,
       gender: gender,
       admin: admin,
       voucher_count: voucher_count
@@ -144,6 +144,8 @@ class User < ApplicationRecord
     days_to_count = days_since_created < 28 ? days_since_created : 28
 
     attended = bookings.where(attended: true)
+    return 0 if attended.empty?
+
     range = days_to_count.days.ago..Date.yesterday
     count = attended.count { |a| range.include?(a.training_session.begins_at.to_datetime) }
     count / days_to_count * 7

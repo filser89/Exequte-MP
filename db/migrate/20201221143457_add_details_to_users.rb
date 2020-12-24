@@ -4,6 +4,7 @@ class AddDetailsToUsers < ActiveRecord::Migration[6.0]
     add_column :users, :city, :string
     add_column :users, :wechat, :string
     add_column :users, :phone, :string
+    add_column :users, :mp_email, :string
     add_column :users, :gender, :string
     add_column :users, :admin, :boolean, default: false
     add_column :users, :wx_open_id, :string

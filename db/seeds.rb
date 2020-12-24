@@ -142,7 +142,7 @@ photo = { io: file, filename: filename }
 
 trainings_arr.each do |t|
   training = Training.create!(t_options(t))
-  # training.photo.attach(photo)
+  training.photo.attach(photo)
 
   puts "Created Training #{training.name}"
 
@@ -212,7 +212,7 @@ file = URI.open(url)
 photo = { io: file, filename: filename }
 
 banner = Banner.create!
-# banner.photo.attach(photo)
+banner.photo.attach(photo)
 puts "Created a banner"
 
 puts "Created a membership it belongs to User.second "

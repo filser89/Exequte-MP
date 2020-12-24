@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+
   before_action :authenticate_user!
   before_action :set_locale
   USERS_PER_PAGE  = 20.freeze

@@ -64,7 +64,7 @@ module Api
           user.update(wx_session_key: result['session_key'])
         else
           puts "CREATING"
-          user = User.create(wx_open_id: result['openid'], wx_session_key: result['session_key'])
+          user = User.create!(wx_open_id: result['openid'], wx_session_key: result['session_key'], email: "#{SecureRandom.hex(16)}@exequte.cn", password: SecureRandom.hex(16) )
         end
 
         auth_token = issue_jwt_token(user)
@@ -82,7 +82,7 @@ module Api
       end
 
       def permitted_params
-        params.require(:user).permit(:name, :email, :city, :phone, :wechat, :gender, :first_name, :last_name, :workout_name, :emergency_name, :emergency_phone, :favorite_song, :favorite_food, :music_styles, :profession, :profession_activity_level, :sports, :birthday, :nationality, :height, :current_weight, :current_body_fat, :current_shapes, :target, :target_weight, :target_body_fat, :target_shapes)
+        params.require(:user).permit(:name, :mp_email, :city, :phone, :wechat, :gender, :first_name, :last_name, :workout_name, :emergency_name, :emergency_phone, :favorite_song, :favorite_food, :music_styles, :profession, :profession_activity_level, :sports, :birthday, :nationality, :height, :current_weight, :current_body_fat, :current_shapes, :target, :target_weight, :target_body_fat, :target_shapes)
       end
     end
   end

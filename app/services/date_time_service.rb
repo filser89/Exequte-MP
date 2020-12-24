@@ -22,4 +22,8 @@ class DateTimeService
   def self.date_d_m_y(datetime)
     datetime.strftime("%d/%m/%Y") # "27/12/2020"
   end
+
+  def self.date_m_d_y(datetime)
+    datetime.strftime("%b %d, %Y") # "Dec 25, 2020"
+  end
 end

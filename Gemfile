@@ -39,7 +39,7 @@ gem 'autoprefixer-rails'
 gem 'sidekiq'
 gem 'devise'
 gem 'faker'
-gem 'forest_liana'
+# gem 'forest_liana'
 
 
 gem 'redis'

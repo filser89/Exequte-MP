@@ -11,8 +11,8 @@ class Membership < ApplicationRecord
       id: id,
       name: localize_name,
       price: price.to_i,
-      start_date: start_date,
-      end_date: end_date,
+      start_date: DateTimeService.date_m_d_y(start_date),
+      end_date: DateTimeService.date_m_d_y(end_date),
       smoothie: smoothie
     }
   end
