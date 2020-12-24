@@ -27,8 +27,6 @@ def filename
 end
 
 # Options hashes for models
-
-
 def t_options(training)
   {
     name: training[:name],
@@ -68,7 +66,7 @@ end
 # Test Users
 puts "Creating Test Users"
 5.times { |n| User.create!(name: "Test User #{n + 1}", email: Faker::Internet.email, password: "password", # issue each user the same password
-        password_confirmation: "password")}
+                           password_confirmation: "password")}
 
 users = User.where(instructor: false)
 
@@ -79,10 +77,9 @@ puts "Creating Instructor"
 
 url =
   'https://i.pinimg.com/originals/b1/94/82/b19482a076bc6a51f713c37a54e7b615.jpg'
-# file = URI.open(url)
+file = URI.open(url)
 
-
-# photo = { io: file, filename: filename }
+photo = { io: file, filename: filename }
 
 instructor = User.create!(
   name: "Mr. Instructor",
@@ -95,7 +92,7 @@ instructor = User.create!(
   password: "password", # issue each user the same password
   password_confirmation: "password"
 )
-# instructor.instructor_photo.attach(photo)
+instructor.instructor_photo.attach(photo)
 
 puts "Created a coach: #{instructor.name}"
 
@@ -139,10 +136,9 @@ puts "Creating Trainings and Training Sessions"
 # require 'open-uri'
 url =
   'https://s5o.ru/storage/simple/ru/edt/90/50/f5/37/rue5f231c5949.jpg'
-# file = URI.open(url)
+file = URI.open(url)
 
-
-# photo = { io: file, filename: filename }
+photo = { io: file, filename: filename }
 
 trainings_arr.each do |t|
   training = Training.create!(t_options(t))
@@ -211,9 +207,9 @@ end
 url =
   'https://images.unsplash.com/photo-1607625004976-be5d015ed235?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'
 
-# file = URI.open(url)
+file = URI.open(url)
 
-# photo = { io: file, filename: filename }
+photo = { io: file, filename: filename }
 
 banner = Banner.create!
 # banner.photo.attach(photo)
