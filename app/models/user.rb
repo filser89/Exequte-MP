@@ -129,6 +129,15 @@ class User < ApplicationRecord
     I18n.locale == :'zh-CN' ? cn_instructor_bio : instructor_bio
   end
 
+  def self.notify_all!
+
+    users = User.where.not(wx_open_id: nil, instructor: true)
+    users.each do |u|
+      obj_hash  = {id: u.id, model: u.model_name.name}
+      wx_params = u.new_banner
+      WechatWorker.perform_async('new_banner', obj_hash, wx_params)
+    end
+  end
   private
 
   def calc_standard_price

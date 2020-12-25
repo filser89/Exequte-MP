@@ -40,7 +40,7 @@ gem 'sidekiq'
 gem 'devise'
 gem 'faker'
 # gem 'forest_liana'
-
+gem 'rest-client'
 
 gem 'redis'
 gem 'httparty' # HTTP requests, API calls
