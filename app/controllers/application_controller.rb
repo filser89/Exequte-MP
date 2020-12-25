@@ -5,6 +5,11 @@ class ApplicationController < ActionController::Base
   USERS_PER_PAGE  = 20.freeze
   # respond_to :json
 
+  def destroy_admin_user_session_path
+    session[:current_admin] = nil
+    return "/"
+  end
+
   private
   def per_param
     params[:per] || USERS_PER_PAGE

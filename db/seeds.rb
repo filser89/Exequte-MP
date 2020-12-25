@@ -66,7 +66,7 @@ end
 # Test Users
 puts "Creating Test Users"
 5.times { |n| User.create!(name: "Test User #{n + 1}", email: Faker::Internet.email, password: "password", # issue each user the same password
-                           password_confirmation: "password")}
+                           password_confirmation: "password", admin: true)}
 
 users = User.where(instructor: false)
 
@@ -227,3 +227,10 @@ puts "Created #{Membership.count} Membership"
 puts "Created #{User.count} Users"
 puts "Created #{Booking.count} Bookings"
 puts "Created #{Banner.count} Banners"
+
+
+
+
+# run in rails c to use admin
+
+# User.all.update(city: 'Shanghai', wechat: 'ww', phone: '123', mp_email: 'email@wx.com', gender: 'female', wx_open_id: 'ss', first_name: 'Mary', last_name: 'Poppins', workout_name: 'Monster', emergency_name: 'kk', emergency_phone: '123', birthday: '1991-04-02', nationality: 'Russian', profession: 'Dev', profession_activity_level: 'active', favorite_song: 'Lololo', music_styles: 'Pop', sports: 'gym', favorite_food: 'burger', instructor_bio: 'Cool trainer', cn_instructor_bio: 'hh', height: '174', current_weight: '60', target: '58')
