@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   devise_for :users
   root to: 'pages#home'
 
-   resources :trainings, only: %i[new create show]
+  resources :trainings, only: %i[new create show]
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
 
@@ -26,11 +26,12 @@ Rails.application.routes.draw do
       resources :training_sessions, only: [:index, :show] do
         resources :bookings, only: [:create] do
           collection do
-            get :attendance_list
+            # get :attendance_list
           end
         end
         member do
           put :add_user_to_queue
+          get :session_attendance
         end
         collection do
           get :dates_list
