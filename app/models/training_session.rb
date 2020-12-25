@@ -20,6 +20,13 @@ class TrainingSession < ApplicationRecord
     h
   end
 
+  def attendance_hash
+    h = standard_hash
+    h[:date] = DateTimeService.date_wd_d_m(begins_at)
+    h[:bookings] = bookings.map(&:attendance_hash)
+    h
+  end
+
   def standard_hash
     h = {
       id: id,

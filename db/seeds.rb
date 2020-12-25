@@ -6,6 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 require 'open-uri'
+require 'faker'
 puts "Destroying Data..."
 Booking.destroy_all
 TrainingSession.destroy_all
@@ -65,8 +66,25 @@ end
 
 # Test Users
 puts "Creating Test Users"
-5.times { |n| User.create!(name: "Test User #{n + 1}", email: Faker::Internet.email, password: "password", # issue each user the same password
-                           password_confirmation: "password", admin: true)}
+
+url =
+  'https://i.pinimg.com/originals/b1/94/82/b19482a076bc6a51f713c37a54e7b615.jpg'
+file = URI.open(url)
+
+photo = { io: file, filename: filename }
+
+5.times do |n|
+  u = User.create!(
+    name: "Test User #{n + 1}",
+    first_name: Faker::GreekPhilosophers.name,
+    last_name: Faker::Beer.brand,
+    email: Faker::Internet.email,
+    password: "password", # issue each user the same password
+    password_confirmation: "password",
+    admin: true
+  )
+  u.avatar.attach(photo)
+end
 
 users = User.where(instructor: false)
 

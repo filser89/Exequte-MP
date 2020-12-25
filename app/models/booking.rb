@@ -21,14 +21,22 @@ class Booking < ApplicationRecord
     h
   end
 
+  def attendance_hash
+    h = standard_hash
+    h[:avatar_url] = user.avatar.service_url if user.avatar.attached?
+    h
+  end
+
   def standard_hash
     {
       id: id,
-      name: user.name,
+      first_name: user.first_name,
+      last_name: user.last_name,
       date: training_session.begins_at,
       training_session_id: training_session.id,
       training: training_session.localize_name,
-      booked_with: booked_with
+      booked_with: booked_with,
+      attended: attended
     }
   end
 

@@ -1,7 +1,7 @@
 module Api
   module V1
     class TrainingSessionsController < Api::BaseController
-      before_action :find_training_session, only: [:show, :add_user_to_queue]
+      before_action :find_training_session, only: [:show, :add_user_to_queue, :session_attendance]
       before_action :choose_date_range, only: %i[index dates_list]
 
       def index
@@ -53,6 +53,10 @@ module Api
           begins_at: @date_range
         ).order(begins_at: :asc)
         render_success(@training_sessions.map { |ts| ts_to_hash(ts).merge!(ts.date_list_hash) })
+      end
+
+      def session_attendance
+        render_success(@training_session.attendance_hash)
       end
 
       private

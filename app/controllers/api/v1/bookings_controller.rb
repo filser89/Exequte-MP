@@ -42,6 +42,7 @@ module Api
 
       def cancel
         @booking.cancelled = true
+        @booking.attended = false
         @booking.cancelled_at = DateTime.now
         if @booking.save
           if @booking.cancelled_on_time? && %w[voucher drop-in].include?(@booking.booked_with)
@@ -53,15 +54,15 @@ module Api
         end
       end
 
-      def attendance_list
-        bookings = @training_session.bookings.where(cancelled: false)
-        render_success(bookings)
-      end
+      # def attendance_list
+      #   bookings = @training_session.bookings.where(cancelled: false)
+      #   render_success(bookings)
+      # end
 
       def take_attendance
         attendance_arr = params["_json"]
         attendance_arr.each { |x| Booking.find(x[:id]).update(attended: x[:attended]) }
-        render_success("Attendance taken!")
+        render_success({message: "Attendance taken!"})
       end
 
       private
