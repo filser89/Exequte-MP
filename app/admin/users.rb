@@ -22,6 +22,38 @@ ActiveAdmin.register User do
     column :name
     column :created_at
     column :admin
+    column :updated_at
+    column :city
+    column :wechat
+    column :phone
+    column :mp_email
+    column :gender
+    column :wx_open_id
+    column :first_name
+    column :last_name
+    column :workout_name
+    column :emergency_name
+    column :emergency_phone
+    column :birthday
+    column :nationality
+    column :profession
+    column :profession_activity_level
+    column :favorite_song
+    column :music_styles
+    column :sports
+    column :favorite_food
+    column :voucher_count
+    column :instructor
+    column :instructor_bio
+    column :cn_instructor_bio
+    column :height
+    column :current_weight
+    column :current_body_fat
+    column :current_shapes
+    column :target
+    column :target_weight
+    column :target_body_fat
+    column :target_shapes
     actions
   end
 
