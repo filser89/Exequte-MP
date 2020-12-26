@@ -9,7 +9,6 @@ class User < ApplicationRecord
   validates :profession_activity_level, inclusion: { in: ACTIVITY_LEVELS }
   validates :target, inclusion: { in: TARGETS}
   # serialize :music_styles, Array
-  has_one :body
   has_many :bookings
   has_many :training_sessions, through: :bookings
   has_many :training_sessions_as_instructor, class_name: "TrainingSession"

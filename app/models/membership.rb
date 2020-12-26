@@ -1,4 +1,8 @@
 class Membership < ApplicationRecord
+  validates :name, presence: true
+  validates :cn_name, presence: true
+  validates :start_date, presence: true
+  validates :end_date, presence: true
   monetize :price_cents
   belongs_to :membership_type
   belongs_to :user

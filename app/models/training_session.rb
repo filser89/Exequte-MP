@@ -2,6 +2,14 @@ class TrainingSession < ApplicationRecord
   monetize :price_1_cents, :price_2_cents, :price_3_cents, :price_4_cents, :price_5_cents, :price_6_cents, :price_7_cents
   serialize :queue, Array
   validates :begins_at, presence: true
+  validates :name, presence: true
+  validates :cn_name, presence: true
+  validates :description, presence: true
+  validates :cn_description, presence: true
+  validates :duration, presence: true
+  validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :capacity, presence: true
+  validates :capacity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   belongs_to :training
   belongs_to :instructor, class_name: "User", foreign_key: :user_id
   has_many :bookings
