@@ -55,6 +55,9 @@ module Api
         return render_error(I18n.t('errors.wechat.wx_app_error')) unless client.error.nil?
 
         result = client.request
+        puts "Error is somewhere here"
+        p client
+        p result
 
         return render_error(I18n.t('errors.wechat.tencent_error', nil)) if result['errcode']
 

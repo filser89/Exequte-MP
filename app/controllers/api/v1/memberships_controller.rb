@@ -10,7 +10,7 @@ module Api
         @membership.smoothie = @membership_type.smoothie
         @membership.end_date = end_date
         @membership.membership_type = @membership_type
-        @membership.price = @membership_type.price
+        # @membership.price = @membership_type.price
         @membership.user = current_user
 
         if @membership.save
@@ -29,7 +29,7 @@ module Api
       def permitted_params
         pars = params.require(:membership)
         pars.each { |par| puts "param: #{par[1]} class: #{par[1].class}" }
-        params.require(:membership).permit(:start_date)
+        params.require(:membership).permit(:start_date, :price_cents, :coupon)
       end
     end
   end

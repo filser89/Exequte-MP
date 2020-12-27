@@ -76,7 +76,7 @@ module Api
       end
 
       def permitted_params
-        params.require(:booking).permit(:booked_with, :membership_id)
+        params.require(:booking).permit(:booked_with, :membership_id, :price_cents, :coupon)
       end
     end
   end

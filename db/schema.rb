@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_24_141905) do
+ActiveRecord::Schema.define(version: 2020_12_27_150710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 2020_12_24_141905) do
     t.bigint "membership_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "coupon"
     t.index ["membership_id"], name: "index_bookings_on_membership_id"
     t.index ["training_session_id"], name: "index_bookings_on_training_session_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
@@ -91,6 +92,15 @@ ActiveRecord::Schema.define(version: 2020_12_24_141905) do
     t.string "name", null: false
     t.integer "kind", null: false
     t.integer "cancel_before", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "coupons", force: :cascade do |t|
+    t.string "relation"
+    t.string "coupon_code"
+    t.float "discount"
+    t.text "note"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -131,6 +141,7 @@ ActiveRecord::Schema.define(version: 2020_12_24_141905) do
     t.boolean "smoothie", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "coupon"
     t.index ["membership_type_id"], name: "index_memberships_on_membership_type_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
@@ -181,6 +192,15 @@ ActiveRecord::Schema.define(version: 2020_12_24_141905) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["class_type_id"], name: "index_trainings_on_class_type_id"
+  end
+
+  create_table "user_coupons", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "coupon_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["coupon_id"], name: "index_user_coupons_on_coupon_id"
+    t.index ["user_id"], name: "index_user_coupons_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -238,4 +258,6 @@ ActiveRecord::Schema.define(version: 2020_12_24_141905) do
   add_foreign_key "training_sessions", "trainings"
   add_foreign_key "training_sessions", "users"
   add_foreign_key "trainings", "class_types"
+  add_foreign_key "user_coupons", "coupons"
+  add_foreign_key "user_coupons", "users"
 end
