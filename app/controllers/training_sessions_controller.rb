@@ -23,7 +23,8 @@ class TrainingSessionsController < ApplicationController
     @training_session.price_7 = @training.class_type.price_7
     @training_session.cancel_before = @training.class_type.cancel_before
     @training_session.class_kind = @training.class_type.kind
-    if @training_session.save!
+    if @training_session.save
+      create_for_weeks(params[:weeks], @training_session)
       redirect_to @training_session
     else
       render :new
@@ -32,8 +33,35 @@ class TrainingSessionsController < ApplicationController
 
   def show
     @training_session = TrainingSession.find(params[:id])
+    @weeks_ts = TrainingSession.where("id > ?", @training_session.id)
   end
 
+  def create_for_weeks(weeks, training_session)
+    weeks.to_i.times do |n|
+      i = n + 1
+      ts = TrainingSession.create(
+        training: training_session.training,
+        instructor: training_session.instructor,
+        name: training_session.name,
+        cn_name: training_session.cn_name,
+        description: training_session.description,
+        cn_description: training_session.cn_description,
+        duration: training_session.duration,
+        capacity: training_session.capacity,
+        calories: training_session.calories,
+        price_1: training_session.price_1,
+        price_2: training_session.price_2,
+        price_3: training_session.price_3,
+        price_4: training_session.price_4,
+        price_5: training_session.price_5,
+        price_6: training_session.price_6,
+        price_7: training_session.price_7,
+        cancel_before: training_session.cancel_before,
+        class_kind: training_session.class_kind,
+        begins_at: training_session.begins_at + i.weeks
+      )
+    end
+  end
 
   def permited_params
     params.require(:training_session).permit(:training_id, :begins_at, :user_id)
