@@ -1,0 +1,12 @@
+<div class="container">
+  <%= simple_form_for(@training_session) do |f| %>
+    <%= f.association :training %>
+    <%= f.association :instructor, scope: {instructor: true} %>
+    <%= f.input :begins_at, as: :datetime %>
+    <%= f.button :submit %>
+    <div>
+      <label for="more"> Create this training session for weeks</label>
+      <input type="number" name="more">
+    </div>
+  <% end %>
+</div>
