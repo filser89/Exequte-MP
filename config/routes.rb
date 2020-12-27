@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
       # PAGES
       post 'pages', to: "pages#make_strings"
+      # COUPONS
+      get 'coupons', to: "coupons#use_coupon"
       # USERS
       resources :users, only: %i[index show update] do
         collection do
