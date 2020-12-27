@@ -8,7 +8,7 @@ ActiveAdmin.register MembershipType do
   permit_params :name, :duration, :cn_name, :price_cents, :price_currency, :smoothie
   #
 
-  sidebar "Lets see", only: [:show, :new, :edit] do
+  sidebar "Memberships", only: [:show, :edit] do
     ul do
       li link_to "Memberships",    admin_membership_type_memberships_path(resource)
     end

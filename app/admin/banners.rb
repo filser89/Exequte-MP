@@ -18,7 +18,7 @@ ActiveAdmin.register Banner do
   form do |f|
     f.inputs "Banners" do
       f.input :photo, as: :file
-      f.input :current, label: "current"
+      f.input :current, label: "Current", as: :radio
     end
     f.actions
   end

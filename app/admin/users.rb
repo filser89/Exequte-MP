@@ -15,7 +15,13 @@ ActiveAdmin.register User do
   #   permitted
   # end
 
- index do
+  # sidebar "Belongings", only: [:show, :edit] do
+  #   ul do
+  #     li link_to "Bookings",    admin_user_bookings_path(resource)
+  #   end
+  # end
+
+  index do
     selectable_column
     column :id
     column :email
@@ -57,7 +63,7 @@ ActiveAdmin.register User do
     actions
   end
 
-form title: 'Users' do |f|
+  form title: 'Users' do |f|
     inputs 'Details of Users' do
       input :name, label: "name"
       li "Created at #{f.object.created_at}" unless f.object.new_record?
@@ -103,6 +109,6 @@ form title: 'Users' do |f|
     actions
   end
   permit_params :name, :city, :phone, :mp_email, :gender, :wx_open_id, :wx_session_key, :first_name, :last_name, :workout_name, :emergency_name, :emergency_phone, :birthday, :nationality , :id, :profession, :profession_activity_level, :favorite_song, :music_styles, :sports, :favorite_food, :voucher_count, :instructor, :instructor_bio, :cn_instructor_bio, :height, :current_weight, :current_body_fat, :current_shapes, :target, :target_weight, :target_body_fat, :target_shapes
-# permit_params do
+  # permit_params do
 
 end
