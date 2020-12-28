@@ -15,6 +15,7 @@ ActiveAdmin.register TrainingSession do
   #   permitted
   # end
 
+
   form do |f|
     tabs do
       tab "Basic" do

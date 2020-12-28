@@ -1,5 +1,7 @@
 class AddDetailsToUsers < ActiveRecord::Migration[6.0]
   def change
+    add_column :users, :first_name, :string
+    add_column :users, :last_name, :string
     add_column :users, :name, :string
     add_column :users, :city, :string
     add_column :users, :wechat, :string
@@ -9,8 +11,6 @@ class AddDetailsToUsers < ActiveRecord::Migration[6.0]
     add_column :users, :admin, :boolean, default: false
     add_column :users, :wx_open_id, :string
     add_column :users, :wx_session_key, :string
-    add_column :users, :first_name, :string
-    add_column :users, :last_name, :string
     add_column :users, :workout_name, :string
     add_column :users, :emergency_name, :string
     add_column :users, :emergency_phone, :string

@@ -1,4 +1,6 @@
 ActiveAdmin.register Booking do
+  # belongs_to :user
+  # belongs_to :training_session
 
   # See permitted parameters documentation:
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters

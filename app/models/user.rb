@@ -13,6 +13,8 @@ class User < ApplicationRecord
   has_many :training_sessions, through: :bookings
   has_many :training_sessions_as_instructor, class_name: "TrainingSession"
   has_many :memberships
+  has_many :user_coupons, dependent: :destroy
+  has_many :coupons, through: :user_coupons
   # has_many :membership_types, through: :memberships
   has_one_attached :instructor_photo
   has_one_attached :avatar
@@ -152,5 +154,7 @@ class User < ApplicationRecord
 
   def set_defaults
     self.name = DEFAULT_NAME if self.name.blank?
+    self.email = "#{SecureRandom.hex(8)}@exequte.cn" if self.email.blank?
+    self.password = SecureRandom.hex(8) if self.password.blank?
   end
 end
