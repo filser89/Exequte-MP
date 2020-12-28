@@ -48,7 +48,7 @@ module Api
           if @booking.cancelled_on_time? && %w[voucher drop-in].include?(@booking.booked_with)
             @booking.user.return_voucher!
           end
-          render_success(@booking.standard_hash)
+          render_success({msg: "Cancelled"})
         else
           # render error
         end

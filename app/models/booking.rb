@@ -8,12 +8,14 @@ class Booking < ApplicationRecord
 
   def upcoming_hash
     h = show_hash
+    h[:instructor_id] = training_session.instructor.id
     h[:session][:date] = DateTimeService.date_wd_d_m(training_session.begins_at)
     h
   end
 
   def history_hash
     h = show_hash
+    h[:instructor_id] = training_session.instructor.id
     h[:session][:date] = DateTimeService.date_d_m_y(training_session.begins_at)
     h
   end
@@ -38,10 +40,15 @@ class Booking < ApplicationRecord
       training_session_id: training_session.id,
       training: training_session.localize_name,
       booked_with: booked_with,
-      attended: attended
+      attended: attended,
+      price: price,
+      can_cancel: can_cancel?
     }
   end
 
+  def can_cancel?
+    DateTime.now < training_session.begins_at && !cancelled
+  end
 
   def cancelled_on_time?
     ((training_session.begins_at - cancelled_at) * 24).to_i > training_session.cancel_before
