@@ -15,6 +15,8 @@ ActiveAdmin.register MembershipType do
   end
 
 
+
+
   # or
   #
   # permit_params do
