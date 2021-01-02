@@ -10,6 +10,13 @@ class Membership < ApplicationRecord
   has_many :training_sessions, through: :bookings
 
 
+  def booking_hash
+    h = standard_hash
+    h[:start_date] = DateTimeService.date_d_m_y(start_date)
+    h[:end_date] = DateTimeService.date_d_m_y(end_date)
+    h
+  end
+
   def standard_hash
     {
       id: id,
