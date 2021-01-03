@@ -233,7 +233,16 @@ banner = Banner.create!
 banner.photo.attach(photo)
 puts "Created a banner"
 
-puts "Created a membership it belongs to User.second "
+# Info
+
+Info.create!(
+  paragraph_one: "P1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Proin libero nunc consequat interdum varius sit amet mattis. Viverra nibh cras pulvinar mattis nunc sed blandit libero. At auctor urna nunc id cursus metus aliquam. Elementum nisi quis eleifend quam adipiscing. Dolor magna eget est lorem. Sit amet tellus cras adipiscing enim eu turpis egestas pretium. Erat imperdiet sed euismod nisi porta lorem. Egestas fringilla phasellus faucibus scelerisque eleifend. In egestas erat imperdiet sed. Erat imperdiet sed euismod nisi porta lorem mollis aliquam ut. Arcu dictum varius duis at. Orci nulla pellentesque dignissim enim sit. Tempus imperdiet nulla malesuada pellentesque elit eget gravida. Egestas integer eget aliquet nibh. Aliquet enim tortor at auctor urna nunc id cursus.",
+  paragraph_two: "P2. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Proin libero nunc consequat interdum varius sit amet mattis. Viverra nibh cras pulvinar mattis nunc sed blandit libero. At auctor urna nunc id cursus metus aliquam. Elementum nisi quis eleifend quam adipiscing. Dolor magna eget est lorem. Sit amet tellus cras adipiscing enim eu turpis egestas pretium. Erat imperdiet sed euismod nisi porta lorem. Egestas fringilla phasellus faucibus scelerisque eleifend. In egestas erat imperdiet sed. Erat imperdiet sed euismod nisi porta lorem mollis aliquam ut. Arcu dictum varius duis at. Orci nulla pellentesque dignissim enim sit. Tempus imperdiet nulla malesuada pellentesque elit eget gravida. Egestas integer eget aliquet nibh. Aliquet enim tortor at auctor urna nunc id cursus.",
+  title_one: "Title One",
+  title_two: "Title Two"
+)
+
+puts "Created an info"
 
 puts "=============================================="
 puts "Seeding is completed"
@@ -245,6 +254,7 @@ puts "Created #{Membership.count} Membership"
 puts "Created #{User.count} Users"
 puts "Created #{Booking.count} Bookings"
 puts "Created #{Banner.count} Banners"
+puts "Created #{Info.count} Infos"
 
 
 
