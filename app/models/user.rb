@@ -4,8 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
     :recoverable, :rememberable, :validatable
   DEFAULT_NAME = "#{Rails.application.class.module_parent} User".freeze
-  ACTIVITY_LEVELS = [nil, "worker", "desk"].freeze
-  TARGETS = [nil, "lose", "gain", "maintain"].freeze
+  ACTIVITY_LEVELS = [nil, "", "worker", "desk"].freeze
+  TARGETS = [nil, "", "lose", "gain", "maintain"].freeze
   validates :profession_activity_level, inclusion: { in: ACTIVITY_LEVELS }
   validates :target, inclusion: { in: TARGETS}
   # serialize :music_styles, Array
@@ -131,6 +131,10 @@ class User < ApplicationRecord
   end
 
   private
+
+  # def password_required?
+  #   new_record? ? super : false
+  # end
 
   def calc_standard_price
     return 'price_1_cents' if average_attendence <= 1
