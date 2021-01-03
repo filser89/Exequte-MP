@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         collection do
           post :wx_login
           get :info
+          get :instructors
         end
         member do
           get :instructor
@@ -57,7 +58,11 @@ Rails.application.routes.draw do
         resources :memberships, only: [:create]
       end
 
+      # BANNERS
       resources :banners, only: [:index]
+
+      # INFOS
+      resources :infos, only: [:index]
     end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

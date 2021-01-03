@@ -36,6 +36,11 @@ module Api
         render_success(@user.instructor_hash)
       end
 
+      def instructors
+        @instructors = User.where(instructor: true)
+        render_success(@instructors.map(&:instructor_hash))
+      end
+
       def update
         if @user.update(permitted_params)
           render_success({ message: 'Profile updated!', user: @user.standard_hash })
