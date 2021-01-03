@@ -80,7 +80,7 @@ module Api
         h[:price] = training_session_price(training_session)
         h[:btn_pattern] = btn_pattern(training_session)
         h[:access_options] = access_options(training_session)
-        h[:usable_membership] = usable_membership(training_session).booking_hash
+        h[:usable_membership] = usable_membership(training_session).booking_hash if usable_membership(training_session)
         h
       end
 
