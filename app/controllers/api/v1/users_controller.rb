@@ -78,6 +78,8 @@ module Api
         puts "==============OUTPUT================"
         puts "auth_token: #{auth_token}"
         puts "token: #{token}"
+        puts "user: #{user}"
+        puts "standard_hash: #{user.standard_hash}"
         response = { user: user.standard_hash, auth_token: token }
         puts "Response: #{response}"
         render_success({ user: user.standard_hash, auth_token: token })
