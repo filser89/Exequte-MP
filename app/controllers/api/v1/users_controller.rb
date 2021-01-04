@@ -76,8 +76,10 @@ module Api
           expires: Rails.application.credentials.jwt_expiration_seconds.to_i.seconds.from_now.to_i * 1000
         }
         puts "==============OUTPUT================"
+        puts "auth_token: #{auth_token}"
+        puts "token: #{token}"
         response = { user: user.standard_hash, auth_token: token }
-        p response
+        puts "Response: #{response}"
         render_success({ user: user.standard_hash, auth_token: token })
       end
 
