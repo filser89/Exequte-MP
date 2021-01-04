@@ -60,18 +60,13 @@ module Api
         return render_error(I18n.t('errors.wechat.wx_app_error')) unless client.error.nil?
 
         result = client.request
-        puts "Error is somewhere here"
-        p client
-        p result
 
         return render_error(I18n.t('errors.wechat.tencent_error', nil)) if result['errcode']
 
         user = User.find_by(wx_open_id: result['openid'])
         if user
-          puts "UPDATING"
           user.update(wx_session_key: result['session_key'])
         else
-          puts "CREATING"
           user = User.create!(wx_open_id: result['openid'], wx_session_key: result['session_key'])
         end
 
@@ -80,6 +75,8 @@ module Api
           auth_token: auth_token,
           expires: Rails.application.credentials.jwt_expiration_seconds.to_i.seconds.from_now.to_i * 1000
         }
+        puts "==============OUTPUT================"
+        p { user: user.standard_hash, auth_token: token }
         render_success({ user: user.standard_hash, auth_token: token })
       end
 
