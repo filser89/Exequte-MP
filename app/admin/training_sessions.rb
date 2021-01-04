@@ -20,7 +20,7 @@ ActiveAdmin.register TrainingSession do
     tabs do
       tab "Basic" do
         f.semantic_errors # shows errors on :base
-        f.inputs except: %i[price_1_cents price_1_currency price_2_cents price_2_currency price_3_cents price_3_currency price_4_cents price_4_currency price_5_cents price_5_currency price_6_cents price_6_currency price_7_cents price_7_currency]# builds an input field for every attribute
+        f.inputs except: %i[price_1_cents price_1_currency price_2_cents price_2_currency price_3_cents price_3_currency price_4_cents price_4_currency price_5_cents price_5_currency price_6_cents price_6_currency price_7_cents price_7_currency queue]# builds an input field for every attribute
       end
       tab "Prices" do
         f.semantic_errors # shows errors on :base
