@@ -23,8 +23,8 @@ class WechatNotifier < ApplicationRecord
 
   def self.booking_reminder
     {
-      "template_id" => "??????????????????????????????", #新订单通知
-      "receiver" => (params[:openid] || "OPENID"), # receiver's openid
+      "template_id" => "siNd6GpH_dAD9k8gIHE0sz384YGb96Dx0uG3_Qr8FVQ", #新订单通知
+      "receiver" => "obaux4lFtNTZt81sgdRyUv-S7MHk"#(params[:openid] || "OPENID"), # receiver's openid
       "pagepath" => (params[:pagepath] || "PAGEPATH"), # Reirect to an MP page on tap
       "header_color" => COLORS[:header], # RED
       "body_color" => COLORS[:body], # BLUE
@@ -33,9 +33,11 @@ class WechatNotifier < ApplicationRecord
 
         # CUSTOM MESSAGES SENT TO USER
         # Ekaterina can edit!
-        "first" => "Your class begins soon!",
+        "first" => "Your class begins in 4 HOURS!",
         "keyword1" => "#{params[:ts_name]}",
-        "keyword2" => "#{params[:ts_time]}",
+        "keyword2" => "exeQute",
+        "keyword3" => "425, Whatever Rd",
+        "keyword4" => "#{params[:ts_time]}",
         "remark" => "Please come 15 minutes in advance"
       }
     }
