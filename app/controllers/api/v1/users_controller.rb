@@ -67,7 +67,7 @@ module Api
         if user
           user.update(wx_session_key: result['session_key'])
         else
-          user = User.create!(wx_open_id: result['openid'], wx_session_key: result['session_key'])
+          user = User.create!(wx_open_id: result['openid'], wx_session_key: result['session_key'], email: "#{SecureRandom.hex(8)}@exequte.cn", password: '123456')
         end
 
         auth_token = issue_jwt_token(user)

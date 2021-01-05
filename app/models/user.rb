@@ -132,10 +132,6 @@ class User < ApplicationRecord
 
   private
 
-  # def password_required?
-  #   new_record? ? super : false
-  # end
-
   def calc_standard_price
     return 'price_1_cents' if average_attendence <= 1
 
@@ -158,7 +154,5 @@ class User < ApplicationRecord
 
   def set_defaults
     self.name = DEFAULT_NAME if self.name.blank?
-    self.email = "#{SecureRandom.hex(8)}@exequte.cn" if self.email.blank?
-    self.password = SecureRandom.hex(8) if self.password.blank?
   end
 end

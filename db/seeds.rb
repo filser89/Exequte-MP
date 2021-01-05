@@ -16,6 +16,7 @@ Membership.destroy_all
 User.destroy_all
 MembershipType.destroy_all
 Banner.destroy_all
+Info.destroy_all
 puts "=============================================="
 
 # Past and Future ranges

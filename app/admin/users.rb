@@ -1,12 +1,13 @@
 ActiveAdmin.register User do
   # config.create_another = true
 
+  # end
   # See permitted parameters documentation:
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :email, :encrypted_password, :reset_password_token, :reset_password_sent_at, :remember_created_at, :name, :city, :wechat, :phone, :gender, :admin, :wx_open_id, :wx_session_key, :first_name, :last_name, :workout_name, :emergency_name, :emergency_phone, :birthday, :nationality, :profession, :profession_activity_level, :favorite_song, :music_styles, :sports, :favorite_food, :voucher_count, :instructor, :instructor_bio, :cn_instructor_bio, :height, :current_weight, :current_body_fat, :current_shapes, :target, :target_weight, :target_body_fat, :target_shapes, :mp_email
+  permit_params :email, :encrypted_password, :reset_password_token, :reset_password_sent_at, :remember_created_at, :name, :city, :wechat, :phone, :gender, :admin, :wx_open_id, :wx_session_key, :first_name, :last_name, :workout_name, :emergency_name, :emergency_phone, :birthday, :nationality, :profession, :profession_activity_level, :favorite_song, :music_styles, :sports, :favorite_food, :voucher_count, :instructor, :instructor_bio, :cn_instructor_bio, :height, :current_weight, :current_body_fat, :current_shapes, :target, :target_weight, :target_body_fat, :target_shapes, :mp_email#, :password, :password_confirmation
   #
   # or
   #
@@ -53,7 +54,8 @@ ActiveAdmin.register User do
     tabs do
       tab "Primary" do
         f.semantic_errors # shows errors on :base
-        f.inputs :first_name, :last_name, :workout_name, :wechat, :phone, :mp_email, :emergency_name, :emergency_phone, :voucher_count, :instructor, :admin# builds an input field for every attribute
+        f.inputs :first_name, :last_name, :workout_name, :wechat, :phone, :mp_email, :emergency_name, :emergency_phone, :voucher_count, :instructor, :admin#, :password, :password_confirmation # builds an input field for every attribute
+        # , :password, :password_confirmation
       end
       tab "Secondary" do
         f.semantic_errors # shows errors on :base

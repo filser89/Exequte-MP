@@ -94,5 +94,6 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # I18n config
+  # config.i18n.fallbacks = [I18n.default_locale]
   config.i18n.available_locales = ['zh-CN', :en]
 end
