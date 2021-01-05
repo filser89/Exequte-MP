@@ -60,6 +60,7 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   # I18n config
+  # config.i18n.fallbacks = [I18n.default_locale]
   config.i18n.available_locales = ['zh-CN', :en]
   # helps to seed with active record attachments
   config.active_job.queue_adapter = :sidekiq

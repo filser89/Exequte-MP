@@ -6,17 +6,17 @@ ActiveAdmin.setup do |config|
   #
   config.site_title = "Exequte Mp"
   def authenticate_admin!
-  redirect_to new_user_session_path unless current_user && current_user.admin
-end
+    redirect_to new_user_session_path unless current_user && current_user.admin
+  end
 
-# Edit those four lines, to reuse existing `User` model.
+  # Edit those four lines, to reuse existing `User` model.
 
   # [...]
   config.authentication_method = :authenticate_admin!
   # [...]
   config.current_user_method = :current_user
   # [...]
-config.logout_link_path = :destroy_admin_user_session_path
+  config.logout_link_path = :destroy_admin_user_session_path
   # [...]
   config.logout_link_method = :delete
 
@@ -172,7 +172,7 @@ config.logout_link_path = :destroy_admin_user_session_path
   # You can exclude possibly sensitive model attributes from being displayed,
   # added to forms, or exported by default by ActiveAdmin
   #
-  config.filter_attributes = [:encrypted_password, :password, :password_confirmation]
+  # config.filter_attributes = [:encrypted_password, :password, :password_confirmation]
 
   # == Localize Date/Time Format
   #
