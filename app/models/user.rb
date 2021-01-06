@@ -75,7 +75,7 @@ class User < ApplicationRecord
       last_name: last_name,
       bio: localize_instructor_bio
     }
-    h [:image_url] = instructor_photo.service_url if instructor_photo.attached?
+    h[:image_url] = instructor_photo.service_url if instructor_photo.attached?
     h
   end
 
