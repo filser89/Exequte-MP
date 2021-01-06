@@ -70,7 +70,7 @@ class User < ApplicationRecord
   end
 
   def instructor_hash
-    {
+    h = {
       first_name: first_name,
       last_name: last_name,
       bio: localize_instructor_bio
