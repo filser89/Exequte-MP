@@ -15,6 +15,18 @@ class TrainingSession < ApplicationRecord
   has_many :bookings
   has_many :users, through: :bookings
 
+  def upcoming_hash
+    h = show_hash
+    h[:date] = DateTimeService.date_wd_d_m(begins_at)
+    h
+  end
+
+  def history_hash
+    h = show_hash
+    h[:date] = DateTimeService.date_d_m_y(begins_at)
+    h
+  end
+
   def show_hash
     h = standard_hash
     h[:description] = localize_description
