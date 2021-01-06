@@ -74,7 +74,7 @@ class User < ApplicationRecord
       first_name: first_name,
       last_name: last_name,
       bio: localize_instructor_bio,
-      image_url: instructor_photo.service_url
+      image_url: instructor_photo.service_url if instructor_photo.attached?
     }
   end
 
