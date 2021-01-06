@@ -7,11 +7,11 @@ module Api
       def index
         sessions_array = []
         @date_range.each do |date|
-          puts "TS INDEX DATE:"
-          p date
-          puts "TS INDEX DATE TODAY:"
-          p DateTime.now.midnight
-          p date == DateTime.now.midnight
+          # puts "TS INDEX DATE:"
+          # p date
+          # puts "TS INDEX DATE TODAY:"
+          # p DateTime.now.midnight
+          # p date == DateTime.now.midnight
           time_range = date == DateTime.now.midnight ? Time.now..date.end_of_day : date.beginning_of_day..date.end_of_day
           sessions = TrainingSession.includes(:training, training: [:class_type]).where(begins_at: time_range)
           training_sessions = sessions.map { |ts| ts_to_hash(ts) }

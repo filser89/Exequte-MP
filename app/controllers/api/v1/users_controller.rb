@@ -5,15 +5,23 @@ module Api
       before_action :find_user, only: %i[show instructor update wechat_avatar avatar]
 
       def avatar
+        puts "==========IN AVATAR=============="
+        puts "PARAMS: #{params}"
         avatar = params[:avatar]
+        puts "AVATAR: #{avatar}"
         @user.avatar.attach(avatar)
-        render_success("Avatar uploaded")
+        puts  "Attached?  #{@user.avatar.attached?}"
+        render_success({msg: 'Avatar uploaded'})
       end
 
       def wechat_avatar
+        puts "============WECHAT AVATAR============"
+        p params
         avatar = { io: FileDownloaderService.download(params[:avatarUrl]), filename: FileDownloaderService.filename }
+        p avatar
         @user.avatar.attach(avatar)
-        render_success("Avatar uploaded")
+        puts  "Attached?  #{@user.avatar.attached?}"
+        render_success({msg: 'Avatar uploaded'})
       end
 
       def index

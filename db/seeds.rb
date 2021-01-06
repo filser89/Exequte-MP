@@ -71,7 +71,6 @@ puts "Creating Test Users"
 url =
   'https://i.pinimg.com/originals/b1/94/82/b19482a076bc6a51f713c37a54e7b615.jpg'
 file = URI.open(url)
-
 photo = { io: file, filename: filename }
 
 5.times do |n|
@@ -221,18 +220,6 @@ mt_arr.each do |mt|
   puts "Created membership: #{membership_type.name}"
 end
 
-# Banner
-
-url =
-  'https://images.unsplash.com/photo-1607625004976-be5d015ed235?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'
-
-file = URI.open(url)
-
-photo = { io: file, filename: filename }
-
-banner = Banner.create!
-banner.photo.attach(photo)
-puts "Created a banner"
 
 # Info
 
@@ -244,6 +231,19 @@ Info.create!(
 )
 
 puts "Created an info"
+
+# Banner
+
+url =
+  'https://images.unsplash.com/photo-1607625004976-be5d015ed235?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'
+
+file = URI.open(url)
+
+photo = { io: file, filename: filename }
+
+banner = Banner.create!(title: "Title", promo_text: "Promo text")
+banner.photo.attach(photo)
+puts "Created a banner"
 
 puts "=============================================="
 puts "Seeding is completed"
