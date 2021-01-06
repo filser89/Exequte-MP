@@ -36,14 +36,13 @@ module Api
         .training_sessions_as_instructor
         .where('begins_at <= ?', DateTime.now)
         .order(begins_at: :desc)
+        .map(&:history_hash)
         upcoming_ts = current_user
         .training_sessions_as_instructor
         .where('begins_at >= ?', DateTime.now)
         .order(:begins_at)
-        sessions = {
-          history: history_ts.map(&:standard_hash),
-          upcoming: upcoming_ts.map(&:standard_hash)
-        }
+        .map(&:upcoming_hash)
+        sessions = [upcoming_ts, history_ts]
         render_success(sessions)
       end
 
