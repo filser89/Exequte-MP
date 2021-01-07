@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_27_150710) do
+ActiveRecord::Schema.define(version: 2021_01_07_200858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,8 @@ ActiveRecord::Schema.define(version: 2020_12_27_150710) do
     t.boolean "current", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "title", null: false
+    t.string "promo_text", null: false
   end
 
   create_table "bookings", force: :cascade do |t|
@@ -116,6 +118,14 @@ ActiveRecord::Schema.define(version: 2020_12_27_150710) do
     t.string "title_four"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "cn_paragraph_one"
+    t.text "cn_paragraph_two"
+    t.text "cn_paragraph_three"
+    t.text "cn_paragraph_four"
+    t.string "cn_title_one"
+    t.string "cn_title_two"
+    t.string "cn_title_three"
+    t.string "cn_title_four"
   end
 
   create_table "membership_types", force: :cascade do |t|
