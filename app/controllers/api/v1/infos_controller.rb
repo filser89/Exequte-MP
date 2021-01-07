@@ -3,7 +3,7 @@ module Api
     class InfosController < Api::BaseController
       def index
         @info = Info.last
-        render_success(@info)
+        render_success(@info.standard_hash)
       end
     end
   end
