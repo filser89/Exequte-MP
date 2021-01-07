@@ -10,3 +10,13 @@ zh-CN:
       js_code_missing: 'JS code missing'
       wx_app_error: 'Wechat MP APP key or secret missing'
       tencent_error: 'Tencent error or JS code expired'
+  miniprogram:
+    class-info:
+      min: "cn  min"
+      kcal: "cn  kCal"
+      coach: "cn Coach "
+      cancellation_1: "cn Free cancelation "
+      cancellation_2: "cn  hours in advance."
+      date: "cn Date: "
+      price: "cn Price: "
+      time: "cn Time: "

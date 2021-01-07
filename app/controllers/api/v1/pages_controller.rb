@@ -4,10 +4,11 @@ module Api
       def make_strings
         puts "Inside make_strings"
         p request.headers['X-API-Lang']
-        keys = params["_json"]
+        page = params["page"]
+        keys = params["keys"]
         strings = {}
         keys.each do |key|
-          strings[key] = I18n.t(key)
+          strings[key] = I18n.t("miniprogram.#{page}.#{key}")
         end
         render_success(strings)
       end

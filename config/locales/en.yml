@@ -41,3 +41,13 @@ en:
       js_code_missing: "JS code missing"
       wx_app_error: "Wechat MP APP key or secret missing"
       tencent_error: "Tencent error or JS code expired"
+  miniprogram:
+    class-info:
+      min: " min"
+      kcal: " kCal"
+      coach: "Coach "
+      cancellation_1: "Free cancelation "
+      cancellation_2: " hours in advance."
+      date: "Date: "
+      price: "Price: "
+      time: "Time: "
