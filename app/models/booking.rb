@@ -17,8 +17,10 @@ class Booking < ApplicationRecord
     h = show_hash
     h[:instructor_id] = training_session.instructor.id
     h[:session][:date] = DateTimeService.date_d_m_y(training_session.begins_at)
+    h[:status] = status
     h
   end
+
   def show_hash
     h = standard_hash
     h[:session] = training_session.show_hash
@@ -52,6 +54,12 @@ class Booking < ApplicationRecord
 
   def cancelled_on_time?
     ((training_session.begins_at - cancelled_at) * 24).to_i > training_session.cancel_before
+  end
+
+  def status
+    return 'completed' if attended
+    return 'cancelled' if cancelled
+    DateTime.now < training_session.begins_at ? 'new' : 'no show'
   end
 
 end

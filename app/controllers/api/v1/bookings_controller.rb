@@ -10,13 +10,21 @@ module Api
         .where('training_sessions.begins_at <= ?', DateTime.now)
         .order('training_sessions.begins_at DESC')
         .map(&:history_hash)
+
+        cancelled = Booking.includes(:training_session, :user)
+        .where(user: current_user, cancelled: true)
+        .where('training_sessions.begins_at > ?', DateTime.now)
+        .order('training_sessions.begins_at DESC')
+        .map(&:history_hash)
+
+
         upcoming = Booking.includes(:training_session, :user)
-        .where(user: current_user)
+        .where(user: current_user, cancelled: false)
         .references(:training_sessions)
         .where('training_sessions.begins_at > ?', DateTime.now)
         .order('training_sessions.begins_at ASC')
         .map(&:upcoming_hash)
-        render_success([upcoming, history])
+        render_success([upcoming, cancelled.concat(history)])
       end
 
       def show
