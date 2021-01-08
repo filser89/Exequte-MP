@@ -1,5 +1,5 @@
 class Booking < ApplicationRecord
-  BOOKING_OPTIONS = [nil, 'drop-in', 'membership', 'voucher']
+  BOOKING_OPTIONS = [nil, 'free', 'drop-in', 'membership', 'voucher']
   monetize :price_cents
   belongs_to :user
   belongs_to :training_session
