@@ -58,6 +58,9 @@ Rails.application.routes.draw do
         resources :memberships, only: [:create]
       end
 
+      # MEMBERSHIPS
+      post "notify", to: 'memberships#payment_confirmed'
+
       # BANNERS
       resources :banners, only: [:index]
 

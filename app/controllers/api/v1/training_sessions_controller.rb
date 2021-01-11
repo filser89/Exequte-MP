@@ -112,7 +112,7 @@ module Api
       end
 
       def usable_membership(training_session)
-        current_user.memberships.find_by(
+        current_user.memberships.where(payment_status: 'paid').find_by(
           'start_date <= ? AND end_date > ?',
           training_session.begins_at,
           training_session.begins_at
