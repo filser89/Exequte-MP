@@ -35,7 +35,7 @@ class Membership < ApplicationRecord
       out_trade_no: "exeQute_membership_#{id}",
       total_fee: price_cents,
       spbill_create_ip: Socket.ip_address_list.detect(&:ipv4_private?).ip_address,
-      notify_url: "https://exequte.cn/api/v1/memperships/notify",
+      notify_url: "https://exequte.cn/api/v1/memberships/notify",
       trade_type: "JSAPI",
       openid: user.wx_open_id
     }
