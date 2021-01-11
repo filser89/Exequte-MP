@@ -50,9 +50,12 @@ class Membership < ApplicationRecord
         prepayid: r["prepay_id"],
         noncestr: r["nonce_str"]
       }
+      puts "===================PARAMS FORMED========================="
+
       p params
       return WxPay::Service.generate_js_pay_req params
     else
+      puts "===================INVOKE FAILED========================="
       p params
     end
 
