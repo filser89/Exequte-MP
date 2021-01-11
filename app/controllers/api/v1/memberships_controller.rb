@@ -6,6 +6,8 @@ module Api
         @membership_type = MembershipType.find(params[:membership_type_id])
         puts "===================FOUND MEMBERSHIP TYPE========================="
         @membership = Membership.new(permitted_params)
+        "MEMBERSHIP PARAMS"
+        p permitted_params
         puts "===================NEW MEMBERSHIP PARAMS OK========================="
 
         @membership.name = @membership_type.name
@@ -59,8 +61,10 @@ module Api
         end
 
         def permitted_params
-          pars = params.require(:membership)
-          pars.each { |par| puts "param: #{par[1]} class: #{par[1].class}" }
+          "======INSIDE PERMITTED PARAMS"
+          # pars = params.require(:membership)
+          # pars.each { |par| puts "param: #{par[1]} class: #{par[1].class}" }
+          p params
           params.require(:membership).permit(:start_date, :price_cents, :coupon)
         end
       end
