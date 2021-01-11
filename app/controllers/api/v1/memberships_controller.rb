@@ -54,20 +54,20 @@ module Api
           puts "===================SIGNATURE ERROR========================="
           render :xml => {return_code: "FAIL", return_msg: "Signature Error"}.to_xml(root: 'xml', dasherize: false)
         end
+      end
 
-        private
+      private
 
-        def end_date
-          @membership.start_date.midnight + @membership_type.duration.days - 1.second
-        end
+      def end_date
+        @membership.start_date.midnight + @membership_type.duration.days - 1.second
+      end
 
-        def permitted_params
-          puts "====================INSIDE PERMITTED PARAMS============================"
-          # pars = params.require(:membership)
-          # pars.each { |par| puts "param: #{par[1]} class: #{par[1].class}" }
-          p params
-          params.require(:membership).permit(:start_date, :price_cents, :coupon)
-        end
+      def permitted_params
+        puts "====================INSIDE PERMITTED PARAMS============================"
+        # pars = params.require(:membership)
+        # pars.each { |par| puts "param: #{par[1]} class: #{par[1].class}" }
+        p params
+        params.require(:membership).permit(:start_date, :price_cents, :coupon)
       end
     end
   end
