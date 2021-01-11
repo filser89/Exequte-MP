@@ -10,6 +10,7 @@ class Membership < ApplicationRecord
   has_many :training_sessions, through: :bookings
 
 
+
   def booking_hash
     h = standard_hash
     h[:start_date] = DateTimeService.date_d_m_y(start_date)
@@ -26,5 +27,38 @@ class Membership < ApplicationRecord
       end_date: DateTimeService.date_m_d_y(end_date),
       smoothie: smoothie
     }
+  end
+
+  def pay_params
+    {
+      body: 'exeQute gym membership',
+      out_trade_no: "exeQute_membership_#{id}",
+      total_fee: price_cents,
+      spbill_create_ip: Socket.ip_address_list.detect(&:ipv4_private?).ip_address,
+      notify_url: "https://exequte.cn/api/v1/memperships/payment_confirmed",
+      trade_type: "JSAPI",
+      openid: user.wx_open_id
+    }
+  end
+
+  def init_payment
+    r = WxPay::Service.invoke_unifiedorder pay_params
+    puts "============================INVOKE RESULT===================================="
+    p r
+    if r.success?
+      params = {
+        prepayid: r["prepay_id"],
+        noncestr: r["nonce_str"]
+      }
+      p params
+      return WxPay::Service.generate_js_pay_req params
+    else
+      p params
+    end
+
+    def self.extract_id(result)
+      regex = /(?<=_)\d+/
+      result[regex].to_i
+    end
   end
 end

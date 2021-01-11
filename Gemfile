@@ -50,6 +50,8 @@ gem 'simple_form'
 gem 'aliyun-sdk'
 gem "activestorage-aliyun"
 gem 'font-awesome-sass'
+gem 'wx_pay'
+gem 'rqrcode' # to generate payment QR code
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
