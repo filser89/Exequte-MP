@@ -61,7 +61,7 @@ module Api
         end
 
         def permitted_params
-          "======INSIDE PERMITTED PARAMS"
+          puts "====================INSIDE PERMITTED PARAMS============================"
           # pars = params.require(:membership)
           # pars.each { |par| puts "param: #{par[1]} class: #{par[1].class}" }
           p params
