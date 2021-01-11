@@ -5,6 +5,7 @@ module Api
         puts "===================INSIDE MEMBERSHIPS CREATE========================="
         @membership_type = MembershipType.find(params[:membership_type_id])
         puts "===================FOUND MEMBERSHIP TYPE========================="
+        p @membership_type
         @membership = Membership.new(permitted_params)
         puts "=============MEMBERSHIP PARAMS===================="
         p permitted_params
