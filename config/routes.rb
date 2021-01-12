@@ -59,7 +59,7 @@ Rails.application.routes.draw do
       end
 
       # MEMBERSHIPS
-      post "memberships/notify", to: 'memberships#payment_confirmed'
+      post "memberships/notify", to: 'memberships#payment_confirmed', format: :xml
 
       # BANNERS
       resources :banners, only: [:index]
