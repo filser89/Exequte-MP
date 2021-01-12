@@ -32,7 +32,7 @@ class Membership < ApplicationRecord
   def pay_params
     {
       body: 'exeQute gym membership',
-      out_trade_no: "exeQute_membership_#{id}",
+      out_trade_no: "exeQute_membership_#{id} #{DateTime.now.to_i}",
       total_fee: price_cents,
       spbill_create_ip: Socket.ip_address_list.detect(&:ipv4_private?).ip_address,
       notify_url: "https://exequte.cn/api/v1/memberships/notify",
@@ -58,10 +58,10 @@ class Membership < ApplicationRecord
       puts "===================INVOKE FAILED========================="
       p params
     end
+  end
 
-    def self.extract_id(result)
-      regex = /(?<=_)\d+/
-      result[regex].to_i
-    end
+  def self.extract_id(result)
+    regex = /(?<=_)\d+/
+    result[regex].to_i
   end
 end
