@@ -64,4 +64,6 @@ Rails.application.configure do
   config.i18n.available_locales = ['zh-CN', :en]
   # helps to seed with active record attachments
   config.active_job.queue_adapter = :sidekiq
+  # add host for debugging wechat payment in development
+  config.hosts << "exequte.5gzvip.idcfengye.com"
 end

@@ -40,8 +40,6 @@ module Api
 
       def payment_confirmed
         puts "===================PAYMENT CONFIRMED========================="
-        p request
-
         # @membership = Membership.find(params[:id])
         result = Hash.from_xml(request.body.read)['xml']
         puts "===============RESULT=========================="
@@ -51,7 +49,7 @@ module Api
           @membership = Membership.find(Membership.extract_id(result['out_trade_no']))
           puts "===================MEMBERSHIP FOUNT========================="
 
-          @membership.update!(payment_status: 'paid', payment: result.to_json)
+          @membership.update(payment_status: 'paid', payment: result.to_json)
           puts "===================MEMBERSHIP UPDATED========================="
           p @membership
           render xml: { return_code: 'SUCCESS', return_msg: 'OK' }.to_xml(root: 'xml', dasherize: false)

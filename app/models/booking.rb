@@ -1,10 +1,12 @@
 class Booking < ApplicationRecord
+  include WxPayable
   BOOKING_OPTIONS = [nil, 'free', 'drop-in', 'membership', 'voucher']
   monetize :price_cents
   belongs_to :user
   belongs_to :training_session
   belongs_to :membership, optional: true
   validates :booked_with, inclusion: BOOKING_OPTIONS
+  scope :settled, -> {where(payment_status: ['paid', 'none'])}
 
   def upcoming_hash
     h = show_hash
