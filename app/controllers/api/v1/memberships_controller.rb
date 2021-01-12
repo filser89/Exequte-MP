@@ -1,6 +1,10 @@
 module Api
   module V1
     class MembershipsController < Api::BaseController
+      skip_before_action :authenticate_api_key!, only: [:payment_confirmed]
+      skip_before_action :authenticate_user_from_token!, only: [:payment_confirmed]
+
+
       def create
         puts "===================INSIDE MEMBERSHIPS CREATE========================="
         @membership_type = MembershipType.find(params[:membership_type_id])
@@ -36,6 +40,7 @@ module Api
 
       def payment_confirmed
         puts "===================PAYMENT CONFIRMED========================="
+        p request
 
         # @membership = Membership.find(params[:id])
         result = Hash.from_xml(request.body.read)['xml']
