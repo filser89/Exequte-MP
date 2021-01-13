@@ -17,7 +17,7 @@ class ApplicationRecord < ActiveRecord::Base
 
   def destroy
     if self.attribute_names.include?("destroyed_at")
-      self.update(destroyed_at: Time.now)
+      self.update(destroyed_at: DateTime.now)
       # self.errors[:base] << "Soft Delete"
       return true
     else

@@ -14,6 +14,8 @@ class TrainingSession < ApplicationRecord
   belongs_to :instructor, class_name: "User", foreign_key: :user_id
   has_many :bookings
   has_many :users, through: :bookings
+  default_scope -> { where(destroyed_at: nil) }
+
 
   def upcoming_hash
     h = show_hash

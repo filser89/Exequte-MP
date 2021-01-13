@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_12_212752) do
+ActiveRecord::Schema.define(version: 2021_01_13_161146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_212752) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "title", null: false
     t.string "promo_text", null: false
+    t.datetime "destroyed_at"
   end
 
   create_table "bookings", force: :cascade do |t|
@@ -73,6 +74,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_212752) do
     t.string "coupon"
     t.string "payment_status"
     t.jsonb "payment"
+    t.datetime "destroyed_at"
     t.index ["membership_id"], name: "index_bookings_on_membership_id"
     t.index ["training_session_id"], name: "index_bookings_on_training_session_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
@@ -98,6 +100,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_212752) do
     t.integer "cancel_before", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "destroyed_at"
   end
 
   create_table "coupons", force: :cascade do |t|
@@ -107,6 +110,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_212752) do
     t.text "note"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "destroyed_at"
   end
 
   create_table "infos", force: :cascade do |t|
@@ -128,6 +132,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_212752) do
     t.string "cn_title_two"
     t.string "cn_title_three"
     t.string "cn_title_four"
+    t.datetime "destroyed_at"
   end
 
   create_table "membership_types", force: :cascade do |t|
@@ -139,6 +144,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_212752) do
     t.boolean "smoothie", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "destroyed_at"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -156,6 +162,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_212752) do
     t.string "coupon"
     t.string "payment_status"
     t.jsonb "payment"
+    t.datetime "destroyed_at"
     t.index ["membership_type_id"], name: "index_memberships_on_membership_type_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
@@ -190,6 +197,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_212752) do
     t.integer "cancel_before", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "destroyed_at"
     t.index ["training_id"], name: "index_training_sessions_on_training_id"
     t.index ["user_id"], name: "index_training_sessions_on_user_id"
   end
@@ -205,6 +213,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_212752) do
     t.text "cn_description", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "destroyed_at"
     t.index ["class_type_id"], name: "index_trainings_on_class_type_id"
   end
 
@@ -213,6 +222,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_212752) do
     t.bigint "coupon_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "destroyed_at"
     t.index ["coupon_id"], name: "index_user_coupons_on_coupon_id"
     t.index ["user_id"], name: "index_user_coupons_on_user_id"
   end
@@ -259,6 +269,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_212752) do
     t.integer "target_weight"
     t.integer "target_body_fat"
     t.string "target_shapes"
+    t.datetime "destroyed_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

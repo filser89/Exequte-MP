@@ -6,6 +6,7 @@ class Booking < ApplicationRecord
   belongs_to :training_session
   belongs_to :membership, optional: true
   validates :booked_with, inclusion: BOOKING_OPTIONS
+  default_scope -> { where(destroyed_at: nil) }
   scope :settled, -> {where(payment_status: ['paid', 'none'])}
 
   def upcoming_hash

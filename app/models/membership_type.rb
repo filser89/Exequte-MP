@@ -6,6 +6,8 @@ class MembershipType < ApplicationRecord
   validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   has_many :memberships
   has_many :users, through: :memberships
+  default_scope -> { where(destroyed_at: nil) }
+
 
   def standard_hash
     {

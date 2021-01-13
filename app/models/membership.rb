@@ -9,6 +9,7 @@ class Membership < ApplicationRecord
   belongs_to :user
   has_many :bookings
   has_many :training_sessions, through: :bookings
+  default_scope -> { where(destroyed_at: nil) }
 
 
 

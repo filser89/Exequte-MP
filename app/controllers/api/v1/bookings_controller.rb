@@ -86,7 +86,7 @@ module Api
       private
 
       def history
-        Booking.settled.includes(:training_session, :user)
+        Booking.includes(:training_session, :user)
         .where(user: current_user)
         .references(:training_sessions)
         .where('training_sessions.begins_at <= ?', DateTime.now)
@@ -95,7 +95,7 @@ module Api
       end
 
       def cancelled
-        Booking.settled.includes(:training_session, :user)
+        Booking.includes(:training_session, :user)
         .where(user: current_user, cancelled: true)
         .where('training_sessions.begins_at > ?', DateTime.now)
         .order('training_sessions.begins_at DESC')
@@ -103,7 +103,7 @@ module Api
       end
 
       def upcoming
-        Booking.settled.includes(:training_session, :user)
+        Booking.includes(:training_session, :user)
         .where(user: current_user, cancelled: false)
         .references(:training_sessions)
         .where('training_sessions.begins_at > ?', DateTime.now)

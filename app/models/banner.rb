@@ -1,5 +1,7 @@
 class Banner < ApplicationRecord
   has_one_attached :photo
+  default_scope -> { where(destroyed_at: nil) }
+
 
   def standard_hash
     h = {

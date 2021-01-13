@@ -18,8 +18,9 @@ class User < ApplicationRecord
   # has_many :membership_types, through: :memberships
   has_one_attached :instructor_photo
   has_one_attached :avatar
-
   before_validation :set_defaults
+  default_scope -> { where(destroyed_at: nil) }
+
 
   def token
     TokenService.encode('user' => id)

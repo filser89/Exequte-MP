@@ -11,6 +11,8 @@ class Training < ApplicationRecord
   has_many :training_sessions
   has_many :bookings, through: :training_sessions
   has_one_attached :photo
+  default_scope -> { where(destroyed_at: nil) }
+
 
   def localize_description
     I18n.locale == :'zh-CN' ? cn_description : description
