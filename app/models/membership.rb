@@ -1,4 +1,5 @@
 class Membership < ApplicationRecord
+  include WxPayable
   validates :name, presence: true
   validates :cn_name, presence: true
   validates :start_date, presence: true
@@ -29,39 +30,40 @@ class Membership < ApplicationRecord
     }
   end
 
-  def pay_params
-    {
-      body: 'exeQute gym membership',
-      out_trade_no: "exeQute_membership_#{id} #{DateTime.now.to_i}",
-      total_fee: price_cents,
-      spbill_create_ip: Socket.ip_address_list.detect(&:ipv4_private?).ip_address,
-      notify_url: "https://exequte.cn/api/v1/memberships/notify",
-      trade_type: "JSAPI",
-      openid: user.wx_open_id
-    }
-  end
+  # def pay_params
+  #   url = Rails.env.development? ? 'http://exequte.5gzvip.idcfengye.com/api/v1' : "https://exequte.cn/api/v1"
+  #   {
+  #     body: 'exeQute gym membership',
+  #     out_trade_no: "exeQute_membership_#{id}_#{DateTime.now.to_i}",
+  #     total_fee: price_cents,
+  #     spbill_create_ip: Socket.ip_address_list.detect(&:ipv4_private?).ip_address,
+  #     notify_url: "#{url}/memberships/notify",
+  #     trade_type: "JSAPI",
+  #     openid: user.wx_open_id
+  #   }
+  # end
 
-  def init_payment
-    r = WxPay::Service.invoke_unifiedorder pay_params
-    puts "============================INVOKE RESULT===================================="
-    p r
-    if r.success?
-      params = {
-        prepayid: r["prepay_id"],
-        noncestr: r["nonce_str"]
-      }
-      puts "===================PARAMS FORMED========================="
+  # def init_payment
+  #   r = WxPay::Service.invoke_unifiedorder pay_params
+  #   puts "============================INVOKE RESULT===================================="
+  #   p r
+  #   if r.success?
+  #     params = {
+  #       prepayid: r["prepay_id"],
+  #       noncestr: r["nonce_str"]
+  #     }
+  #     puts "===================PARAMS FORMED========================="
 
-      p params
-      return WxPay::Service.generate_js_pay_req params
-    else
-      puts "===================INVOKE FAILED========================="
-      p params
-    end
-  end
+  #     p params
+  #     return WxPay::Service.generate_js_pay_req params
+  #   else
+  #     puts "===================INVOKE FAILED========================="
+  #     p params
+  #   end
+  # end
 
-  def self.extract_id(result)
-    regex = /(?<=_)\d+/
-    result[regex].to_i
-  end
+  # def self.extract_id(result)
+  #   regex = /(?<=_)\d+/
+  #   result[regex].to_i
+  # end
 end
