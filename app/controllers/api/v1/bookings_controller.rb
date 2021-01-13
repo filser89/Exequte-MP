@@ -4,7 +4,7 @@ module Api
       skip_before_action :authenticate_api_key!, only: [:payment_confirmed]
       skip_before_action :authenticate_user_from_token!, only: [:payment_confirmed]
       before_action :find_training_session, only: %i[create attendance_list]
-      before_action :find_booking, only: %i[show cancel]
+      before_action :find_booking, only: %i[show cancel destroy]
       def index
         render_success([upcoming, cancelled.concat(history)])
       end
@@ -51,6 +51,11 @@ module Api
           puts "===================SIGNATURE ERROR========================="
           render :xml => {return_code: "FAIL", return_msg: "Signature Error"}.to_xml(root: 'xml', dasherize: false)
         end
+      end
+
+      def destroy
+        @booking.destroy
+        render_success({msg: "Failed booking destroyed"})
       end
 
       def cancel

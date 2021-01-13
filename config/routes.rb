@@ -44,7 +44,7 @@ Rails.application.routes.draw do
       end
 
       # BOOKINGS
-      resources :bookings, only: %i[index show] do
+      resources :bookings, only: %i[index show destroy] do
         member do
           put :cancel
         end
@@ -59,13 +59,17 @@ Rails.application.routes.draw do
       end
 
       # MEMBERSHIPS
-      post "memberships/notify", to: 'memberships#payment_confirmed', format: :xml
+      resources :memberships, only: [:destroy]
 
       # BANNERS
       resources :banners, only: [:index]
 
       # INFOS
       resources :infos, only: [:index]
+
+      # WECHAT PAYMENT NOTIFICATIONS
+      post "memberships/notify", to: 'memberships#payment_confirmed', format: :xml
+      post "bookings/notify", to: 'bookings#payment_confirmed', format: :xml
     end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
