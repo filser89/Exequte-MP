@@ -1,6 +1,8 @@
 class Info < ApplicationRecord
   has_one_attached :photo_1
   has_one_attached :photo_2
+  default_scope -> { where(destroyed_at: nil) }
+
 
   def localize(attr)
     return unless self.attributes.keys.include?(attr) && self.attributes.keys.include?('cn_' + attr)
