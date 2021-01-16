@@ -9,11 +9,11 @@ class User < ApplicationRecord
   validates :profession_activity_level, inclusion: { in: ACTIVITY_LEVELS }
   validates :target, inclusion: { in: TARGETS}
   # serialize :music_styles, Array
-  has_many :bookings
+  has_many :bookings, dependent: :destroy
   has_many :training_sessions, through: :bookings
-  has_many :training_sessions_as_instructor, class_name: "TrainingSession"
-  has_many :memberships
-  has_many :user_coupons, dependent: :destroy
+  has_many :training_sessions_as_instructor, class_name: "TrainingSession", dependent: :destroy
+  has_many :memberships, dependent: :destroy
+  has_many :user_coupons, dependent: :destroy, dependent: :destroy
   has_many :coupons, through: :user_coupons
   # has_many :membership_types, through: :memberships
   has_one_attached :instructor_photo
