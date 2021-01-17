@@ -1,11 +1,11 @@
 ActiveAdmin.register_page "Dashboard" do
-  menu priority: 1, label: proc { I18n.t("active_admin.dashboard") }
+  menu priority: 1, label: proc { 'Create Schedule' }
 
-  content title: proc { I18n.t("active_admin.dashboard") } do
+  content title: proc { "Create training session" } do
     div class: "blank_slate_container", id: "dashboard_default_message" do
       span class: "blank_slate" do
-        link_to root_path do
-          'Go to Home page'
+         link_to new_training_session_path do
+          'Create training session'
         end
       end
     end
