@@ -10,7 +10,10 @@ module Api
         puts "Current user INDEX: #{current_user}"
         sessions_array = []
         @date_range.each do |date|
+          puts "====================INSIDE ITTERATION=========================="
+          puts "Date: #{date}"
           time_range = date == DateTime.now.midnight ? Time.now..date.end_of_day : date.beginning_of_day..date.end_of_day
+          puts "Time range: #{time_range}"
           sessions = TrainingSession.includes(:training, training: [:class_type]).where(begins_at: time_range)
           puts "Sessions: #{sessions}"
           training_sessions = sessions.map { |ts| ts_to_hash(ts) }

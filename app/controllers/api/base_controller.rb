@@ -33,18 +33,18 @@ module Api
     end
 
     def current_user
-      puts "========================Inside current user=========================="
+      # puts "========================Inside current user=========================="
       token = request.headers['X-Auth-Token']&.split(' ')&.last
-      puts "Token: #{token}"
+      # puts "Token: #{token}"
       claims = TokenService.decode(token) if token
-      puts "Claims: #{claims}"
-      puts "User: #{User.find_by(id: claims[0]['user'])}"
+      # puts "Claims: #{claims}"
+      # puts "User: #{User.find_by(id: claims[0]['user'])}"
       @current_user ||= User.find_by(id: claims[0]['user']) if claims
     end
 
     def authenticate_user_from_token!
-      puts "========================Inside authenticate_user_from_token=========================="
-      puts "Current user: #{current_user}"
+      # puts "========================Inside authenticate_user_from_token=========================="
+      # puts "Current user: #{current_user}"
       current_user || invalid_authentication
     end
 
