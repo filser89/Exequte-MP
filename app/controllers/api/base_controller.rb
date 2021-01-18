@@ -44,11 +44,12 @@ module Api
 
     def authenticate_user_from_token!
       puts "========================Inside authenticate_user_from_token=========================="
-      puts "#{current_user}"
+      puts "Current user: #{current_user}"
       current_user || invalid_authentication
     end
 
     def invalid_authentication
+      puts '===================Inside INVALID AUTH======================='
       render json: { error: { message: I18n.t('errors.failure.unauthenticated'), code: nil } }, status: :unauthorized
     end
 
