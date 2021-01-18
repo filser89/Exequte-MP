@@ -1,6 +1,6 @@
 ActiveAdmin.register Membership do
   # belongs_to :membership_type
-  belongs_to :user
+  # belongs_to :user
   # See permitted parameters documentation:
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   #
