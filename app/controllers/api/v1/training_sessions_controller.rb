@@ -6,7 +6,8 @@ module Api
 
       def index
         puts "==========INSIDE TS INDEX====================="
-        puts "Current user: #{current_user}"
+        puts "DATE RSNGE: #{@date_range}"
+        puts "Current user INDEX: #{current_user}"
         sessions_array = []
         @date_range.each do |date|
           time_range = date == DateTime.now.midnight ? Time.now..date.end_of_day : date.beginning_of_day..date.end_of_day
@@ -61,6 +62,7 @@ module Api
       private
 
       def choose_date_range
+        puts '=================DATE RANGE====================='
         today = DateTime.now.midnight
         last_day = today + 14.days - 1.second
         @date_range = (today..last_day)
