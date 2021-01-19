@@ -16,4 +16,5 @@ ActiveAdmin.register Membership do
   #   permitted
   # end
 
+  json_editor
 end
