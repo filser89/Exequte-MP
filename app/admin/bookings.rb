@@ -13,8 +13,7 @@ ActiveAdmin.register Booking do
 
   form do |f|
     f.semantic_errors # shows errors on :base
-    f.inputs except: [:booked_with]       # builds an input field for every attribute
-
+    f.inputs except: [:user, :booked_with]       # builds an input field for every attribute
     f.input :booked_with, collection: Booking::BOOKING_OPTIONS
     f.actions         # adds the 'Submit' and 'Cancel' buttons
   end

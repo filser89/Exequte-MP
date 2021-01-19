@@ -132,6 +132,10 @@ class User < ApplicationRecord
     I18n.locale == :'zh-CN' ? cn_instructor_bio : instructor_bio
   end
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   private
 
   def calc_standard_price
