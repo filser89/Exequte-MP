@@ -14,14 +14,4 @@ class ApplicationRecord < ActiveRecord::Base
   def created_at_mndt
     created_at.midnight.to_datetime
   end
-
-  def destroy
-    if self.attribute_names.include?("destroyed_at")
-      self.update(destroyed_at: DateTime.now)
-      # self.errors[:base] << "Soft Delete"
-      return true
-    else
-      super
-    end
-  end
 end

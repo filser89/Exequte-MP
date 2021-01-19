@@ -11,9 +11,9 @@ class User < ApplicationRecord
   # serialize :music_styles, Array
   has_many :bookings, dependent: :destroy
   has_many :training_sessions, through: :bookings
-  has_many :training_sessions_as_instructor, class_name: "TrainingSession", dependent: :destroy
+  has_many :training_sessions_as_instructor, class_name: "TrainingSession"
   has_many :memberships, dependent: :destroy
-  has_many :user_coupons, dependent: :destroy, dependent: :destroy
+  has_many :user_coupons, dependent: :destroy
   has_many :coupons, through: :user_coupons
   # has_many :membership_types, through: :memberships
   has_one_attached :instructor_photo
@@ -103,7 +103,7 @@ class User < ApplicationRecord
   def carb_prot_fat; end
 
   def attended_classes
-    bookings.where(attended: true).count
+    bookings.attended.size
   end
 
   def valid_memberships
@@ -146,7 +146,7 @@ class User < ApplicationRecord
 
     days_to_count = days_since_created < 28 ? days_since_created : 28
 
-    attended = bookings.where(attended: true)
+    attended = bookings.attended
     return 0 if attended.empty?
 
     range = days_to_count.days.ago..Date.yesterday

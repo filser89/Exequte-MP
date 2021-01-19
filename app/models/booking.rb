@@ -7,7 +7,8 @@ class Booking < ApplicationRecord
   belongs_to :membership, optional: true
   validates :booked_with, inclusion: BOOKING_OPTIONS
   default_scope -> { where(destroyed_at: nil) }
-  scope :settled, -> {where(payment_status: ['paid', 'none'])}
+  scope :settled, -> { where(payment_status: ['paid', 'none']) }
+  scope :attended, -> { where(attended: true) }
 
   def upcoming_hash
     h = show_hash

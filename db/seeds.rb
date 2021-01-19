@@ -8,7 +8,7 @@
 require 'open-uri'
 require 'faker'
 puts "Destroying Data..."
-Booking.destroy_all
+Booking.unscoped.destroy_all
 TrainingSession.destroy_all
 Training.destroy_all
 ClassType.destroy_all
@@ -164,7 +164,7 @@ trainings_arr.each do |t|
 
   puts "Created Training #{training.name}"
 
-  10.times do |n|
+  500.times do |n|
     training_session = TrainingSession.new(ts_options(training))
     range = n < 5 ? past_range : future_range
     training_session.update!(instructor: instructor, begins_at: rand(range))

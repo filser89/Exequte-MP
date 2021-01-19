@@ -81,7 +81,7 @@ class TrainingSession < ApplicationRecord
   end
 
   def can_book?
-    capacity > bookings.where(cancelled: false).count
+    capacity > bookings.where(cancelled: false).size
   end
 
   def localize_description

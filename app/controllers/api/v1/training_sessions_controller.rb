@@ -5,21 +5,12 @@ module Api
       before_action :choose_date_range, only: %i[index dates_list]
 
       def index
-        puts "==========INSIDE TS INDEX====================="
-        puts "DATE RSNGE: #{@date_range}"
-        puts "Current user INDEX: #{current_user}"
         sessions_array = []
         @date_range.each do |date|
-          puts "====================INSIDE ITTERATION=========================="
-          puts "Date: #{date}"
           time_range = date == DateTime.now.midnight ? Time.now..date.end_of_day : date.beginning_of_day..date.end_of_day
-          puts "Time range: #{time_range}"
-          sessions = TrainingSession.includes(:training, training: [:class_type]).where(begins_at: time_range)
-          puts "Sessions: #{sessions}"
+          sessions = TrainingSession.includes(:bookings, :training, bookings: [:user], training: [:class_type]).where(begins_at: time_range)
           training_sessions = sessions.map { |ts| ts_to_hash(ts) }
-          puts "Training Sessions: #{training_sessions}"
           sessions_array << training_sessions
-          puts "Sessions array: #{sessions_array}"
         end
         render_success({ sessions: sessions_array, dates: @date_range.to_a.map { |d| DateTimeService.date_wd_d_m(d) } })
       end
