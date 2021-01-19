@@ -1,10 +1,11 @@
 class Coupon < ApplicationRecord
-  has_many :user_coupons, dependent: :destroy
+  has_many :user_coupons
 
   before_validation :set_coupon_code
   validates :coupon_code, uniqueness: true
   validates :discount, presence: true, numericality: { less_than_or_equal_to: 1, greater_than_or_equal_to: 0 }
   default_scope -> { where(destroyed_at: nil) }
+  scope :active, -> {where(active: true)}
 
   def set_coupon_code
     self.coupon_code = self.coupon_code = SecureRandom.urlsafe_base64(6).upcase if self.coupon_code.blank?

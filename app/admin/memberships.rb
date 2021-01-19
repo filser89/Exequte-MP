@@ -17,4 +17,5 @@ ActiveAdmin.register Membership do
   # end
 
   json_editor
+
 end

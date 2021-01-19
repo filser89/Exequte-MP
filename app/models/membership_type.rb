@@ -7,6 +7,7 @@ class MembershipType < ApplicationRecord
   has_many :memberships
   has_many :users, through: :memberships
   default_scope -> { where(destroyed_at: nil) }
+  scope :active, -> {where(active: true)}
 
 
   def standard_hash
