@@ -164,7 +164,7 @@ trainings_arr.each do |t|
 
   puts "Created Training #{training.name}"
 
-  500.times do |n|
+  50.times do |n|
     training_session = TrainingSession.new(ts_options(training))
     range = n < 5 ? past_range : future_range
     training_session.update!(instructor: instructor, begins_at: rand(range))
