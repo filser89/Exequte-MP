@@ -4,15 +4,31 @@ module Api
       before_action :find_training_session, only: [:show, :add_user_to_queue, :session_attendance]
       before_action :choose_date_range, only: %i[index dates_list]
 
+      # def index
+      #   sessions_array = []
+      #   @date_range.each do |date|
+      #     time_range = date == DateTime.now.midnight ? Time.now..date.end_of_day : date.beginning_of_day..date.end_of_day
+      #     sessions = TrainingSession.includes(:bookings, :training, bookings: [:user], training: [:class_type]).where(begins_at: time_range)
+      #     training_sessions = sessions.map { |ts| ts_to_hash(ts) }
+      #     sessions_array << training_sessions
+      #   end
+      #   render_success({ sessions: sessions_array, dates: @date_range.to_a.map { |d| DateTimeService.date_wd_d_m(d) } })
+      # end
+
       def index
-        sessions_array = []
-        @date_range.each do |date|
-          time_range = date == DateTime.now.midnight ? Time.now..date.end_of_day : date.beginning_of_day..date.end_of_day
-          sessions = TrainingSession.includes(:bookings, :training, bookings: [:user], training: [:class_type]).where(begins_at: time_range)
-          training_sessions = sessions.map { |ts| ts_to_hash(ts) }
-          sessions_array << training_sessions
-        end
-        render_success({ sessions: sessions_array, dates: @date_range.to_a.map { |d| DateTimeService.date_wd_d_m(d) } })
+        render_success(@date_range.to_a)#.map { |d| DateTimeService.date_wd_d_m(d) })
+      end
+
+      def sessions
+        date_str = params[:date]
+        date_str[-6] = '+'
+        date = date_str.to_datetime
+        puts "Date: #{date}"
+        puts "today: #{DateTime.now.midnight}"
+        puts "Date is today? #{date == DateTime.now.midnight}"
+        time_range = date == DateTime.now.midnight ? Time.now..date.end_of_day : date.beginning_of_day..date.end_of_day
+        sessions = TrainingSession.includes(:bookings, :training, bookings: [:user], training: [:class_type]).where(begins_at: time_range).order(begins_at: :asc).map { |ts| ts_to_hash(ts) }
+        render_success(sessions)
       end
 
       def show
@@ -56,7 +72,6 @@ module Api
       private
 
       def choose_date_range
-        puts '=================DATE RANGE====================='
         today = DateTime.now.midnight
         last_day = today + 14.days - 1.second
         @date_range = (today..last_day)
