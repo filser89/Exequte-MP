@@ -2,7 +2,7 @@ module Api
   module V1
     class CouponsController < Api::BaseController
       def use_coupon
-        @coupon = Coupon.find_by(coupon_code: params[:coupon_code])
+        @coupon = Coupon.active.find_by(coupon_code: params[:coupon_code])
 
         # Coupon does not exist
         if @coupon.nil?
