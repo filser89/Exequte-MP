@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_19_184802) do
+ActiveRecord::Schema.define(version: 2021_01_26_174539) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -259,7 +259,7 @@ ActiveRecord::Schema.define(version: 2021_01_19_184802) do
     t.string "music_styles"
     t.string "sports"
     t.text "favorite_food"
-    t.integer "voucher_count", default: 5, null: false
+    t.integer "voucher_count", default: 1, null: false
     t.boolean "instructor", default: false, null: false
     t.string "instructor_bio"
     t.string "cn_instructor_bio"
