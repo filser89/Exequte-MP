@@ -67,6 +67,7 @@ class User < ApplicationRecord
     h[:attended_classes] = attended_classes
     h[:memberships] = valid_memberships.map(&:standard_hash)
     h[:avatar_url] = avatar.service_url if avatar.attached?
+    h[:has_body_data] = has_body_data?
     h
   end
 
@@ -156,6 +157,10 @@ class User < ApplicationRecord
     range = days_to_count.days.ago..Date.yesterday
     count = attended.count { |a| range.include?(a.training_session.begins_at.to_datetime) }
     count / days_to_count * 7
+  end
+
+  def has_body_data?
+    profession_activity_level.present? && height.present? && current_weight.present? && target_weight.present? && current_body_fat.present? && target_body_fat.present?
   end
 
   def set_defaults
