@@ -13,6 +13,8 @@ class TrainingSessionsController < ApplicationController
       @training_session.name = @training.name
       @training_session.cn_name = @training.cn_name
       @training_session.description = @training.description
+      @training_session.subtitle = @training.subtitle
+      @training_session.cn_subtitle = @training.cn_subtitle
       @training_session.cn_description = @training.cn_description
       @training_session.duration = @training.duration
       @training_session.capacity = @training.capacity
