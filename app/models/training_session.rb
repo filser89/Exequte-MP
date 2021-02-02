@@ -57,6 +57,7 @@ class TrainingSession < ApplicationRecord
       duration: duration,
       capacity: capacity,
       name: localize_name,
+      subtitle: localize('subtitle'),
       class_type: training.class_type.kind,
       bookable: can_book?,
       queue: queue.map(&:standard_hash),

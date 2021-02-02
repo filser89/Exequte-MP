@@ -30,7 +30,7 @@ end
 
 # Options hashes for models
 def t_options(training)
-  {
+  h = {
     name: training[:name],
     cn_name: "CHINESE #{training[:name]}",
     calories: (300..700).to_a.map { |x| x / 100 * 100 }.sample,
@@ -40,11 +40,14 @@ def t_options(training)
     description: training[:description],
     cn_description: "CHINESE #{training[:description]}"
   }
+  h[:subtitle] = training[:subtitle] if training[:subtitle]
+  h[:cn_subtitle] =  "CHINESE #{training[:subtitle]}" if training[:subtitle]
+  h
 end
 
 # Add Training Session Attributes here
 def ts_options(training)
-  {
+  h = {
     training: training,
     duration: training.duration,
     capacity: training.capacity,
@@ -63,6 +66,9 @@ def ts_options(training)
     price_6: training.class_type.price_6,
     price_7: training.class_type.price_7
   }
+  h[:subtitle] = training.subtitle if training.subtitle
+  h[:cn_subtitle] = training.cn_subtitle if training.cn_subtitle
+  h
 end
 
 # Test Users
@@ -143,8 +149,8 @@ puts "=============================================="
 # Traiings and Training Sessions
 
 trainings_arr = [
-  { name: "Yoga", description: "Stretch your body and mind with us", class_type: premium },
-  { name: "Body Pump", description: "Go crazy with Body Pump", class_type: standard },
+  { name: "Yoga", description: "Stretch your body and mind with us", class_type: premium, subtitle: "Hot Yoga"},
+  { name: "Body Pump", description: "Go crazy with Body Pump", class_type: standard, subtitle: "Light Weight" },
   { name: "Stretching", description: "Same like yoga but without Zen", class_type: standard },
   { name: "Abs workout", description: "Go get that 6-pack", class_type: standard },
   { name: "Weight lifting", description: "Free and powerful workout session", class_type: free }
