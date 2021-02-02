@@ -14,4 +14,11 @@ class ApplicationRecord < ActiveRecord::Base
   def created_at_mndt
     created_at.midnight.to_datetime
   end
+
+  def localize(attr)
+    return unless self.attributes.keys.include?(attr) && self.attributes.keys.include?('cn_' + attr)
+
+    localized = self.send :"#{I18n.locale == :'zh-CN' ? 'cn_' + attr : attr}"
+    localized unless localized == ""
+  end
 end
