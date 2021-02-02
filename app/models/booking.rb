@@ -21,7 +21,7 @@ class Booking < ApplicationRecord
     h = show_hash
     h[:instructor_id] = training_session.instructor.id
     h[:session][:date] = DateTimeService.date_d_m_y(training_session.begins_at)
-    h[:status] = status
+    # h[:status] = status
     h
   end
 
@@ -48,7 +48,8 @@ class Booking < ApplicationRecord
       booked_with: booked_with,
       attended: attended,
       price: price,
-      can_cancel: can_cancel?
+      can_cancel: can_cancel?,
+      status: status
     }
   end
 
