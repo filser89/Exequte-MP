@@ -56,6 +56,9 @@ ActiveAdmin.register User do
         f.semantic_errors # shows errors on :base
         f.inputs :first_name, :last_name, :workout_name, :wechat, :phone, :mp_email, :emergency_name, :emergency_phone, :voucher_count, :instructor, :admin#, :password, :password_confirmation # builds an input field for every attribute
         # , :password, :password_confirmation
+        f.inputs do
+          f.input :gender, collection: User::GENDERS
+        end
       end
       tab "Secondary" do
         f.semantic_errors # shows errors on :base
