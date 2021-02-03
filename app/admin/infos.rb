@@ -5,7 +5,7 @@ ActiveAdmin.register Info do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :paragraph_one, :paragraph_two, :paragraph_three, :paragraph_four, :title_one, :title_two, :title_three, :title_four, :cn_title_one, :cn_title_two, :cn_title_three, :cn_title_four, :cn_paragraph_one, :cn_paragraph_two, :cn_paragraph_three, :cn_paragraph_four, :photo_1, :photo_2
+  permit_params :paragraph_one, :paragraph_two, :paragraph_three, :paragraph_four, :title_one, :title_two, :title_three, :title_four, :cn_title_one, :cn_title_two, :cn_title_three, :cn_title_four, :cn_paragraph_one, :cn_paragraph_two, :cn_paragraph_three, :cn_paragraph_four, :photo_1, :photo_2, :terms
   #
   # or
   #

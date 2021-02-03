@@ -2,6 +2,8 @@ class Info < ApplicationRecord
   has_one_attached :photo_1
   has_one_attached :photo_2
   default_scope -> { where(destroyed_at: nil) }
+  scope :terms, -> { where(terms: true) }
+  scope :regular, -> { where(terms: false) }
 
 
   def localize(attr)
