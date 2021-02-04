@@ -105,7 +105,7 @@ module Api
         queued_up = training_session.queue.include?(current_user)
 
         return { disabled: true, action: nil, text: "BOOKED" } if booked
-        return { disabled: false, action: 'navigateToBooking', text: "BOOK" } if training_session.can_book? && !booked
+        return { disabled: false, action: 'navigateToBooking', text: "COMMIT" } if training_session.can_book? && !booked
         return { disabled: true, action: nil, text: "WAITING" } if queued_up
 
         { disabled: false, action: 'queueUp', text: "QUEUE UP" }
