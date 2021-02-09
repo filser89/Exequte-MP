@@ -27,7 +27,7 @@ ActiveAdmin.register TrainingSession do
           f.input :name
           f.input :cn_name
           f.input :subtitle
-          f.input :cn_ssubtitle
+          f.input :cn_subtitle
           f.input :begins_at
           f.input :duration
           f.input :capacity
