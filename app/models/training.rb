@@ -18,4 +18,8 @@ class Training < ApplicationRecord
   def localize_description
     I18n.locale == :'zh-CN' ? cn_description : description
   end
+
+  def full_name
+    "#{name} #{subtitle}"
+  end
 end

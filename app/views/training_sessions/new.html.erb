@@ -1,6 +1,6 @@
 <div class="container" >
   <%= simple_form_for(@training_session) do |f| %>
-    <%= f.association :training %>
+    <%= f.association :training , label_method: :full_name %>
     <%= f.association :instructor, collection: User.where(instructor: true), label_method: :full_name %>
     <%= f.input :begins_at, as: :datetime %>
     <div>
