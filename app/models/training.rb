@@ -1,5 +1,6 @@
 class Training < ApplicationRecord
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true
+  validates :subtitle, uniqueness: { scope: :name }
   validates :cn_name, presence: true, uniqueness: true
   validates :description, presence: true
   validates :cn_description, presence: true
