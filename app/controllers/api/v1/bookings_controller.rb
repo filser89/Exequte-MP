@@ -66,6 +66,7 @@ module Api
           if @booking.cancelled_on_time? && %w[voucher drop-in].include?(@booking.booked_with)
             @booking.user.return_voucher!
           end
+          TrainingSession.notify_queue(@booking.training_session)
           render_success({msg: "Cancelled"})
         else
           # render error
