@@ -90,7 +90,7 @@ class TrainingSession < ApplicationRecord
   end
 
   def self.notify_queue(training_session)
-    traiing_session.queue.each do |u|
+    training_session.queue.each do |u|
       # Not sure what obj_hash does so can be an error next line
       obj_hash  = {id: traiing_session.id, model: traiing_session.model_name.name}
       note_params = {
