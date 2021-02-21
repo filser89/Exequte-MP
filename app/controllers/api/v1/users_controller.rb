@@ -2,7 +2,7 @@ module Api
   module V1
     class UsersController < Api::BaseController
       skip_before_action :authenticate_user_from_token!, only: [:wx_login]
-      before_action :find_user, only: %i[show instructor update wechat_avatar avatar]
+      before_action :find_user, only: %i[show instructor update wechat_avatar avatar process_wx_info]
 
       def avatar
         puts "==========IN AVATAR=============="
@@ -14,14 +14,18 @@ module Api
         render_success({msg: 'Avatar uploaded'})
       end
 
-      def wechat_avatar
-        puts "============WECHAT AVATAR============"
-        p params
-        avatar = { io: FileDownloaderService.download(params[:avatarUrl]), filename: FileDownloaderService.filename }
-        p avatar
-        @user.avatar.attach(avatar)
-        puts  "Attached?  #{@user.avatar.attached?}"
-        render_success({msg: 'Avatar uploaded'})
+      def process_wx_info
+        # saves union_id
+        # saves all wx info
+        # downloads avatar
+        cipher = OpenSSL::Cipher.new( "AES-128-CBC")
+        cipher.decrypt
+        cipher.key = Base64.decode64(@user.wx_session_key)
+        cipher.iv = Base64.decode64(params[:iv])
+        wx_info = JSON.parse(cipher.update(Base64.decode64(params[:encryptedData])) + cipher.final)
+        @user.update(union_id: wx_info["unionId"], wx_info: wx_info)
+        @user.attach_avatar_from_url(params[:userInfo][:avatarUrl])
+        render_success({msg: 'Ready!'})
       end
 
       def index
@@ -68,14 +72,23 @@ module Api
         return render_error(I18n.t('errors.wechat.wx_app_error')) unless client.error.nil?
 
         result = client.request
+        puts "===========Result=============="
+        p result
 
         return render_error(I18n.t('errors.wechat.tencent_error', nil)) if result['errcode']
 
         user = User.find_by(wx_open_id: result['openid'])
+
+        options = { wx_session_key: result['session_key']}
+        options[:union_id] = result['unionid'] if result['unionid'] && user&.union_id.blank?
+
         if user
-          user.update(wx_session_key: result['session_key'])
+          user.update(options)
         else
-          user = User.create!(wx_open_id: result['openid'], wx_session_key: result['session_key'], email: "#{SecureRandom.hex(8)}@exequte.cn", password: '123456')
+          options[:wx_open_id] = result['openid']
+          options[:email] = "#{SecureRandom.hex(8)}@exequte.cn"
+          options[:password] = '123456'
+          user = User.create(options)
         end
 
         auth_token = issue_jwt_token(user)

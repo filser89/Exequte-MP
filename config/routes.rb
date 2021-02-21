@@ -21,8 +21,8 @@ Rails.application.routes.draw do
         end
         member do
           get :instructor
-          put :wechat_avatar
           post :avatar
+          put :process_wx_info
         end
       end
 
