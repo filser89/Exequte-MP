@@ -9,14 +9,15 @@ class User < ApplicationRecord
   TARGETS = [nil, "", "lose", "gain", "maintain"].freeze
   validates :profession_activity_level, inclusion: { in: ACTIVITY_LEVELS }
   validates :target, inclusion: { in: TARGETS}
-  # serialize :music_styles, Array
+  serialize :wx_info, Hash
+  # Assosiations
   has_many :bookings, dependent: :destroy
   has_many :training_sessions, through: :bookings
   has_many :training_sessions_as_instructor, class_name: "TrainingSession"
   has_many :memberships, dependent: :destroy
   has_many :user_coupons, dependent: :destroy
   has_many :coupons, through: :user_coupons
-  # has_many :membership_types, through: :memberships
+
   has_one_attached :instructor_photo
   has_one_attached :avatar
   before_validation :set_defaults
@@ -94,7 +95,8 @@ class User < ApplicationRecord
       mp_email: mp_email,
       gender: gender,
       admin: admin,
-      voucher_count: voucher_count
+      voucher_count: voucher_count,
+      union_id: union_id
     }
   end
 
@@ -136,6 +138,20 @@ class User < ApplicationRecord
 
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  def self.notify_all!
+
+    users = User.where.not(wx_open_id: nil, instructor: true)
+    users.each do |u|
+      obj_hash  = {id: u.id, model: u.model_name.name}
+      wx_params = u.new_banner
+      WechatWorker.perform_async('new_banner', obj_hash, wx_params)
+    end
+  end
+
+  def attach_avatar_from_url(url)
+    avatar.attach({ io: FileDownloaderService.download(url), filename: FileDownloaderService.filename })
   end
 
   private

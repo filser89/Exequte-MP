@@ -88,4 +88,20 @@ class TrainingSession < ApplicationRecord
   def localize_description
     I18n.locale == :'zh-CN' ? cn_description : description
   end
+
+  def self.notify_queue(training_session)
+    training_session.queue.each do |u|
+      # Not sure what obj_hash does so can be an error next line
+      obj_hash  = {id: traiing_session.id, model: traiing_session.model_name.name}
+      note_params = {
+        openid: u.wx_open_id,
+        pagepath: "booking?sessionId=#{training_session.id}",
+        ts_name: training_session.localize_name,
+        ts_date: DateTimeService.date_d_m_y(training_session.begins_at),
+        ts_time: DateTimeService.time_24_h_m(training_session.begins_at)
+      }
+      wx_params = WechatNotifier.notify_queue(note_params)
+      WechatWorker.perform_async('notify_queue', obj_hash, wx_params)
+    end
+  end
 end
