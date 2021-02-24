@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_20_141908) do
+ActiveRecord::Schema.define(version: 2021_02_24_180138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -279,6 +279,9 @@ ActiveRecord::Schema.define(version: 2021_02_20_141908) do
     t.datetime "destroyed_at"
     t.text "wx_info"
     t.string "union_id"
+    t.string "oa_open_id"
+    t.text "oa_info"
+    t.integer "oa_subscribed_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

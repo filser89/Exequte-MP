@@ -10,6 +10,7 @@ class User < ApplicationRecord
   validates :profession_activity_level, inclusion: { in: ACTIVITY_LEVELS }
   validates :target, inclusion: { in: TARGETS}
   serialize :wx_info, Hash
+  serialize :oa_info, Hash
   # Assosiations
   has_many :bookings, dependent: :destroy
   has_many :training_sessions, through: :bookings
