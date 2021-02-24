@@ -30,7 +30,7 @@ class OaService
     puts "================== ACCESS TOKEN RES ===================="
     p res
     @access_token = res['access_token']
-    # @access_token = "42_ZNSTQbRIARXSIfx1u-znp7y_oCno-b7AbV9jW_OSXZzW9mkMS7v3MktzTeMewrivQUEwXhMztUt36SW53P6YrNn-pzMuP1QZC4lStBOcBLgDpUlhkArECKs7T1F5fXi3oY8FPpChv1O2CvJCEAQdADALHX"
+    # @access_token = "42_fRZhgfsLz1296jOsO1fcuY4zxtE-73NNFu4Ry3oMemJRdphMyUMHCfz_u0qLmGW7o1TtDystCLeRb026DgPTB08LmikGz60W5X6FedN-GYrf9iWRnvfPSngrV-LbWpBG7uqKmVKAYoz7JnIFQLCiAIAMHY"
   end
 
 
@@ -76,4 +76,7 @@ end
 
 # app_secret = "46ba6e3800e79874459861aa8bce5bf4"
 # app_id = "wxb24c089a90f978dc"
-# @access_token = "42_ZNSTQbRIARXSIfx1u-znp7y_oCno-b7AbV9jW_OSXZzW9mkMS7v3MktzTeMewrivQUEwXhMztUt36SW53P6YrNn-pzMuP1QZC4lStBOcBLgDpUlhkArECKs7T1F5fXi3oY8FPpChv1O2CvJCEAQdADALHX"
+# @access_token = "42_fRZhgfsLz1296jOsO1fcuY4zxtE-73NNFu4Ry3oMemJRdphMyUMHCfz_u0qLmGW7o1TtDystCLeRb026DgPTB08LmikGz60W5X6FedN-GYrf9iWRnvfPSngrV-LbWpBG7uqKmVKAYoz7JnIFQLCiAIAMHY"
+
+# My oa_open_id = "oS9Rj68fySLTSNGeAzIkUfUaMVc4"
+# "openid"=>"oS9Rj68fySLTSNGeAzIkUfUaMVc4",
