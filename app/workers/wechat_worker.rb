@@ -9,7 +9,7 @@ class WechatWorker
     end
 
 
-    5.times{puts ""}
+    # 5.times{puts ""}
     puts "WECHAT NOTIFICATION WORKER START!!!"
 
     p obj_hash
