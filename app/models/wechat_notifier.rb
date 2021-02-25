@@ -149,7 +149,7 @@ class WechatNotifier < ApplicationRecord
     msg = {
       "touser"=> params["receiver"],
       "template_id"=> params["template_id"],
-      "miniprogram"=> miniprogram
+      "miniprogram"=> miniprogram,
       "data"=> data
     }
     msg["url"] = params["redirect_url"] if params["redirect_url"].present?
