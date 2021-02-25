@@ -1,6 +1,6 @@
 # module Concerns
 module MessageScheduler
-  module WxTrainingSessions
+  module WxTrainingSession
     def training_session_new
       set = []
     end
