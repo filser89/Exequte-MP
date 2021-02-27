@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_24_180139) do
+ActiveRecord::Schema.define(version: 2021_02_27_223938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,6 +112,44 @@ ActiveRecord::Schema.define(version: 2021_02_24_180139) do
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "destroyed_at"
     t.boolean "active", default: true
+  end
+
+  create_table "info_item_patterns", force: :cascade do |t|
+    t.integer "margin_bottom"
+    t.integer "font_size"
+    t.string "placement"
+    t.integer "position"
+    t.text "note"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "title"
+    t.integer "margin_top"
+    t.integer "margin_left"
+    t.string "text_align"
+    t.string "text_transform"
+    t.boolean "italic"
+  end
+
+  create_table "info_items", force: :cascade do |t|
+    t.text "item_text"
+    t.text "cn_item_text"
+    t.integer "margin_bottom"
+    t.integer "font_size"
+    t.string "placement"
+    t.integer "position"
+    t.bigint "info_id", null: false
+    t.bigint "info_item_pattern_id"
+    t.text "note"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "title"
+    t.integer "margin_top"
+    t.integer "margin_left"
+    t.string "text_align"
+    t.string "text_transform"
+    t.boolean "italic"
+    t.index ["info_id"], name: "index_info_items_on_info_id"
+    t.index ["info_item_pattern_id"], name: "index_info_items_on_info_item_pattern_id"
   end
 
   create_table "infos", force: :cascade do |t|
@@ -290,6 +328,8 @@ ActiveRecord::Schema.define(version: 2021_02_24_180139) do
   add_foreign_key "bookings", "memberships"
   add_foreign_key "bookings", "training_sessions"
   add_foreign_key "bookings", "users"
+  add_foreign_key "info_items", "info_item_patterns"
+  add_foreign_key "info_items", "infos"
   add_foreign_key "memberships", "membership_types"
   add_foreign_key "memberships", "users"
   add_foreign_key "training_sessions", "trainings"

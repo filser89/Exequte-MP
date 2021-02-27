@@ -1,4 +1,5 @@
 class Info < ApplicationRecord
+  has_many :info_items
   has_one_attached :photo_1
   has_one_attached :photo_2
   default_scope -> { where(destroyed_at: nil) }
@@ -22,6 +23,19 @@ class Info < ApplicationRecord
     end
     h[:image_url_1] = photo_1.service_url if photo_1.attached?
     h[:image_url_2] = photo_2.service_url if photo_2.attached?
+    if info_items.present?
+
+      h[:items] = {}
+      InfoItem::PLACEMENTS.each { |x| h[:items][x] = info_items.placed(x).order(:position).map(&:standard_hash) }
+
+    end
+    h[:has_items] = info_items.present?
     h
+  end
+
+
+
+  def full_name
+    title_one
   end
 end
