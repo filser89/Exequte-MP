@@ -6,7 +6,7 @@ ActiveAdmin.register Membership do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :membership_type_id, :user_id, :name, :cn_name, :price_cents, :price_currency, :start_date, :end_date, :smoothie
+  permit_params :membership_type_id, :user_id, :name, :cn_name, :price_cents, :price_currency, :start_date, :end_date, :smoothie, :payment_status
   #
   # or
   #
