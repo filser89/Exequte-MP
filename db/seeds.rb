@@ -247,7 +247,7 @@ file = URI.open(url)
 
 photo = { io: file, filename: filename }
 
-banner = Banner.create!(title: "Title", promo_text: "Promo text")
+banner = Banner.create!()
 banner.photo.attach(photo)
 puts "Created a banner"
 
