@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root to: 'pages#home'
 
   resources :training_sessions, only: %i[new create show]
+  resources :info_items, only: %i[new create show]
   resources :trainings, only: %i[new create show]
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
