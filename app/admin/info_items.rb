@@ -5,6 +5,8 @@ ActiveAdmin.register InfoItem do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
+
+
   permit_params :title, :item_text, :cn_item_text, :margin_bottom, :font_size, :placement, :position, :info_id, :info_item_pattern_id, :margin_top, :margin_left, :text_align, :text_transform, :italic, :note
   #
 
