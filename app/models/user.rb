@@ -5,8 +5,8 @@ class User < ApplicationRecord
     :recoverable, :rememberable, :validatable
   DEFAULT_NAME = "#{Rails.application.class.module_parent} User".freeze
   ACTIVITY_LEVELS = [nil, '', 'No activity (0x weekly)', 'Light (1-2x weekly)', 'Moderate (2-3x weekly)', 'High (4-5x weekly)', 'Extreme (5+ weekly)'].freeze
-  GENDERS = [nil, '', 'Male', 'Female', 'Trance / Non-binary / Other', 'Prefer not to disclose']
-  TARGETS = [nil, "", "lose", "gain", "maintain"].freeze
+  GENDERS = [nil, '', 'Male', 'Female', 'Trans / Non-binary / Other', 'Prefer not to disclose']
+  TARGETS = [nil, "", "Lose", "Gain", "Maintain"].freeze
   validates :profession_activity_level, inclusion: { in: ACTIVITY_LEVELS }
   validates :target, inclusion: { in: TARGETS}
   serialize :wx_info, Hash
