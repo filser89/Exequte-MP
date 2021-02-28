@@ -26,7 +26,7 @@ class Info < ApplicationRecord
     if info_items.present?
 
       h[:items] = {}
-      InfoItem::PLACEMENTS.each { |x| h[:items][x] = info_items.placed(x).order(:position).map(&:standard_hash) }
+      InfoItem::PLACEMENTS.each { |x| h[:items][x] = info_items.placed(x).order(:position, created_at: :asc).map(&:standard_hash) }
 
     end
     h[:has_items] = info_items.present?
