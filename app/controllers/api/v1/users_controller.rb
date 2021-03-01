@@ -24,8 +24,8 @@ module Api
         cipher.iv = Base64.decode64(params[:iv])
         wx_info = JSON.parse(cipher.update(Base64.decode64(params[:encryptedData])) + cipher.final)
         @user.update(union_id: wx_info["unionId"], wx_info: wx_info)
-        @user.attach_avatar_from_url(params[:userInfo][:avatarUrl])
-        render_success({msg: 'Ready!'})
+        @user.attach_avatar_from_url(params[:userInfo][:avatarUrl]) unless @user.avatar.attached?
+        render_success(@user.standard_hash)
       end
 
       def index
@@ -37,6 +37,7 @@ module Api
       end
 
       def show
+        p @user.show_hash
         render_success(@user.show_hash)
       end
 

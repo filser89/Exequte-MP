@@ -35,7 +35,8 @@ module Api
     def current_user
       token = request.headers['X-Auth-Token']&.split(' ')&.last
       claims = TokenService.decode(token) if token
-      @current_user ||= User.includes(:bookings, :memberships, bookings: [:training_session]).find_by(id: claims[0]['user']) if claims
+      # @current_user ||= User.includes(:bookings, :memberships, bookings: [:training_session]).find_by(id: claims[0]['user']) if claims
+      @current_user ||= User.find_by(id: claims[0]['user']) if claims
     end
 
     def authenticate_user_from_token!
