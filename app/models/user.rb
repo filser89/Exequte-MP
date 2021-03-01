@@ -97,7 +97,9 @@ class User < ApplicationRecord
       gender: gender,
       admin: admin,
       voucher_count: voucher_count,
-      union_id: union_id
+      union_id: union_id,
+      profile_filled: first_name.present?,
+      has_wx_info: wx_info.present?
     }
   end
 
