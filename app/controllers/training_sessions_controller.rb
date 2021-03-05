@@ -51,6 +51,8 @@ class TrainingSessionsController < ApplicationController
         instructor: training_session.instructor,
         name: training_session.name,
         cn_name: training_session.cn_name,
+        subtitle: training_session.subtitle,
+        cn_subtitle: training_session.cn_subtitle,
         description: training_session.description,
         cn_description: training_session.cn_description,
         duration: training_session.duration,
