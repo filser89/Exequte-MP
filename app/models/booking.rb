@@ -79,6 +79,13 @@ class Booking < ApplicationRecord
     training_session.subtitle
   end
 
+  def client_first_name
+    user.first_name
+  end
+
+  def client_last_name
+    user.last_name
+  end
 
 
 end
