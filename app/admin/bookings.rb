@@ -10,6 +10,25 @@ ActiveAdmin.register Booking do
   permit_params :user_id, :training_session_id, :price_cents, :price_currency, :cancelled, :cancelled_at, :attended, :booked_with, :membership_id
   json_editor
 
+  index do
+    selectable_column
+    column :user_id
+    column :training_session_id
+    column :class_time
+    column :class_name
+    column :subtitle
+    column :created_at
+    column :updated_at
+    column :price_cents
+    column :price_currency
+    column :cancelled
+    column :cancelled_at
+    column :attended
+    column :booked_with
+    column :membership_id
+    actions
+  end
+
 
   form do |f|
     f.semantic_errors # shows errors on :base
