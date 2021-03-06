@@ -67,4 +67,18 @@ class Booking < ApplicationRecord
     DateTime.now < training_session.begins_at ? 'new' : 'no show'
   end
 
+  def class_time
+    training_session.begins_at
+  end
+
+  def class_name
+    training_session.name
+  end
+
+  def subtitle
+    training_session.subtitle
+  end
+
+
+
 end
