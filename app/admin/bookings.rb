@@ -14,18 +14,19 @@ ActiveAdmin.register Booking do
     selectable_column
     column :user_id
     column :training_session_id
+    column :client_first_name
+    column :client_last_name
     column :class_time
     column :class_name
     column :subtitle
-    column :created_at
-    column :updated_at
     column :price_cents
-    column :price_currency
     column :cancelled
     column :cancelled_at
     column :attended
     column :booked_with
     column :membership_id
+    column :created_at
+    column :updated_at
     actions
   end
 
