@@ -13,11 +13,12 @@ ActiveAdmin.register Booking do
 
   index do
     selectable_column
-    column :user_id
-    column :training_session_id
+    column :id
     column :client_first_name
     column :client_last_name
+    column :user_id
     column :class_time
+    column :training_session_id
     column :class_name
     column :subtitle
     column :price_cents
