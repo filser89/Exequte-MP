@@ -17,7 +17,7 @@ ActiveAdmin.register TrainingSession do
 
   index do
     selectable_column
-    column :training_id
+    column :id
     column :name
     column :subtitle
     column :begins_at
@@ -28,6 +28,7 @@ ActiveAdmin.register TrainingSession do
     column :price_1
     column :description
     column :calories
+    column :training_id
     column :cancel_before
     column :created_at
     column :updated_at
