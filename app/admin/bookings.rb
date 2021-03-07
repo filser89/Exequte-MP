@@ -11,6 +11,25 @@ ActiveAdmin.register Booking do
   permit_params :user_id, :training_session_id, :price_cents, :price_currency, :cancelled, :cancelled_at, :attended, :booked_with, :membership_id
   json_editor
 
+  filter :user_id, :as => :select, :collection => User.all.map {|user| [user.last_name, user.id]}, label: 'Client Last Name'
+  # filter :training_session_id, :as => :select, :collection => TrainingSession.all.map { |ts| [ts.id]}
+  filter :class_time, :as => :date_range, :collection => TrainingSession.all.map { |ts| [ts.begins_at]}
+  filter :id, label: 'Booking Id'
+  # filter :class_time
+  filter :training_session_id
+  filter :class_name
+  filter :subtitle
+  filter :price_cents
+  filter :cancelled
+  filter :cancelled_at
+  filter :attended
+  filter :booked_with
+  filter :membership_id
+  filter :created_at
+  filter :updated_at
+
+
+
   index do
     selectable_column
     column :id
@@ -41,6 +60,11 @@ ActiveAdmin.register Booking do
   end
   #
   # or
+
+  # sidebar :filters do
+  #   render partial: 'search'
+  # end
+
   #
   # permit_params do
   #   permitted = [:user_id, :training_session_id, :price_cents, :price_currency, :cancelled, :cancelled_at, :attended, :booked_with, :membership_id]
