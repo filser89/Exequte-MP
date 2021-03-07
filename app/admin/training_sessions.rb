@@ -15,6 +15,24 @@ ActiveAdmin.register TrainingSession do
   #   permitted
   # end
 
+  index do
+    selectable_column
+    column :training_id
+    column :name
+    column :subtitle
+    column :begins_at
+    column :capacity
+    column :queue
+    column :instructor
+    column :duration
+    column :price_1
+    column :description
+    column :calories
+    column :created_at
+    column :updated_at
+    actions
+  end
+
 
   form do |f|
     tabs do
