@@ -28,6 +28,7 @@ ActiveAdmin.register TrainingSession do
     column :price_1
     column :description
     column :calories
+    column :cancel_before
     column :created_at
     column :updated_at
     actions
