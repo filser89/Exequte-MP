@@ -22,6 +22,7 @@ module MessageScheduler
 
   # INSTANCE METHODS HERE
   def notify(tag)
+    puts ("INSIDE NOTIFY (scheduler)")
     class_name = self.model_name.singular
     wx_notes = self.send("#{class_name}_#{tag}")
     wx_notes.each do |x|
@@ -46,6 +47,7 @@ module MessageScheduler
   end
 
   def notify_new
+    puts "INSIDE NOTIFY NEW"
     notify("new")
   end
 

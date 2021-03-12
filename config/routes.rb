@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   devise_for :users
   root to: 'pages#home'
+  get "wx_token", to: "pages#wx_token"
+
 
   resources :training_sessions, only: %i[new create show]
   resources :info_items, only: %i[new create show]
@@ -11,6 +13,7 @@ Rails.application.routes.draw do
 
       # PAGES
       post 'pages', to: "pages#make_strings"
+
       # COUPONS
       get 'coupons', to: "coupons#use_coupon"
       # USERS
@@ -73,6 +76,12 @@ Rails.application.routes.draw do
       post "memberships/notify", to: 'memberships#payment_confirmed', format: :xml
       post "bookings/notify", to: 'bookings#payment_confirmed', format: :xml
     end
+  end
+
+  # sidekiq dashboard
+  require "sidekiq/web"
+  authenticate :user, lambda { |u| u.admin } do
+    mount Sidekiq::Web => '/sidekiq'
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

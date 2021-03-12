@@ -21,10 +21,10 @@ class WechatNotifier < ApplicationRecord
     }
   end
 
-  def self.booking_reminder
+  def self.booking_reminder(params={})
     {
       "template_id" => "siNd6GpH_dAD9k8gIHE0sz384YGb96Dx0uG3_Qr8FVQ", #新订单通知
-      "receiver" => "obaux4lFtNTZt81sgdRyUv-S7MHk",#(params[:openid] || "OPENID"), # receiver's openid
+      "receiver" => "oS9Rj68fySLTSNGeAzIkUfUaMVc4",#(params[:openid] || "OPENID"), # receiver's openid
       "pagepath" => (params[:pagepath] || "PAGEPATH"), # Reirect to an MP page on tap
       "header_color" => COLORS[:header], # RED
       "body_color" => COLORS[:body], # BLUE
@@ -45,7 +45,7 @@ class WechatNotifier < ApplicationRecord
 
   def self.notify_queue
     {
-      "template_id" => "??????????????????????????????", #新订单通知
+      "template_id" => "siNd6GpH_dAD9k8gIHE0sz384YGb96Dx0uG3_Qr8FVQ", #新订单通知
       "receiver" => (params[:openid] || "OPENID"), # receiver's openid
       "pagepath" => (params[:pagepath] || "PAGEPATH"), # Reirect to an MP page on tap
       "header_color" => COLORS[:header], # RED
@@ -128,12 +128,13 @@ class WechatNotifier < ApplicationRecord
   end
 
   def self.notify!(params={})
-    if params["second_attempt"]
-      token = self.fetch_token(true)
-    else
-      token = self.fetch_token
-    end
-
+    puts 'INSIDE NOFIFY! (NOTIFIER)'
+    # if params["second_attempt"]
+    #   token = self.fetch_token(true)
+    # else
+    #   token = self.fetch_token
+    # end
+    token = "42_0OM_yMSx661IqGsm2yOln2D9S9-RXJAftOxf_M89a3l8LfrCehaNhoPADm-TKoT4yLikiryg5eMrc5Z0hMmB8ZdfkreVaViWSfiwr6bBiHPTcdYdb73GXDIOmu14tXSe-v9vIMp0JafnZgF5INQdAHAPUX"
     post_msg = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=#{token}"
     data = {}
     params["data"].each do |k,v|
@@ -145,7 +146,7 @@ class WechatNotifier < ApplicationRecord
     miniprogram = {
       "appid" => Rails.application.credentials.wx_mp_app_id
     }
-    miniprogram["pagepath"] = params["pagepath"] if params[pagepath].present?
+    miniprogram["pagepath"] = params["pagepath"] if params["pagepath"].present?
     msg = {
       "touser"=> params["receiver"],
       "template_id"=> params["template_id"],
@@ -155,6 +156,7 @@ class WechatNotifier < ApplicationRecord
     msg["url"] = params["redirect_url"] if params["redirect_url"].present?
 
     p '------start send msg--------'
+    p msg
     result = RestClient.post(post_msg, msg.to_json)
     p JSON.parse(result)
 
