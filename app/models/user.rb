@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include MessageScheduler
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -143,12 +144,12 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
-  def self.notify_all!
-
-    users = User.where.not(wx_open_id: nil, instructor: true)
-    users.each do |u|
+  def self.notify_all!(banner)
+    puts "INSIDE NOTIFY ALL"
+    # users = User.where.not(oa_open_id: nil)
+    User.all.each do |u|
       obj_hash  = {id: u.id, model: u.model_name.name}
-      wx_params = u.new_banner
+      wx_params = u.new_banner(banner)
       WechatWorker.perform_async('new_banner', obj_hash, wx_params)
     end
   end
@@ -156,6 +157,7 @@ class User < ApplicationRecord
   def attach_avatar_from_url(url)
     avatar.attach({ io: FileDownloaderService.download(url), filename: FileDownloaderService.filename })
   end
+
 
   private
 

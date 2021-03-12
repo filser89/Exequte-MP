@@ -24,7 +24,7 @@ class WechatNotifier < ApplicationRecord
   def self.booking_reminder(params={})
     {
       "template_id" => "siNd6GpH_dAD9k8gIHE0sz384YGb96Dx0uG3_Qr8FVQ", #新订单通知
-      "receiver" => "oS9Rj68fySLTSNGeAzIkUfUaMVc4",#(params[:openid] || "OPENID"), # receiver's openid
+      "receiver" => params[:open_id],#(params[:openid] || "OPENID"), # receiver's openid
       "pagepath" => (params[:pagepath] || "PAGEPATH"), # Reirect to an MP page on tap
       "header_color" => COLORS[:header], # RED
       "body_color" => COLORS[:body], # BLUE
@@ -43,7 +43,7 @@ class WechatNotifier < ApplicationRecord
     }
   end
 
-  def self.notify_queue
+  def self.notify_queue(params={})
     {
       "template_id" => "siNd6GpH_dAD9k8gIHE0sz384YGb96Dx0uG3_Qr8FVQ", #新订单通知
       "receiver" => (params[:openid] || "OPENID"), # receiver's openid
@@ -64,9 +64,10 @@ class WechatNotifier < ApplicationRecord
     }
   end
 
-  def self.new_banner
+  def self.new_banner(params={})
+    puts "INSIDE NEW BANNER"
     {
-      "template_id" => "??????????????????????????????", #新订单通知
+      "template_id" => "siNd6GpH_dAD9k8gIHE0sz384YGb96Dx0uG3_Qr8FVQ", #新订单通知
       "receiver" => (params[:openid] || "OPENID"), # receiver's openid
       "pagepath" => (params[:pagepath] || "PAGEPATH"), # Reirect to an MP page on tap
       "header_color" => COLORS[:header], # RED
@@ -76,7 +77,7 @@ class WechatNotifier < ApplicationRecord
 
         # CUSTOM MESSAGES SENT TO USER
         # Ekaterina can edit!
-        "first" => "Great news",
+        "first" => "Great news from exeQute",
         "keyword1" => "#{params[:name]}",
         "keyword2" => "#{params[:title]}",
         "keyword3" => "#{params[:text]}",
@@ -134,7 +135,7 @@ class WechatNotifier < ApplicationRecord
     # else
     #   token = self.fetch_token
     # end
-    token = "42_0OM_yMSx661IqGsm2yOln2D9S9-RXJAftOxf_M89a3l8LfrCehaNhoPADm-TKoT4yLikiryg5eMrc5Z0hMmB8ZdfkreVaViWSfiwr6bBiHPTcdYdb73GXDIOmu14tXSe-v9vIMp0JafnZgF5INQdAHAPUX"
+    token = "43_yvXsJGgSkS6SzY4QnFfBTdt2Tnb-6zlgjexwg-v9rclP7nLGm69wEyRKr3OoSyR6EFiiksIpYyJ007Xd57neADJbr1TYc8AGTrV3IbSLhoM1Zt3KZhsUvzVK6ynRWX54SQxiHtiVSowRc8S3WAKgACAHLV"
     post_msg = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=#{token}"
     data = {}
     params["data"].each do |k,v|
