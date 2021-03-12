@@ -39,6 +39,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'autoprefixer-rails'
 gem 'sidekiq'
+gem 'sidekiq-failures', '~> 1.0'
 gem 'devise'
 gem 'faker'
 # gem 'forest_liana'

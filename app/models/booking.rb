@@ -1,11 +1,14 @@
 class Booking < ApplicationRecord
   include WxPayable
+  include MessageScheduler
   BOOKING_OPTIONS = [nil, 'free', 'drop-in', 'membership', 'voucher']
   monetize :price_cents
   belongs_to :user
   belongs_to :training_session
   belongs_to :membership, optional: true
   validates :booked_with, inclusion: BOOKING_OPTIONS
+  after_create  :notify_new
+
   default_scope -> { where(destroyed_at: nil) }
   scope :settled, -> { where(payment_status: ['paid', 'none']) }
   scope :attended, -> { where(attended: true) }

@@ -3,4 +3,8 @@ class PagesController < ApplicationController
 
   def home
   end
+
+  def wx_token
+    OaService.access_token
+  end
 end
