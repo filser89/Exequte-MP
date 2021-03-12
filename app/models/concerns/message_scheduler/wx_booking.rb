@@ -6,7 +6,7 @@ module MessageScheduler
     end
 
     def booking_update
-      ["booking_paid", "booking_payout", "booking_client_paid", "booking_accepted_client", "booking_cancelled_sitter", "booking_cancelled_customer", "booking_refund"]
+      ["booking_cancelled_notify_queue"]
     end
 
     def booking_reminder
@@ -15,12 +15,6 @@ module MessageScheduler
       note_params = {
         openid: self.user.oa_open_id,
         pagepath: "pages/booking-info/booking-info?bookingId=#{self.id}&instructorId=#{self.training_session.instructor.id}",
-        # pagepath: "index",
-
-        # miniprogram: {
-        #   appid: Rails.application.credentials.dig(:wx_mp_app_id),
-        #   pagepath: "booking-details?id=#{self.id}"
-        # }
         ts_name: self.training_session.localize_name,
         ts_time: DateTimeService.time_24_h_m(self.training_session.begins_at)
       }
@@ -28,6 +22,14 @@ module MessageScheduler
       wx_params[:deliver_at] = self.training_session.begins_at - 4.hours
       wx_params
     end
+
+    # def booking_cancelled_notify_queue
+    #   if self.cancelled_changed? && self.cancelled
+    #     queue = self.training_session.queue
+
+    #   end
+
+    # end
   end
 end
 # end

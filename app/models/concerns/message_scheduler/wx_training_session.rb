@@ -6,7 +6,7 @@ module MessageScheduler
     end
 
     def booking_update
-      ["training_session_free_spot"]
+      ["training_session_"]
     end
 
     def training_session_free_spot(user)
@@ -24,4 +24,3 @@ module MessageScheduler
     end
   end
 end
-# end

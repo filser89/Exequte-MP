@@ -1,5 +1,4 @@
 class OaService
-  attr_accessor @access_token
   def get_users_info
     access_token
     puts "access_token"

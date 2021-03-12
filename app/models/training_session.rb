@@ -91,11 +91,12 @@ class TrainingSession < ApplicationRecord
 
   def self.notify_queue(training_session)
     training_session.queue.each do |u|
+      puts "NOTIFICATION FOR QUEUE: USER #{u.full_name}"
       # Not sure what obj_hash does so can be an error next line
-      obj_hash  = {id: traiing_session.id, model: traiing_session.model_name.name}
+      obj_hash  = {id: training_session.id, model: training_session.model_name.name}
       note_params = {
-        openid: u.wx_open_id,
-        pagepath: "booking?sessionId=#{training_session.id}",
+        openid: u.oa_open_id,
+        pagepath: "pages/class-info/class-info?sessionId=#{training_session.id}&instructorId=#{training_session.instructor.id}",
         ts_name: training_session.localize_name,
         ts_date: DateTimeService.date_d_m_y(training_session.begins_at),
         ts_time: DateTimeService.time_24_h_m(training_session.begins_at)
