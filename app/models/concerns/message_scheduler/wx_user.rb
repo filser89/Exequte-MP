@@ -6,6 +6,7 @@ module MessageScheduler
       puts "PREPARING NEW BANNER MSG"
       note_params = {
         openid: self.oa_open_id,
+        unionid: self.union_id, # needed to retrieve oa_open_id if it is not present
         pagepath: "pages/index/index",
         title: banner.title,
         text: banner.promo_text

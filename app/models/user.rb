@@ -144,6 +144,11 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+
+  def attach_avatar_from_url(url)
+    avatar.attach({ io: FileDownloaderService.download(url), filename: FileDownloaderService.filename })
+  end
+
   def self.notify_all!(banner)
     puts "INSIDE NOTIFY ALL"
     # users = User.where.not(oa_open_id: nil)
@@ -153,11 +158,6 @@ class User < ApplicationRecord
       WechatWorker.perform_async('new_banner', obj_hash, wx_params)
     end
   end
-
-  def attach_avatar_from_url(url)
-    avatar.attach({ io: FileDownloaderService.download(url), filename: FileDownloaderService.filename })
-  end
-
 
   private
 

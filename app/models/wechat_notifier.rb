@@ -3,6 +3,9 @@ require 'rest-client'
 class WechatNotifier < ApplicationRecord
   mattr_accessor :token
   mattr_accessor :token_time
+  mattr_accessor :oa_service
+  mattr_accessor :oa_users
+  mattr_accessor :oa_users_time
   mattr_accessor :js_ticket
   mattr_accessor :js_ticket_time
   self.abstract_class = true
@@ -24,7 +27,8 @@ class WechatNotifier < ApplicationRecord
   def self.booking_reminder(params={})
     {
       "template_id" => "siNd6GpH_dAD9k8gIHE0sz384YGb96Dx0uG3_Qr8FVQ", #新订单通知
-      "receiver" => params[:open_id],#(params[:openid] || "OPENID"), # receiver's openid
+      "receiver" => params[:openid],#(params[:openid] || "OPENID"), # receiver's openid
+      "unionid" => params[:unionid], # will be used if openid is blank
       "pagepath" => (params[:pagepath] || "PAGEPATH"), # Reirect to an MP page on tap
       "header_color" => COLORS[:header], # RED
       "body_color" => COLORS[:body], # BLUE
@@ -46,15 +50,16 @@ class WechatNotifier < ApplicationRecord
   def self.notify_queue(params={})
     {
       "template_id" => "siNd6GpH_dAD9k8gIHE0sz384YGb96Dx0uG3_Qr8FVQ", #新订单通知
-      "receiver" => (params[:openid] || "OPENID"), # receiver's openid
+      "receiver" => params[:openid], # receiver's openid
+      "unionid" => params[:unionid], # will be used if openid is blank
       "pagepath" => (params[:pagepath] || "PAGEPATH"), # Reirect to an MP page on tap
       "header_color" => COLORS[:header], # RED
       "body_color" => COLORS[:body], # BLUE
-      "footer_color" => COLORS[:footer], # Spare Leash Green
+      "footer_color" => COLORS[:footer], # Green
       "data" => {
 
         # CUSTOM MESSAGES SENT TO USER
-        # Ekaterina can edit!
+
         "first" => "Huuraay!!! Free spot!",
         "keyword1" => "#{params[:ts_name]}",
         "keyword2" => "#{params[:ts_date]}",
@@ -68,7 +73,8 @@ class WechatNotifier < ApplicationRecord
     puts "INSIDE NEW BANNER"
     {
       "template_id" => "siNd6GpH_dAD9k8gIHE0sz384YGb96Dx0uG3_Qr8FVQ", #新订单通知
-      "receiver" => (params[:openid] || "OPENID"), # receiver's openid
+      "receiver" => params[:openid], # receiver's openid
+      "unionid" => params[:unionid], # will be used if openid is blank
       "pagepath" => (params[:pagepath] || "PAGEPATH"), # Reirect to an MP page on tap
       "header_color" => COLORS[:header], # RED
       "body_color" => COLORS[:body], # BLUE
@@ -91,7 +97,7 @@ class WechatNotifier < ApplicationRecord
 
   # ======================================================
   #                 API CONNECTORS
-  #              DON'T TOUCH!
+  #                  DON'T TOUCH!
   # ======================================================
   def self.token_expired?
     return true if self.token.nil?
@@ -108,13 +114,16 @@ class WechatNotifier < ApplicationRecord
   end
 
   def self.set_token
-    app_id = ENV["WX_APP_ID"]
-    app_secret = ENV["WX_SECRET"]
-    token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{app_id}&secret=#{app_secret}"
-    result = RestClient.get(token_url)
-    r = JSON.parse(result)
-    if !r["access_token"].nil?
-      self.token = r["access_token"]
+    # app_id = Rails.application.credentials.dig(:wx_mp_app_id)
+    # app_secret = Rails.application.credentials.dig(:wx_mp_app_secret)
+    # token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{app_id}&secret=#{app_secret}"
+    # result = RestClient.get(token_url)
+    self.oa_service ||= OaService.new
+    p "OA SERVICE IN SET TOKEN"
+    p self.oa_service
+    access_token = oa_service.access_token
+    if access_token.present?
+      self.token = access_token
       self.token_time = Time.now
     else
       p 'get token failed'
@@ -123,7 +132,7 @@ class WechatNotifier < ApplicationRecord
 
   def self.fetch_token(again=false)
     puts "fetching wx oa token..."
-    url = 'https://spareleash.com.cn/wx_token'
+    url = 'https://exequte.cn/wx_token'
     url += "?again=true" if again
     RestClient.get(url).body
   end
@@ -135,7 +144,12 @@ class WechatNotifier < ApplicationRecord
     # else
     #   token = self.fetch_token
     # end
-    token = "43_yvXsJGgSkS6SzY4QnFfBTdt2Tnb-6zlgjexwg-v9rclP7nLGm69wEyRKr3OoSyR6EFiiksIpYyJ007Xd57neADJbr1TYc8AGTrV3IbSLhoM1Zt3KZhsUvzVK6ynRWX54SQxiHtiVSowRc8S3WAKgACAHLV"
+    token = self.get_token
+
+    params["receiver"] = self.set_user_oa_open_id(params["unionid"]) if params["receiver"].blank?
+
+
+    # oa_users.find{|x| x['unionid'] == ?????}
     post_msg = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=#{token}"
     data = {}
     params["data"].each do |k,v|
@@ -196,6 +210,7 @@ class WechatNotifier < ApplicationRecord
     end
   end
 
+
   def self.get_js_ticket
     return SecureRandom.hex if Rails.env == "development"
 
@@ -211,5 +226,37 @@ class WechatNotifier < ApplicationRecord
     expiration = self.js_ticket_time + 110.minutes
     return false if expiration > Time.now
     return true
+  end
+
+  def self.set_oa_users
+    users = oa_service.get_users_info
+    if users.present?
+      self.oa_users = users
+      self.oa_users_time = Time.now
+    else
+      p 'failed to get oa_users'
+    end
+  end
+
+  def self.get_oa_users
+    self.oa_users_expired? ? self.set_oa_users : self.oa_users
+  end
+
+  def self.oa_users_expired?
+    return true if self.oa_users.nil?
+    expiration = self.oa_users_time + 1.day
+    return false if expiration > Time.now
+    return true
+  end
+
+  # gets the list of OA subscribers, finds the right subscriber by union id, updates user and returns the openid
+  def self.set_user_oa_open_id(union_id)
+    puts "SETTING OA OPEN ID"
+    oa_users = self.get_oa_users
+    oa_user = oa_users.find{|x| x["unionid"] == union_id }
+    return unless oa_user.present?
+
+    User.find_by(union_id: union_id).update(oa_open_id: oa_user["openid"], oa_info: oa_user)
+    oa_user["openid"]
   end
 end

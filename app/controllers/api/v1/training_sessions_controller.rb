@@ -36,7 +36,7 @@ module Api
       end
 
       def add_user_to_queue
-        @training_session.queue << current_user
+        @training_session.queue << current_user.id
         @training_session.save
         render_success(ts_to_show_hash(@training_session))
       end

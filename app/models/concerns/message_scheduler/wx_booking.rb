@@ -14,6 +14,7 @@ module MessageScheduler
       begins_at = self.training_session.begins_at
       note_params = {
         openid: self.user.oa_open_id,
+        unionid: self.user.union_id,
         pagepath: "pages/booking-info/booking-info?bookingId=#{self.id}&instructorId=#{self.training_session.instructor.id}",
         ts_name: self.training_session.localize_name,
         ts_time: DateTimeService.time_24_h_m(self.training_session.begins_at)
