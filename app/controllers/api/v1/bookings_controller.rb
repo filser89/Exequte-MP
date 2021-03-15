@@ -21,7 +21,7 @@ module Api
         @booking.training_session = @training_session
         @booking.payment_status = @booking.booked_with == 'drop-in' ?  'pending' : 'none'
         if @booking.save
-          @training_session.queue.delete(current_user)
+          @training_session.queue.delete(current_user.id)
           @training_session.save
           @booking.user.use_voucher! if @booking.booked_with == "voucher"
           response = {booking: @booking.standard_hash}

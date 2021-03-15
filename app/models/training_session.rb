@@ -90,12 +90,14 @@ class TrainingSession < ApplicationRecord
   end
 
   def self.notify_queue(training_session)
-    training_session.queue.each do |u|
+    training_session.queue.each do |u_id|
+      u = User.find(u_id)
       puts "NOTIFICATION FOR QUEUE: USER #{u.full_name}"
       # Not sure what obj_hash does so can be an error next line
       obj_hash  = {id: training_session.id, model: training_session.model_name.name}
       note_params = {
         openid: u.oa_open_id,
+        unionid: u.union_id, # needed to retrieve oa_open_id if it is not present
         pagepath: "pages/class-info/class-info?sessionId=#{training_session.id}&instructorId=#{training_session.instructor.id}",
         ts_name: training_session.localize_name,
         ts_date: DateTimeService.date_d_m_y(training_session.begins_at),
