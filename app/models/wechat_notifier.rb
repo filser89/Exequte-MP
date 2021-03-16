@@ -139,12 +139,12 @@ class WechatNotifier < ApplicationRecord
 
   def self.notify!(params={})
     puts 'INSIDE NOFIFY! (NOTIFIER)'
-    # if params["second_attempt"]
-    #   token = self.fetch_token(true)
-    # else
-    #   token = self.fetch_token
-    # end
-    token = self.get_token
+    if params["second_attempt"]
+      token = self.fetch_token(true)
+    else
+      token = self.fetch_token
+    end
+    # token = self.get_token
 
     params["receiver"] = self.set_user_oa_open_id(params["unionid"]) if params["receiver"].blank?
 

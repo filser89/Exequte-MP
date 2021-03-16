@@ -15,21 +15,21 @@ class OaService
   # private
 
   def access_token
-    # app_id = Rails.application.credentials.dig(:wx_oa, :app_id)
-    # app_secret = Rails.application.credentials.dig(:wx_oa, :app_secret)
+    app_id = Rails.application.credentials.dig(:wx_oa, :app_id)
+    app_secret = Rails.application.credentials.dig(:wx_oa, :app_secret)
 
-    # url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{app_id}&secret=#{app_secret}"
-    # puts "================== ACCESS TOKEN URL SET ===================="
+    url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{app_id}&secret=#{app_secret}"
+    puts "================== ACCESS TOKEN URL SET ===================="
 
-    # r = RestClient.get(url)
-    # puts "================== ACCESS TOKEN R ===================="
-    # p r
+    r = RestClient.get(url)
+    puts "================== ACCESS TOKEN R ===================="
+    p r
 
-    # res = JSON.parse r
-    # puts "================== ACCESS TOKEN RES ===================="
-    # res
-    # @access_token = res['access_token']
-    @access_token = "43_aU8YZroFQYpDsbZTygDHfQUJ3k4XOBkNMa9cpIwinKeRcWMfM0oyYbxg2Bdm3Uh3IiYBaQ_uxloZF2bZpBf_ptSB3i7vn0Z-aqvfFMi-CP9pVARQn3nGWMM1HiaXcGaevMyFW1lJJFkDGgM8UDMaAAABKT"
+    res = JSON.parse r
+    puts "================== ACCESS TOKEN RES ===================="
+    res
+    @access_token = res['access_token']
+    # @access_token = "43_aU8YZroFQYpDsbZTygDHfQUJ3k4XOBkNMa9cpIwinKeRcWMfM0oyYbxg2Bdm3Uh3IiYBaQ_uxloZF2bZpBf_ptSB3i7vn0Z-aqvfFMi-CP9pVARQn3nGWMM1HiaXcGaevMyFW1lJJFkDGgM8UDMaAAABKT"
   end
 
 
