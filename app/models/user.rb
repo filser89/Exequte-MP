@@ -10,6 +10,7 @@ class User < ApplicationRecord
   TARGETS = [nil, "", "lose", "gain", "maintain"].freeze
   validates :profession_activity_level, inclusion: { in: ACTIVITY_LEVELS }
   validates :target, inclusion: { in: TARGETS}
+  validates :voucher_count , numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   serialize :wx_info, Hash
   serialize :oa_info, Hash
   # Assosiations

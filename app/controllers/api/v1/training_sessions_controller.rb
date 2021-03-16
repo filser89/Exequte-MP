@@ -117,7 +117,7 @@ module Api
         options = { drop_in: true }
         return options if training_session.class_kind == 1
 
-        options[:voucher] = true unless current_user.voucher_count.zero?
+        options[:voucher] = true if current_user.voucher_count.positive?
         options[:membership] = membership_option(training_session)
         options
       end
