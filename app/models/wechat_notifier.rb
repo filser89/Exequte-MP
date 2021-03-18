@@ -40,7 +40,7 @@ class WechatNotifier < ApplicationRecord
         "first" => "Your class begins in 4 HOURS!",
         "keyword1" => "#{params[:ts_name]}",
         "keyword2" => "exeQute",
-        "keyword3" => "425, Whatever Rd",
+        "keyword3" => "425, Yanping Rd",
         "keyword4" => "#{params[:ts_time]}",
         "remark" => "Please come 15 minutes in advance"
       }
