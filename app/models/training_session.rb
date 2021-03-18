@@ -60,7 +60,7 @@ class TrainingSession < ApplicationRecord
       subtitle: localize('subtitle'),
       class_type: training.class_type.kind,
       bookable: can_book?,
-      queue: queue.map(&:standard_hash),
+      queue: User.where(id: queue).map(&:standard_hash),
       from: DateTimeService.time_24_h_m(begins_at),
       to: DateTimeService.time_24_h_m(begins_at + duration.minutes),
       instructor_id: instructor.id,
@@ -90,8 +90,7 @@ class TrainingSession < ApplicationRecord
   end
 
   def self.notify_queue(training_session)
-    training_session.queue.each do |u_id|
-      u = User.find(u_id)
+    User.where(id: training_session.queue).each do |u|
       puts "NOTIFICATION FOR QUEUE: USER #{u.full_name}"
       # Not sure what obj_hash does so can be an error next line
       obj_hash  = {id: training_session.id, model: training_session.model_name.name}

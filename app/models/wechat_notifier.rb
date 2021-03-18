@@ -144,9 +144,8 @@ class WechatNotifier < ApplicationRecord
     else
       token = self.fetch_token
     end
-    # token = self.get_token
 
-    params["receiver"] = self.set_user_oa_open_id(params["unionid"]) if params["receiver"].blank?
+    params["receiver"] = self.set_user_oa_open_id(params["unionid"], token) if params["receiver"].blank?
 
 
     # oa_users.find{|x| x['unionid'] == ?????}
@@ -228,18 +227,20 @@ class WechatNotifier < ApplicationRecord
     return true
   end
 
-  def self.set_oa_users
-    users = oa_service.get_users_info
+  def self.set_oa_users(wx_token)
+    self.oa_service ||= OaService.new
+    self.oa_service.access_token = wx_token
+    users = self.oa_service.get_users_info
     if users.present?
-      self.oa_users = users
       self.oa_users_time = Time.now
+      self.oa_users = users
     else
       p 'failed to get oa_users'
     end
   end
 
-  def self.get_oa_users
-    self.oa_users_expired? ? self.set_oa_users : self.oa_users
+  def self.get_oa_users(wx_token)
+    self.oa_users_expired? ? self.set_oa_users(wx_token) : self.oa_users
   end
 
   def self.oa_users_expired?
@@ -250,9 +251,9 @@ class WechatNotifier < ApplicationRecord
   end
 
   # gets the list of OA subscribers, finds the right subscriber by union id, updates user and returns the openid
-  def self.set_user_oa_open_id(union_id)
+  def self.set_user_oa_open_id(union_id, wx_token)
     puts "SETTING OA OPEN ID"
-    oa_users = self.get_oa_users
+    oa_users = self.get_oa_users(wx_token)
     oa_user = oa_users.find{|x| x["unionid"] == union_id }
     return unless oa_user.present?
 
