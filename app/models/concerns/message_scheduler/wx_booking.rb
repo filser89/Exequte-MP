@@ -10,7 +10,7 @@ module MessageScheduler
     end
 
     def booking_reminder
-      # return unless self.user.admin # TEST MODE
+      return unless self.user.admin # TEST MODE
       puts "PREPARING NEW REMINDER FOR BOOKING"
       begins_at = self.training_session.begins_at
       note_params = {

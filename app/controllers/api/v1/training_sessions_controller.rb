@@ -102,11 +102,11 @@ module Api
 
       def btn_pattern(training_session)
         booked = current_user.bookings.any? { |b| b.training_session.id == training_session.id && !b.cancelled }
-        queued_up = training_session.queue.include?(current_user)
+        queued_up = training_session.queue.include?(current_user.id)
 
         return { disabled: true, action: nil, text: "BOOKED" } if booked
         return { disabled: false, action: 'navigateToBooking', text: "COMMIT" } if training_session.can_book? && !booked
-        return { disabled: true, action: nil, text: "WAITING" } if queued_up
+        return { disabled: true, action: nil, text: "IN QUEUE" } if queued_up
 
         { disabled: false, action: 'queueUp', text: "QUEUE UP" }
       end

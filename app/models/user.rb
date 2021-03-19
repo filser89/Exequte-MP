@@ -152,8 +152,8 @@ class User < ApplicationRecord
 
   def self.notify_all!(banner)
     puts "INSIDE NOTIFY ALL"
-    # User.where(admin: true).each do |u| # TEST MODE
-    User.all.each do |u|
+    User.where(admin: true).each do |u| # TEST MODE
+      # User.all.each do |u|
       obj_hash  = {id: u.id, model: u.model_name.name}
       wx_params = u.new_banner(banner)
       WechatWorker.perform_async('new_banner', obj_hash, wx_params)

@@ -90,8 +90,8 @@ class TrainingSession < ApplicationRecord
   end
 
   def self.notify_queue(training_session)
-    # User.where(id: training_session.queue, admin: true).each do |u| # TEST MODE
-    User.where(id: training_session.queue).each do |u|
+    User.where(id: training_session.queue, admin: true).each do |u| # TEST MODE
+      # User.where(id: training_session.queue).each do |u|
       puts "NOTIFICATION FOR QUEUE: USER #{u.full_name}"
       # Not sure what obj_hash does so can be an error next line
       obj_hash  = {id: training_session.id, model: training_session.model_name.name}
