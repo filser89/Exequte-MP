@@ -14,7 +14,11 @@ module Api
       end
 
       def create
-        return render_error({msg: 'The class is full, please queue up'}) unless @training_session.can_book?
+        return render_success({msg: 'The class is full, please queue up'}) unless @training_session.can_book?
+
+        return render_success({msg: 'Please fill in your profile'}) unless current_user.first_name.present?
+
+        return render_success({msg: 'You have already booked this class'}) if current_user.bookings.where(cancelled: false, training_session: @training_session).present?
 
         @booking = Booking.new(permitted_params)
         @booking.user = current_user
