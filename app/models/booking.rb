@@ -12,6 +12,7 @@ class Booking < ApplicationRecord
   default_scope -> { where(destroyed_at: nil) }
   scope :settled, -> { where(payment_status: ['paid', 'none']) }
   scope :attended, -> { where(attended: true) }
+  scope :with_ts, -> { includes(:training_session) }
 
   def upcoming_hash
     h = show_hash

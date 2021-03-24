@@ -173,13 +173,14 @@ class User < ApplicationRecord
   def average_attendence
 
     days_to_count = days_since_created < 28 ? days_since_created : 28
+    attended = self.bookings.with_ts.attended
 
-    attended = bookings.attended
-    return 0 if attended.empty?
+    return 0 if attended.blank?
 
-    range = days_to_count.days.ago..Date.yesterday
-    count = attended.count { |a| range.include?(a.training_session.begins_at.to_datetime) }
-    count / days_to_count * 7
+    range = days_to_count.days.ago..DateTime.now.midnight
+    count = attended.where(training_sessions: {begins_at: range}).count
+
+    (count.fdiv(days_to_count) * 7).to_i
   end
 
   def has_body_data?
