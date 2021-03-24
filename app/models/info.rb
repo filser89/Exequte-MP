@@ -1,5 +1,5 @@
 class Info < ApplicationRecord
-  has_many :info_items
+  has_many :info_items, dependent: :destroy
   has_one_attached :photo_1
   has_one_attached :photo_2
   default_scope -> { where(destroyed_at: nil) }
