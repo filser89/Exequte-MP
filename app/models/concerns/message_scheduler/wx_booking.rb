@@ -12,16 +12,17 @@ module MessageScheduler
     def booking_reminder
       return unless self.user.admin # TEST MODE
       puts "PREPARING NEW REMINDER FOR BOOKING"
-      begins_at = self.training_session.begins_at
+      ts = self.training_session
+
       note_params = {
         openid: self.user.oa_open_id,
         unionid: self.user.union_id,
-        pagepath: "pages/booking-info/booking-info?bookingId=#{self.id}&instructorId=#{self.training_session.instructor.id}",
-        ts_name: self.training_session.localize_name,
-        ts_time: DateTimeService.time_24_h_m(self.training_session.begins_at)
+        pagepath: "pages/booking-info/booking-info?bookingId=#{self.id}&instructorId=#{ts.instructor.id}",
+        ts_name: ts.full_name,
+        ts_time: DateTimeService.time_12_h_m(ts.begins_at)
       }
       wx_params = WechatNotifier.booking_reminder(note_params)
-      wx_params[:deliver_at] = self.training_session.begins_at - 4.hours
+      wx_params[:deliver_at] = ts.begins_at.midnight - 1.day + 20.hours
       wx_params
     end
 

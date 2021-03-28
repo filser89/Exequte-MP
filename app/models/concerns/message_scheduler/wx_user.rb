@@ -8,8 +8,8 @@ module MessageScheduler
         openid: self.oa_open_id,
         unionid: self.union_id, # needed to retrieve oa_open_id if it is not present
         pagepath: "pages/index/index",
-        title: banner.title,
-        text: banner.promo_text
+        activity_name: banner.activity_name,
+        activity_time: banner.activity_time
       }
       WechatNotifier.new_banner(note_params)
       # wx_params[:deliver_at] = begins_at - 4.hours

@@ -37,12 +37,12 @@ class WechatNotifier < ApplicationRecord
 
         # CUSTOM MESSAGES SENT TO USER
         # Ekaterina can edit!
-        "first" => "Your class begins in 4 HOURS!",
+        "first" => "You booked a class tomorrow, COMMIT!",
         "keyword1" => "#{params[:ts_name]}",
-        "keyword2" => "exeQute",
-        "keyword3" => "425, Yanping Rd",
+        "keyword2" => "exeQute JingAn",
+        "keyword3" => "425, Yanping Rd, 1F",
         "keyword4" => "#{params[:ts_time]}",
-        "remark" => "Please come 15 minutes in advance"
+        "remark" => "Be on time, bring a towel!"
       }
     }
   end
@@ -60,11 +60,12 @@ class WechatNotifier < ApplicationRecord
 
         # CUSTOM MESSAGES SENT TO USER
 
-        "first" => "Huuraay!!! Free spot!",
+        "first" => "Yesss! A spot freed up!",
         "keyword1" => "#{params[:ts_name]}",
-        "keyword2" => "#{params[:ts_date]}",
-        "keyword3" => "#{params[:ts_time]}",
-        "remark" => "Hurry up! Tap to book a class!"
+        "keyword2" => "exeQute JingAn",
+        "keyword3" => "425, Yanping Rd, 1F",
+        "keyword4" => "#{params[:ts_time]}",
+        "remark" => "Be the FASTEST and COMMIT now!"
       }
     }
   end
@@ -83,11 +84,12 @@ class WechatNotifier < ApplicationRecord
 
         # CUSTOM MESSAGES SENT TO USER
         # Ekaterina can edit!
-        "first" => "Great news from exeQute",
-        "keyword1" => "#{params[:name]}",
-        "keyword2" => "#{params[:title]}",
-        "keyword3" => "#{params[:text]}",
-        "remark" => "Click to find out more!"
+        "first" => "Updates from EXEQUTE!",
+        "keyword1" => "#{params[:activity_name]}",
+        "keyword2" => "exeQute JingAn",
+        "keyword3" => "425, Yanping Rd, 1F",
+        "keyword4" => "#{params[:activity_time]}",
+        "remark" => "Check it out now!"
       }
     }
   end
