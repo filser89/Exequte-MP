@@ -19,13 +19,14 @@ class Banner < ApplicationRecord
 
   def notify_users_on_create
     puts "INSIDE AFTER CREATE"
-    User.notify_all!(self) if self.current == true
+    activity_present = self.activity_name.present? && self.activity_time.present?
+    User.notify_all!(self) if self.current == true && activity_present
   end
 
   def notify_users_on_update
     puts "INSIDE AFTER UPDATE"
-    condition = self.saved_change_to_current && self.current == true
-    p condition
-    User.notify_all!(self) if condition
+    new_current = self.saved_change_to_current && self.current == true
+    activity_present = self.activity_name.present? && self.activity_time.present?
+    User.notify_all!(self) if new_current && activity_present
   end
 end

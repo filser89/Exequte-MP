@@ -89,6 +89,11 @@ class TrainingSession < ApplicationRecord
     I18n.locale == :'zh-CN' ? cn_description : description
   end
 
+  # returns a name with subtile if there is a subtile or just a name
+  def full_name
+    self.localize_name + "#{self.subtitle.present? ? (': ' + self.localize('subtitle')) : ''}"
+  end
+
   def self.notify_queue(training_session)
     User.where(id: training_session.queue, admin: true).each do |u| # TEST MODE
       # User.where(id: training_session.queue).each do |u|
@@ -99,9 +104,9 @@ class TrainingSession < ApplicationRecord
         openid: u.oa_open_id,
         unionid: u.union_id, # needed to retrieve oa_open_id if it is not present
         pagepath: "pages/class-info/class-info?sessionId=#{training_session.id}&instructorId=#{training_session.instructor.id}",
-        ts_name: training_session.localize_name,
-        ts_date: DateTimeService.date_d_m_y(training_session.begins_at),
-        ts_time: DateTimeService.time_24_h_m(training_session.begins_at)
+        ts_name: training_session.full_name,
+        # ts_date: DateTimeService.date_d_m_y(training_session.begins_at),
+        ts_time: "#{DateTimeService.date_d_m_y(training_session.begins_at)} #{DateTimeService.time_12_h_m(training_session.begins_at)}"
       }
       wx_params = WechatNotifier.notify_queue(note_params)
       WechatWorker.perform_async('notify_queue', obj_hash, wx_params)

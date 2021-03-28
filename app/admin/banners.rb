@@ -18,12 +18,12 @@ ActiveAdmin.register Banner do
   form do |f|
     f.inputs "Banners" do
       f.input :photo, as: :file
-      f.input :title
-      f.input :promo_text
+      f.input :activity_name
+      f.input :activity_time
       f.input :current, label: "Current", as: :radio
     end
     f.actions
   end
 
-  permit_params :photo, :current, :title, :promo_text
+  permit_params :photo, :current, :activity_name, :activity_time
 end
