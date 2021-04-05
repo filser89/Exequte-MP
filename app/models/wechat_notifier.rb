@@ -37,12 +37,12 @@ class WechatNotifier < ApplicationRecord
 
         # CUSTOM MESSAGES SENT TO USER
         # Ekaterina can edit!
-        "first" => "You booked a class tomorrow, COMMIT!",
+        "first" => "COMMIT, bring water and a towel!",
         "keyword1" => "#{params[:ts_name]}",
         "keyword2" => "exeQute JingAn",
         "keyword3" => "425, Yanping Rd, 1F",
         "keyword4" => "#{params[:ts_time]}",
-        "remark" => "Be on time, bring a towel!"
+        "remark" => "Cancel 3hrs in advance!"
       }
     }
   end
