@@ -22,17 +22,9 @@ module MessageScheduler
         ts_time: DateTimeService.time_12_h_m(ts.begins_at)
       }
       wx_params = WechatNotifier.booking_reminder(note_params)
-      wx_params[:deliver_at] = ts.begins_at.midnight - 1.day + 20.hours
+      wx_params[:deliver_at] = booking_reminder_notification_time
       wx_params
     end
-
-    # def booking_cancelled_notify_queue
-    #   if self.cancelled_changed? && self.cancelled
-    #     queue = self.training_session.queue
-
-    #   end
-
-    # end
   end
 end
 # end

@@ -91,5 +91,9 @@ class Booking < ApplicationRecord
     user.last_name
   end
 
+  def booking_reminder_notification_time
+    training_session.begins_at.midnight - 1.day + 20.hours
+  end
+
 
 end
