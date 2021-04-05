@@ -15,6 +15,8 @@ class WechatWorker
     p obj_hash
     p wx_params
 
+    return true if notification_not_needed?(obj_hash)
+
     # return true if Rails.env == "development"
     return true if ENV["staging"] == "true"
     # update object w/ most recent database updates
@@ -38,4 +40,27 @@ class WechatWorker
       WechatNotifier.notify!(wx_params)
     end
   end
+
+  private
+
+  def notification_not_needed?(obj_hash)
+    return alse unless obj_hash["model"].present? && obj_hash["model"] == "Booking"
+    booking = Booking.find(obj_hash["id"].to_i)
+    booking_cancelled?(booking) || booking_created_late(booking)
+  end
+
+  def booking_cancelled?(booking)
+
+    cancelled = booking&.cancelled
+    puts "========Booking cancelled===========" if cancelled
+    cancelled
+  end
+
+  def booking_created_late(booking)
+    late = booking&.created_at > booking&.booking_reminder_notification_time
+    puts "========Booking created late===========" if late
+    return false if Rails.env.development?
+    late
+  end
+
 end
