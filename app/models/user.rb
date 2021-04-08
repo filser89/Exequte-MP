@@ -4,6 +4,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
     :recoverable, :rememberable, :validatable
+  DAYS_TO_CALC_AVERAGE = 7
   DEFAULT_NAME = "#{Rails.application.class.module_parent} User".freeze
   ACTIVITY_LEVELS = [nil, '', 'No activity (0x weekly)', 'Light (1-2x weekly)', 'Moderate (2-3x weekly)', 'High (4-5x weekly)', 'Extreme (5+ weekly)'].freeze
   GENDERS = [nil, '', 'Male', 'Female', 'Trans / Non-binary / Other', 'Prefer not to disclose']
@@ -172,7 +173,7 @@ class User < ApplicationRecord
 
   def average_attendence
 
-    days_to_count = days_since_created < 28 ? days_since_created : 28
+    days_to_count = days_since_created < DAYS_TO_CALC_AVERAGE ? days_since_created : DAYS_TO_CALC_AVERAGE
     attended = self.bookings.with_ts.attended
 
     return 0 if attended.blank?
