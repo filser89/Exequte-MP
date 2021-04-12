@@ -13,7 +13,7 @@ module WxPayable
     plural = model_name.plural
     h = {
       body: "exeQute gym #{plural}",
-      out_trade_no: "exeQute_#{singular}_#{id}_#{DateTime.now.to_i}",
+      out_trade_no: "xQ_#{singular}_#{id}_#{DateTime.now.to_i}",
       total_fee: price_cents,
       spbill_create_ip: Socket.ip_address_list.detect(&:ipv4_private?).ip_address,
       notify_url: "#{url}/#{plural}/notify",
