@@ -11,7 +11,7 @@ module WxPayable
     url = Rails.env.development? ? 'http://exequte.5gzvip.idcfengye.com/api/v1' : "https://exequte.cn/api/v1"
     singular = model_name.singular
     plural = model_name.plural
-    {
+    h = {
       body: "exeQute gym #{plural}",
       out_trade_no: "exeQute_#{singular}_#{id}_#{DateTime.now.to_i}",
       total_fee: price_cents,
@@ -20,6 +20,11 @@ module WxPayable
       trade_type: "JSAPI",
       openid: user.wx_open_id
     }
+    puts "============OUT TRADE NUMBER=============="
+    p h[:out_trade_no]
+    p "Length:"
+    p h[:out_trade_no].size
+    h
   end
 
   def init_payment
