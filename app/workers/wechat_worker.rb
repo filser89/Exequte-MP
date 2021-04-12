@@ -44,7 +44,7 @@ class WechatWorker
   private
 
   def notification_not_needed?(obj_hash)
-    return alse unless obj_hash["model"].present? && obj_hash["model"] == "Booking"
+    return false unless obj_hash["model"].present? && obj_hash["model"] == "Booking"
     booking = Booking.find(obj_hash["id"].to_i)
     booking_cancelled?(booking) || booking_created_late(booking)
   end
