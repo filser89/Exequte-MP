@@ -19,7 +19,7 @@ module MessageScheduler
         unionid: self.user.union_id,
         pagepath: "pages/booking-info/booking-info?bookingId=#{self.id}&instructorId=#{ts.instructor.id}",
         ts_name: ts.full_name,
-        ts_time: DateTimeService.time_12_h_m(ts.begins_at)
+        ts_time: "Tomorrow, #{DateTimeService.time_12_h_m(ts.begins_at)}"
       }
       wx_params = WechatNotifier.booking_reminder(note_params)
       wx_params[:deliver_at] = booking_reminder_notification_time
