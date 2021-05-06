@@ -50,7 +50,7 @@ module Api
       end
 
       def instructors
-        @instructors = User.where(instructor: true)
+        @instructors = User.where(instructor: true).order(created_at: :asc)
         render_success(@instructors.map(&:instructor_hash))
       end
 
