@@ -24,6 +24,7 @@ ActiveAdmin.register Booking do
   filter :cancelled_at
   filter :attended
   filter :booked_with
+  filter :payment_status
   filter :membership_id
   filter :created_at
   filter :updated_at
@@ -45,6 +46,7 @@ ActiveAdmin.register Booking do
     column :cancelled_at
     column :attended
     column :booked_with
+    column :payment_status
     column :membership_id
     column :created_at
     column :updated_at

@@ -198,7 +198,9 @@ users.each do |u|
       training_session: ts,
       cancelled: n <= cancelled_bookings_count,
       cancelled_at: n < cancelled_bookings_count ? ts.begins_at - rand(2..6).hours : nil,
-      attended: attended(n, past_bookings_count, cancelled_bookings_count)
+      attended: attended(n, past_bookings_count, cancelled_bookings_count),
+      payment_status: %w[paid none].sample
+
     )
   end
   puts "Created #{u.bookings.count} bookings for #{u.name}"

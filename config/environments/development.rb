@@ -65,5 +65,5 @@ Rails.application.configure do
   # helps to seed with active record attachments
   config.active_job.queue_adapter = :sidekiq
   # add host for debugging wechat payment in development
-  config.hosts << "exequte.5gzvip.idcfengye.com"
+  config.hosts << "exequte.vipgz4.idcfengye.com"
 end
