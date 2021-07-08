@@ -8,7 +8,7 @@ module WxPayable
   end
 
   def pay_params
-    url = Rails.env.development? ? 'http://exequte.5gzvip.idcfengye.com/api/v1' : "https://exequte.cn/api/v1"
+    url = Rails.env.development? ? 'exequte.vipgz4.idcfengye.com/api/v1' : "https://exequte.cn/api/v1"
     singular = model_name.singular
     plural = model_name.plural
     h = {

@@ -18,7 +18,7 @@ module Api
 
         return render_success({msg: 'Please fill in your profile'}) unless current_user.first_name.present?
 
-        return render_success({msg: 'You have already booked this class'}) if current_user.bookings.where(cancelled: false, training_session: @training_session).present?
+        return render_success({msg: 'You have already booked this class'}) if current_user.bookings.where(cancelled: false, training_session: @training_session, payment_status: ['paid', 'none']).present?
 
         @booking = Booking.new(permitted_params)
         @booking.user = current_user
@@ -91,29 +91,15 @@ module Api
       private
 
       def history
-        Booking.includes(:training_session, :user)
-        .where(user: current_user)
-        .references(:training_sessions)
-        .where('training_sessions.begins_at <= ?', DateTime.now)
-        .order('training_sessions.begins_at DESC')
-        .map(&:history_hash)
+        Booking.for(current_user).history.map(&:history_hash)
       end
 
       def cancelled
-        Booking.includes(:training_session, :user)
-        .where(user: current_user, cancelled: true)
-        .where('training_sessions.begins_at > ?', DateTime.now)
-        .order('training_sessions.begins_at DESC')
-        .map(&:history_hash)
+        Booking.for(current_user).upcoming.cancelled.map(&:history_hash)
       end
 
       def upcoming
-        Booking.includes(:training_session, :user)
-        .where(user: current_user, cancelled: false)
-        .references(:training_sessions)
-        .where('training_sessions.begins_at > ?', DateTime.now)
-        .order('training_sessions.begins_at ASC')
-        .map(&:upcoming_hash)
+        Booking.for(current_user).upcoming.active.map(&:upcoming_hash)
       end
 
       def find_booking

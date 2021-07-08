@@ -13,6 +13,16 @@ class Booking < ApplicationRecord
   scope :settled, -> { where(payment_status: ['paid', 'none']) }
   scope :attended, -> { where(attended: true) }
   scope :with_ts, -> { includes(:training_session) }
+  scope :history, -> {with_ts.settled.references(:training_sessions)
+                      .where('training_sessions.begins_at <= ?', DateTime.now)
+                      .order('training_sessions.begins_at DESC')}
+  scope :upcoming, -> {with_ts.settled.references(:training_sessions)
+                       .where('training_sessions.begins_at > ?', DateTime.now)
+                       .order('training_sessions.begins_at ASC')}
+  scope :for, -> (user) {where(user: user)}
+  scope :cancelled, -> {where(cancelled: true).reorder('training_sessions.begins_at DESC')}
+  scope :active, -> {where(cancelled: false)}
+
 
   def upcoming_hash
     h = show_hash
