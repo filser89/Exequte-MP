@@ -4,17 +4,6 @@ module Api
       before_action :find_training_session, only: [:show, :add_user_to_queue, :session_attendance]
       before_action :choose_date_range, only: %i[index dates_list]
 
-      # def index
-      #   sessions_array = []
-      #   @date_range.each do |date|
-      #     time_range = date == DateTime.now.midnight ? Time.now..date.end_of_day : date.beginning_of_day..date.end_of_day
-      #     sessions = TrainingSession.includes(:bookings, :training, bookings: [:user], training: [:class_type]).where(begins_at: time_range)
-      #     training_sessions = sessions.map { |ts| ts_to_hash(ts) }
-      #     sessions_array << training_sessions
-      #   end
-      #   render_success({ sessions: sessions_array, dates: @date_range.to_a.map { |d| DateTimeService.date_wd_d_m(d) } })
-      # end
-
       def index
         render_success(@date_range.to_a)#.map { |d| DateTimeService.date_wd_d_m(d) })
       end
@@ -41,7 +30,6 @@ module Api
         render_success(ts_to_show_hash(@training_session))
       end
 
-      # do I need to have a closure that current_user.instructor
       def instructor_sessions
         history_ts = current_user
         .training_sessions_as_instructor
@@ -101,7 +89,7 @@ module Api
       end
 
       def btn_pattern(training_session)
-        booked = current_user.bookings.with_ts.any? { |b| b.training_session.id == training_session.id && !b.cancelled && b.payment_status.in?(%w[paid none]) }
+        booked = current_user.bookings.with_ts.any? { |b| b.training_session.id == training_session.id && !b.cancelled && b.settled? }
         queued_up = training_session.queue.include?(current_user.id)
 
         return { disabled: true, action: nil, text: "BOOKED" } if booked
@@ -123,7 +111,7 @@ module Api
       end
 
       def usable_membership(training_session)
-        current_user.memberships.where(payment_status: 'paid').find_by(
+        current_user.memberships.settled.find_by(
           'start_date <= ? AND end_date > ?',
           training_session.begins_at,
           training_session.begins_at
@@ -131,7 +119,7 @@ module Api
       end
 
       def upcoming_membership(training_session)
-        current_user.memberships.find_by(
+        current_user.memberships.settled.find_by(
           'start_date >  ?',
           training_session.begins_at
         )
@@ -141,7 +129,6 @@ module Api
         return 'membership' if usable_membership(training_session)
 
         'buy-membership' unless upcoming_membership(training_session)
-
       end
     end
   end

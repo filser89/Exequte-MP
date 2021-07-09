@@ -47,7 +47,13 @@ class WechatWorker
     return false unless obj_hash["model"].present? && obj_hash["model"] == "Booking"
     booking = Booking.find_by(id: obj_hash["id"].to_i)
     return true if booking.blank?
-    booking_cancelled?(booking) || booking_created_late(booking)
+    booking_cancelled?(booking) || booking_created_late(booking) || booking_unpaid?(booking)
+  end
+
+  def booking_unpaid?(booking)
+    unpaid = !booking&.settled?
+    puts "===========Booking unpaid=============="
+    unpaid
   end
 
   def booking_cancelled?(booking)

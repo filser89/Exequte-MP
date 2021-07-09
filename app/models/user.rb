@@ -117,7 +117,7 @@ class User < ApplicationRecord
   end
 
   def valid_memberships
-    memberships.where('end_date >= ?', DateTime.now.midnight)
+    memberships.settled.where('end_date >= ?', DateTime.now.midnight)
   end
 
   def prices

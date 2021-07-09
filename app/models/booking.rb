@@ -2,6 +2,7 @@ class Booking < ApplicationRecord
   include WxPayable
   include MessageScheduler
   BOOKING_OPTIONS = [nil, 'free', 'drop-in', 'membership', 'voucher']
+  SETTLED_PAYMENTS = %w[paid none]
   monetize :price_cents
   belongs_to :user
   belongs_to :training_session
@@ -10,7 +11,7 @@ class Booking < ApplicationRecord
   after_create  :notify_new
 
   default_scope -> { where(destroyed_at: nil) }
-  scope :settled, -> { where(payment_status: ['paid', 'none']) }
+  scope :settled, -> { where(payment_status: SETTLED_PAYMENTS) }
   scope :attended, -> { where(attended: true) }
   scope :with_ts, -> { includes(:training_session) }
   scope :history, -> {with_ts.settled.references(:training_sessions)
@@ -23,6 +24,9 @@ class Booking < ApplicationRecord
   scope :cancelled, -> {where(cancelled: true).reorder('training_sessions.begins_at DESC')}
   scope :active, -> {where(cancelled: false)}
 
+  def settled?
+    payment_status.in?(SETTLED_PAYMENTS)
+  end
 
   def upcoming_hash
     h = show_hash
