@@ -45,7 +45,7 @@ class TrainingSession < ApplicationRecord
   def attendance_hash
     h = standard_hash
     h[:date] = DateTimeService.date_wd_d_m(begins_at)
-    h[:bookings] = bookings.where(cancelled: false, payment_status: %w[paid none]).map(&:attendance_hash)
+    h[:bookings] = bookings.settled.where(cancelled: false).map(&:attendance_hash)
     h
   end
 
@@ -82,7 +82,7 @@ class TrainingSession < ApplicationRecord
   end
 
   def can_book?
-    capacity > bookings&.where(cancelled: false)&.size
+    capacity > bookings&.settled.where(cancelled: false)&.size
   end
 
   def localize_description
