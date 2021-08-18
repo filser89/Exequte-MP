@@ -86,23 +86,24 @@ class Booking < ApplicationRecord
   end
 
   def class_time
-    training_session.begins_at
+    training_session&.begins_at
   end
 
   def class_name
-    training_session.name
+    training_session&.name
   end
 
   def subtitle
-    training_session.subtitle
+    training_session&.subtitle
   end
 
   def client_first_name
-    user.first_name
+    p "===========================USER", user
+    user&.first_name
   end
 
   def client_last_name
-    user.last_name
+    user&.last_name
   end
 
   def booking_reminder_notification_time
@@ -110,7 +111,7 @@ class Booking < ApplicationRecord
   end
 
   def instructor
-    training_session.instructor.first_name
+    training_session&.instructor&.first_name
   end
 
 end
