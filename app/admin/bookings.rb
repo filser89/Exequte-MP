@@ -7,7 +7,7 @@ ActiveAdmin.register Booking do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  includes :user, :training_session
+  includes :user, training_session: [:instructor]
   permit_params :user_id, :training_session_id, :price_cents, :price_currency, :cancelled, :cancelled_at, :attended, :booked_with, :membership_id
   json_editor
 
@@ -51,6 +51,27 @@ ActiveAdmin.register Booking do
     column :created_at
     column :updated_at
     actions
+  end
+
+  csv do
+    column :id
+    column :user_id
+    column :client_first_name
+    column :client_last_name
+    column :training_session_id
+    column :class_name
+    column :subtitle
+    column :class_time
+    column :price_cents
+    column :cancelled
+    column :cancelled_at
+    column :attended
+    column :booked_with
+    column :payment_status
+    column :membership_id
+    column :created_at
+    column :updated_at
+    column :instructor
   end
 
 

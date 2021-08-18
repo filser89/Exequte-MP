@@ -109,5 +109,8 @@ class Booking < ApplicationRecord
     training_session.begins_at.midnight - 1.day + 20.hours
   end
 
+  def instructor
+    training_session.instructor.first_name
+  end
 
 end
