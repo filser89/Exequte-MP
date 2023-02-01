@@ -15,7 +15,7 @@ gem 'puma', '~> 4.1'
 gem 'sass-rails', '>= 6'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.2'
-gem 'railties', '~> 6.0', '>= 6.0.3.4'
+#gem 'railties', '~> 6.0', '>= 6.0.3.4'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 4.0'
@@ -25,8 +25,8 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.7'
 gem 'rails-i18n', '~> 6.0.0'
 gem 'money-rails', '~>1.12'
-gem 'activeadmin', '~> 2.13', '>= 2.13.1'
-gem 'inherited_resources', '~> 1.13', '>= 1.13.1'
+gem 'activeadmin', '~> 2.9'
+gem 'inherited_resources', '~> 1.12'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
