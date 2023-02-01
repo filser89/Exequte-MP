@@ -25,7 +25,7 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.7'
 gem 'rails-i18n', '~> 6.0.0'
 gem 'money-rails', '~>1.12'
-gem 'activeadmin', '~> 2.6'
+gem 'activeadmin', '~> 2.0'
 gem 'inherited_resources', '~> 1.10'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
