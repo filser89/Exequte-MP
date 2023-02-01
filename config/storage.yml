@@ -10,7 +10,7 @@ aliyun:
   service: Aliyun
   access_key_id: <%= Rails.application.credentials.dig(:aliyun_access_key_id) %>
   access_key_secret: <%= Rails.application.credentials.dig(:aliyun_access_key_secret) %>
-  bucket: "exequte-main"
+  bucket: "exequte"
   endpoint: <%= Rails.application.credentials.dig(:aliyun_endpoint) %>
   # path prefix, default: /
   path: "/"
