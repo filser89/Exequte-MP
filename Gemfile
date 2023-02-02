@@ -24,8 +24,10 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.7'
 gem 'rails-i18n', '~> 6.0.0'
 gem 'money-rails', '~>1.12'
-gem 'activeadmin', github: 'activeadmin/activeadmin'
-gem 'inherited_resources', github: 'activeadmin/inherited_resources'
+gem 'activeadmin'
+gem 'inherited_resources'
+gem 'mimemagic', '~> 0.4.3'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
