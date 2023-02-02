@@ -26,8 +26,8 @@ gem 'rails-i18n', '~> 6.0.0'
 gem 'money-rails', '~>1.12'
 gem 'activeadmin'
 gem 'inherited_resources'
-gem 'mimemagic', github: 'mimemagicrb/mimemagic', ref: '01f92d86d15d85cfd0f20dabd025dcbd36a8a60f' 
-
+#gem 'mimemagic', github: 'mimemagicrb/mimemagic', ref: '01f92d86d15d85cfd0f20dabd025dcbd36a8a60f' 
+gem 'mimemagic', path: "mimemagic-01f92d86d15d"
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
