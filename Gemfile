@@ -26,7 +26,7 @@ gem 'rails-i18n', '~> 6.0.0'
 gem 'money-rails', '~>1.12'
 gem 'activeadmin'
 gem 'inherited_resources'
-gem 'mimemagic', '~> 0.4.3'
+gem 'mimemagic', '~> 0.3.10'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
