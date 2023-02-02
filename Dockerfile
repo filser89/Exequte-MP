@@ -11,7 +11,7 @@ RUN apt-get update && apt-get -qqyy install nodejs yarn && rm -rf /var/lib/apt/l
 COPY Gemfile* /tmp/
 COPY package.json /tmp/
 COPY yarn.lock /tmp/
-ADD mimemagic-01f92d86d15d /tmp/mimemagic-01f92d86d15d
+COPY mimemagic-01f92d86d15d /tmp/mimemagic-01f92d86d15d
 WORKDIR /tmp
 RUN gem install bundler -v 2.2.2
 RUN bundle install --jobs 5 --retry 5 --without development test
