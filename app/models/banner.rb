@@ -1,7 +1,8 @@
 class Banner < ApplicationRecord
   has_one_attached :photo
   default_scope -> { where(destroyed_at: nil) }
-  after_save :remove_current_from_others
+  # can have multiple banners active
+  # after_save :remove_current_from_others
   after_create :notify_users_on_create
   after_update :notify_users_on_update
 
