@@ -74,6 +74,8 @@ class User < ApplicationRecord
     h[:memberships] = valid_memberships.map(&:standard_hash)
     h[:avatar_url] = avatar.service_url if avatar.attached?
     h[:has_body_data] = has_body_data?
+    h[:waiver_signed] = waiver_signed
+    h[:waiver_signed_at] = waiver_signed_at
     h
   end
 
