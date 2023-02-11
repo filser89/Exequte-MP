@@ -104,7 +104,9 @@ class User < ApplicationRecord
       voucher_count: voucher_count,
       union_id: union_id,
       profile_filled: first_name.present?,
-      has_wx_info: wx_info.present?
+      has_wx_info: wx_info.present?,
+      waiver_signed: waiver_signed,
+      waiver_signed_at: waiver_signed_at
     }
   end
 
