@@ -5,7 +5,7 @@ ActiveAdmin.register TrainingSession do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle
+  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy
   #
   # or
   #
@@ -32,6 +32,7 @@ ActiveAdmin.register TrainingSession do
     column :cancel_before
     column :created_at
     column :updated_at
+    column :enforce_cancellation_policy
     actions
   end
 
@@ -56,6 +57,7 @@ ActiveAdmin.register TrainingSession do
           f.input :cn_description
           f.input :class_kind
           f.input :cancel_before
+          f.input :enforce_cancellation_policy
         end
       end
       tab "Prices" do

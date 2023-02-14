@@ -66,9 +66,34 @@ module Api
         @booking.cancelled = true
         @booking.attended = false
         @booking.cancelled_at = DateTime.now
+        puts "===================cancelled at #{@booking.cancelled_at} ========================="
         if @booking.save
-          if @booking.cancelled_on_time? && %w[voucher drop-in].include?(@booking.booked_with)
-            @booking.user.return_voucher!
+          if @booking.cancelled_on_time?
+            if %w[voucher drop-in].include?(@booking.booked_with)
+              @booking.user.return_voucher!
+              puts "===================RETURN VOUCHER========================="
+            else
+              puts "===================NO VOUCHER========================="
+            end
+            puts "===================CANCELED ON TIME========================="
+          else
+            puts "===================LATE CANCELLATION========================="
+            if @booking.booked_with == "membership"
+              puts "===================REMOVING ONE DAY========================="
+              begin
+                puts @booking.membership_id
+                @membership = Membership.find(@booking.membership_id)
+                @membership.change_end_date(-1)
+                if @membership.save
+                  puts "===================MEMBERSHIP IS SAVED========================="
+                else
+                  puts "===================ERROR SAVING MEMBERSHIP========================="
+                end
+
+              rescue => e
+                puts  "===================MEMBERSHIP NOT FOUND========================="
+              end
+            end
           end
           TrainingSession.notify_queue(@booking.training_session)
           render_success({msg: "Cancelled"})

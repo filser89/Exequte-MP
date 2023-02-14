@@ -35,4 +35,8 @@ class Membership < ApplicationRecord
   def settled?
     payment_status == "paid"
   end
+
+  def change_end_date(days)
+    self.end_date = self.end_date.ago(-days.days)
+  end
 end

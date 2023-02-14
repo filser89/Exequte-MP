@@ -67,7 +67,8 @@ class TrainingSession < ApplicationRecord
       training_id: training.id,
       date: DateTimeService.date_long_wd_m_d_y(begins_at),
       dates_array: dates_for_membership,
-      membership_date: begins_at.midnight
+      membership_date: begins_at.midnight,
+      enforce_cancellation_policy: enforce_cancellation_policy
     }
     h[:image_url] =  training.photo.service_url if training.photo.attached?
     h

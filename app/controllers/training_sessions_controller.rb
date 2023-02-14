@@ -28,6 +28,7 @@ class TrainingSessionsController < ApplicationController
       @training_session.price_7 = @training.class_type.price_7
       @training_session.cancel_before = @training.class_type.cancel_before
       @training_session.class_kind = @training.class_type.kind
+      @training_session.enforce_cancellation_policy = true
 
       if @training_session.save
         create_for_weeks(params[:weeks], @training_session)
@@ -67,7 +68,8 @@ class TrainingSessionsController < ApplicationController
         price_7: training_session.price_7,
         cancel_before: training_session.cancel_before,
         class_kind: training_session.class_kind,
-        begins_at: training_session.begins_at + i.weeks
+        begins_at: training_session.begins_at + i.weeks,
+        enforce_cancellation_policy: training_session.enforce_cancellation_policy
       )
     end
   end
