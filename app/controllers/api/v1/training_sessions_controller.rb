@@ -1,7 +1,7 @@
 module Api
   module V1
     class TrainingSessionsController < Api::BaseController
-      before_action :find_training_session, only: [:show, :add_user_to_queue, :session_attendance, :cancel]
+      before_action :find_training_session, only: [:show, :add_user_to_queue, :session_attendance, :cancel, :change_capacity]
       before_action :choose_date_range, only: %i[index dates_list]
 
       def index
@@ -64,6 +64,21 @@ module Api
           # render error
         end
       end
+
+      def change_capacity
+        @training_session.updated_at = DateTime.now
+        new_capacity = params[:capacity]
+        puts "==================training session #{@training_session.name}  had this training capacity  #{@training_session.capacity}, changing to #{new_capacity} ==============="
+        @training_session.capacity = new_capacity
+        if @training_session.save
+          puts "=========about to update users in the queue about new capacity========"
+          TrainingSession.notify_queue(@training_session)
+          render_success({msg: "Capacity changed"})
+        else
+          render_error({ message: 'Something went wrong' })
+        end
+      end
+
       def show
         render_success(ts_to_show_hash(@training_session))
       end

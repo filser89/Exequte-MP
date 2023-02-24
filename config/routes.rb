@@ -40,6 +40,7 @@ Rails.application.routes.draw do
         member do
           put :add_user_to_queue
           put :cancel
+          put :change_capacity
           get :session_attendance
         end
         collection do
