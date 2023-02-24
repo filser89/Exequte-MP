@@ -20,7 +20,8 @@ class WechatNotifier < ApplicationRecord
     return {
       "booking_reminder" => booking_reminder,
       "notify_queue" => notify_queue,
-      "new_banner" => new_banner
+      "new_banner" => new_banner,
+      "trainingsession_cancel" => trainingsession_cancel
     }
   end
 
@@ -94,6 +95,28 @@ class WechatNotifier < ApplicationRecord
     }
   end
 
+  def self.trainingsession_cancel(params={})
+    {
+      "template_id" => "siNd6GpH_dAD9k8gIHE0sz384YGb96Dx0uG3_Qr8FVQ", #新订单通知
+      "receiver" => params[:openid],#(params[:openid] || "OPENID"), # receiver's openid
+      "unionid" => params[:unionid], # will be used if openid is blank
+      "pagepath" => (params[:pagepath] || "PAGEPATH"), # Reirect to an MP page on tap
+      "header_color" => COLORS[:header], # RED
+      "body_color" => COLORS[:body], # BLUE
+      "footer_color" => COLORS[:footer], # Spare Leash Green
+      "data" => {
+
+        # CUSTOM MESSAGES SENT TO USER
+        # Ekaterina can edit!
+        "first" => "Unfortunately this training session was cancelled.",
+        "keyword1" => "#{params[:ts_name]}",
+        "keyword2" => "exeQute JingAn",
+        "keyword3" => "425, Yanping Rd, 1F",
+        "keyword4" => "#{params[:ts_time]}",
+        "remark" => "If you booked with voucher/drop-in, your voucher has already been returned to your account."
+      }
+    }
+  end
 
 
 

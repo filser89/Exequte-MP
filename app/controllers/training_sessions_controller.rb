@@ -69,7 +69,8 @@ class TrainingSessionsController < ApplicationController
         cancel_before: training_session.cancel_before,
         class_kind: training_session.class_kind,
         begins_at: training_session.begins_at + i.weeks,
-        enforce_cancellation_policy: training_session.enforce_cancellation_policy
+        enforce_cancellation_policy: training_session.enforce_cancellation_policy,
+        note: training_session.note
       )
     end
   end

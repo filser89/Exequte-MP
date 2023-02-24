@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_12_220138) do
+ActiveRecord::Schema.define(version: 2023_02_18_100138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -242,6 +242,9 @@ ActiveRecord::Schema.define(version: 2023_02_12_220138) do
     t.string "subtitle"
     t.string "cn_subtitle"
     t.boolean "enforce_cancellation_policy", default: true
+    t.string "note"
+    t.boolean "cancelled", default: false
+    t.datetime "cancelled_at"
     t.index ["training_id"], name: "index_training_sessions_on_training_id"
     t.index ["user_id"], name: "index_training_sessions_on_user_id"
   end

@@ -68,7 +68,8 @@ class TrainingSession < ApplicationRecord
       date: DateTimeService.date_long_wd_m_d_y(begins_at),
       dates_array: dates_for_membership,
       membership_date: begins_at.midnight,
-      enforce_cancellation_policy: enforce_cancellation_policy
+      enforce_cancellation_policy: enforce_cancellation_policy,
+      note: note
     }
     h[:image_url] =  training.photo.service_url if training.photo.attached?
     h
@@ -113,4 +114,31 @@ class TrainingSession < ApplicationRecord
       WechatWorker.perform_async('notify_queue', obj_hash, wx_params)
     end
   end
+
+  def self.notify_cancellation(training_session)
+    puts "=======INSIDE NOTIFY CANCELLATION======="
+    training_session.bookings.settled.each do | booking|
+      begin
+        puts "NOTIFICATION FOR CANCELLATION: USER #{booking.user.full_name}"
+        puts "booking.user.oa_open_id:#{booking.user.oa_open_id}"
+        puts "booking.user.union_id:#{booking.user.union_id}"
+        # Not sure what obj_hash does so can be an error next line
+        obj_hash  = {id: training_session.id, model: training_session.model_name.name}
+        note_params = {
+          openid: booking.user.oa_open_id,
+          unionid: booking.user.union_id, # needed to retrieve oa_open_id if it is not present
+          pagepath: "pages/class-info/class-info?sessionId=#{training_session.id}&instructorId=#{training_session.instructor.id}",
+          ts_name: training_session.full_name,
+          # ts_date: DateTimeService.date_d_m_y(training_session.begins_at),
+          ts_time: "#{DateTimeService.date_d_m_y(training_session.begins_at)} #{DateTimeService.time_12_h_m(training_session.begins_at)}"
+        }
+        wx_params = WechatNotifier.trainingsession_cancel(note_params)
+        WechatWorker.perform_async('trainingsession_cancel', obj_hash, wx_params)
+      rescue => exceptionThrown
+        puts exceptionThrown
+        puts  "===================SOMETHING WENT WRONG, ABORT========================="
+      end
+    end
+  end
+
 end

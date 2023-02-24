@@ -1,7 +1,7 @@
 module Api
   module V1
     class TrainingSessionsController < Api::BaseController
-      before_action :find_training_session, only: [:show, :add_user_to_queue, :session_attendance]
+      before_action :find_training_session, only: [:show, :add_user_to_queue, :session_attendance, :cancel]
       before_action :choose_date_range, only: %i[index dates_list]
 
       def index
@@ -16,10 +16,54 @@ module Api
         puts "today: #{DateTime.now.midnight}"
         puts "Date is today? #{date == DateTime.now.midnight}"
         time_range = date == DateTime.now.midnight ? Time.now..date.end_of_day : date.beginning_of_day..date.end_of_day
-        sessions = TrainingSession.includes(:bookings, :training, bookings: [:user], training: [:class_type]).where(begins_at: time_range).order(begins_at: :asc).map { |ts| ts_to_hash(ts) }
+        sessions = TrainingSession.includes(:bookings, :training, bookings: [:user], training: [:class_type]).where(begins_at: time_range, cancelled: false).order(begins_at: :asc).map { |ts| ts_to_hash(ts) }
         render_success(sessions)
       end
 
+      def cancel
+        @training_session.cancelled = true
+        @training_session.cancelled_at = DateTime.now
+        cancellation_note = params[:note] ? params[:note] : "no reason provided"
+        puts "==================training session #{@training_session.name} was canceled with this reason #{cancellation_note}==============="
+        @training_session.note = cancellation_note
+        puts "===================training session cancelled at #{@training_session.cancelled_at} ========================="
+        if @training_session.save
+           @training_session.bookings.settled.each do | booking|
+             #only refund for bookings that were not cancelled
+             if booking.cancelled == false
+              puts "#{booking.user.full_name} booked class #{booking.training_session.name}  with #{booking.booked_with}"
+              begin
+                #return voucher if paid with drop-in or voucher
+                if %w[voucher drop-in].include?(booking.booked_with)
+                  puts "current user voucher #{booking.user.voucher_count}"
+                  booking.user.return_voucher!
+                else
+                  puts "current user booked with membership, do nothing"
+                end
+                #cancel the bookings
+                puts "==============canceling bookings========="
+                booking.cancelled = true
+                booking.attended = false
+                booking.cancelled_at = DateTime.now
+                if booking.save
+                  puts "===================booking cancelled at #{booking.cancelled_at} ========================="
+                else
+                  # render error
+                end
+              rescue => exceptionThrown
+                puts exceptionThrown
+                puts  "===================SOMETHING WENT WRONG, ABORT========================="
+              end
+             end
+           end
+           puts "=========ABOUT TO SEND WECHAT TEMPLATE MSG FOR CLASS CANCELLATION========"
+          #@todo modify below line to be a training session cancellation message
+          TrainingSession.notify_cancellation(@training_session)
+          render_success({msg: "Cancelled"})
+        else
+          # render error
+        end
+      end
       def show
         render_success(ts_to_show_hash(@training_session))
       end
@@ -34,11 +78,13 @@ module Api
         history_ts = current_user
         .training_sessions_as_instructor
         .where('begins_at <= ?', DateTime.now)
+        .where(cancelled: false)
         .order(begins_at: :desc)
         .map(&:history_hash)
         upcoming_ts = current_user
         .training_sessions_as_instructor
         .where('begins_at >= ?', DateTime.now)
+        .where(cancelled: false)
         .order(:begins_at)
         .map(&:upcoming_hash)
         sessions = [upcoming_ts, history_ts]
@@ -48,7 +94,8 @@ module Api
       def dates_list
         @training_sessions = TrainingSession.where(
           training_id: params[:training_id],
-          begins_at: @date_range
+          begins_at: @date_range,
+          cancelled: false
         ).order(begins_at: :asc)
         render_success(@training_sessions.map { |ts| ts_to_hash(ts).merge!(ts.date_list_hash) })
       end
