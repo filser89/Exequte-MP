@@ -106,6 +106,28 @@ module Api
         render_success(sessions)
       end
 
+      def admin_sessions
+        today = DateTime.now.midnight
+        last_day_future = today + 7.days - 1.second
+        last_day_past = today - 7.days - 1.second
+        date_range_history = (last_day_past..today)
+        date_range_future = (today..last_day_future)
+        puts "--------#{date_range_history}---------"
+        puts "--------#{date_range_future}---------"
+        history_ts = TrainingSession.where(
+                        begins_at: date_range_history,
+                        cancelled: false)
+                       .order(begins_at: :desc)
+                       .map(&:history_hash)
+        upcoming_ts = TrainingSession.where(
+                        begins_at: date_range_future,
+                        cancelled: false)
+                        .order(:begins_at)
+                        .map(&:upcoming_hash)
+        sessions = [upcoming_ts, history_ts]
+        render_success(sessions)
+      end
+
       def dates_list
         @training_sessions = TrainingSession.where(
           training_id: params[:training_id],

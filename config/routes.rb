@@ -46,6 +46,7 @@ Rails.application.routes.draw do
         collection do
           get :dates_list
           get :instructor_sessions
+          get :admin_sessions
           get :sessions
         end
       end

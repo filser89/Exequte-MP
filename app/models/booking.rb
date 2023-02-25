@@ -60,6 +60,7 @@ class Booking < ApplicationRecord
       id: id,
       first_name: user.first_name,
       last_name: user.last_name,
+      user_id: user.id,
       date: training_session.begins_at,
       training_session_id: training_session.id,
       training: training_session.localize_name,
