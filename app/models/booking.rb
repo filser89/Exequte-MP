@@ -68,12 +68,18 @@ class Booking < ApplicationRecord
       attended: attended,
       price: price,
       can_cancel: can_cancel?,
+      first_booking: first_booking?,
       status: status
     }
   end
 
   def can_cancel?
     DateTime.now < training_session.begins_at && !cancelled
+  end
+
+  def first_booking?
+    # if only active booking in system, then its first booking
+    Booking.for(user).active.size == 1 ? true : false
   end
 
   def cancelled_on_time?
