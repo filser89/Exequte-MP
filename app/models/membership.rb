@@ -11,7 +11,8 @@ class Membership < ApplicationRecord
   has_many :training_sessions, through: :bookings
   default_scope -> { where(destroyed_at: nil) }
   scope :settled, -> {where(payment_status: "paid")}
-
+  scope :classpack, -> {where(is_class_pack: true)}
+  scope :not_classpack, -> {where(is_class_pack: false)}
 
 
   def booking_hash
@@ -28,7 +29,9 @@ class Membership < ApplicationRecord
       price: price.to_i,
       start_date: DateTimeService.date_m_d_y(start_date),
       end_date: DateTimeService.date_m_d_y(end_date),
-      smoothie: smoothie
+      smoothie: smoothie,
+      vouchers: vouchers,
+      is_class_pack: is_class_pack
     }
   end
 
@@ -38,5 +41,15 @@ class Membership < ApplicationRecord
 
   def change_end_date(days)
     self.end_date = self.end_date.ago(-days.days)
+  end
+
+  def use_voucher!
+    self.vouchers -= 1
+    save
+  end
+
+  def return_voucher!
+    self.vouchers += 1
+    save
   end
 end

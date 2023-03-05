@@ -163,6 +163,7 @@ module Api
         h[:btn_pattern] = btn_pattern(training_session)
         h[:access_options] = access_options(training_session)
         h[:usable_membership] = usable_membership(training_session).booking_hash if usable_membership(training_session)
+        h[:usable_classpack] = usable_classpack(training_session).booking_hash if usable_classpack(training_session)
         h
       end
 
@@ -191,12 +192,21 @@ module Api
 
         options[:voucher] = true if current_user.voucher_count.positive?
         options[:membership] = membership_option(training_session)
+        options[:classpack] = classpack_option(training_session)
         options
       end
 
       def usable_membership(training_session)
-        current_user.memberships.settled.find_by(
+        current_user.memberships.not_classpack.settled.find_by(
           'start_date <= ? AND end_date > ?',
+          training_session.begins_at,
+          training_session.begins_at
+        )
+      end
+
+      def usable_classpack(training_session)
+        current_user.memberships.classpack.find_by(
+          'start_date <= ? AND end_date > ? AND vouchers > 0',
           training_session.begins_at,
           training_session.begins_at
         )
@@ -213,6 +223,10 @@ module Api
         return 'membership' if usable_membership(training_session)
 
         'buy-membership' unless upcoming_membership(training_session)
+      end
+
+      def classpack_option(training_session)
+        return 'classpack' if usable_classpack(training_session)
       end
     end
   end

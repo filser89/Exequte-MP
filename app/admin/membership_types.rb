@@ -5,7 +5,7 @@ ActiveAdmin.register MembershipType do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :name, :duration, :cn_name, :price_cents, :price_currency, :smoothie, :active
+  permit_params :name, :duration, :cn_name, :price_cents, :price_currency, :smoothie, :active, :vouchers, :is_class_pack
   #
 
 

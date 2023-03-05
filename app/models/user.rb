@@ -121,7 +121,7 @@ class User < ApplicationRecord
   end
 
   def valid_memberships
-    memberships.settled.where('end_date >= ?', DateTime.now.midnight)
+    memberships.settled.where('end_date >= ? AND is_class_pack = false OR end_date >= ? AND is_class_pack = true AND vouchers > 0', DateTime.now.midnight, DateTime.now.midnight)
   end
 
   def prices

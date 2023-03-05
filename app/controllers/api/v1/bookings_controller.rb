@@ -28,6 +28,22 @@ module Api
           @training_session.queue.delete(current_user.id)
           @training_session.save
           @booking.user.use_voucher! if @booking.booked_with == "voucher"
+          if @booking.booked_with == "class-pack"
+            puts "===================REMOVING ONE VOUCHER FROM CLASS-PACK:========================="
+            begin
+              puts @booking.membership_id
+              @membership = Membership.find(@booking.membership_id)
+              puts "===================CLASS PACK MEMBERSHIP NAME:#{@membership.name}========================="
+              @membership.use_voucher!
+              if @membership.save
+                puts "===================MEMBERSHIP IS SAVED========================="
+              else
+                puts "===================ERROR SAVING MEMBERSHIP========================="
+              end
+            rescue => e
+              puts  "===================CLASS-PACK MEMBERSHIP NOT FOUND========================="
+            end
+          end
           response = {booking: @booking.standard_hash}
           response[:res] = @booking.init_payment if @booking.booked_with == "drop-in"
           render_success(response)
@@ -73,7 +89,24 @@ module Api
               @booking.user.return_voucher!
               puts "===================RETURN VOUCHER========================="
             else
-              puts "===================NO VOUCHER========================="
+              if %w[class-pack].include?(@booking.booked_with)
+                puts "===================RETURNING ONE VOUCHER TO CLASS-PACK:========================="
+                begin
+                  puts @booking.membership_id
+                  @membership = Membership.find(@booking.membership_id)
+                  puts "===================CLASS PACK MEMBERSHIP NAME:#{@membership.name}========================="
+                  @membership.return_voucher!
+                  if @membership.save
+                    puts "===================MEMBERSHIP IS SAVED========================="
+                  else
+                    puts "===================ERROR SAVING MEMBERSHIP========================="
+                  end
+                rescue => e
+                  puts  "===================CLASS-PACK MEMBERSHIP NOT FOUND========================="
+                end
+              else
+                puts "===================NO VOUCHER========================="
+              end
             end
             puts "===================CANCELED ON TIME========================="
           else
@@ -89,7 +122,6 @@ module Api
                 else
                   puts "===================ERROR SAVING MEMBERSHIP========================="
                 end
-
               rescue => e
                 puts  "===================MEMBERSHIP NOT FOUND========================="
               end

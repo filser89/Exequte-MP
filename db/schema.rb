@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_18_100138) do
+ActiveRecord::Schema.define(version: 2023_03_06_150649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -186,6 +186,8 @@ ActiveRecord::Schema.define(version: 2023_02_18_100138) do
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "destroyed_at"
     t.boolean "active", default: true
+    t.integer "vouchers"
+    t.boolean "is_class_pack", default: false
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -204,6 +206,8 @@ ActiveRecord::Schema.define(version: 2023_02_18_100138) do
     t.string "payment_status"
     t.jsonb "payment"
     t.datetime "destroyed_at"
+    t.integer "vouchers"
+    t.boolean "is_class_pack", default: false
     t.index ["membership_type_id"], name: "index_memberships_on_membership_type_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
