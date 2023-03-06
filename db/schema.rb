@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_06_150649) do
+ActiveRecord::Schema.define(version: 2023_03_06_190138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -249,6 +249,7 @@ ActiveRecord::Schema.define(version: 2023_03_06_150649) do
     t.string "note"
     t.boolean "cancelled", default: false
     t.datetime "cancelled_at"
+    t.integer "late_booking_minutes"
     t.index ["training_id"], name: "index_training_sessions_on_training_id"
     t.index ["user_id"], name: "index_training_sessions_on_user_id"
   end
@@ -267,6 +268,7 @@ ActiveRecord::Schema.define(version: 2023_03_06_150649) do
     t.datetime "destroyed_at"
     t.string "subtitle"
     t.string "cn_subtitle"
+    t.integer "late_booking_minutes"
     t.index ["class_type_id"], name: "index_trainings_on_class_type_id"
   end
 

@@ -69,7 +69,8 @@ class TrainingSession < ApplicationRecord
       dates_array: dates_for_membership,
       membership_date: begins_at.midnight,
       enforce_cancellation_policy: enforce_cancellation_policy,
-      note: note
+      note: note,
+      late_booking_minutes: late_booking_minutes
     }
     h[:image_url] =  training.photo.service_url if training.photo.attached?
     h

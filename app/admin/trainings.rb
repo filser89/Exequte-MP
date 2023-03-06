@@ -5,7 +5,7 @@ ActiveAdmin.register Training do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :name, :calories, :duration, :capacity, :class_type_id, :description, :cn_name, :cn_description, :photo, :subtitle, :cn_subtitle
+  permit_params :name, :calories, :duration, :capacity, :class_type_id, :description, :cn_name, :cn_description, :photo, :subtitle, :cn_subtitle, :late_booking_minutes
 
   form do |f|
     f.semantic_errors # shows errors on :base

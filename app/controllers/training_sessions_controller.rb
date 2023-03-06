@@ -29,6 +29,8 @@ class TrainingSessionsController < ApplicationController
       @training_session.cancel_before = @training.class_type.cancel_before
       @training_session.class_kind = @training.class_type.kind
       @training_session.enforce_cancellation_policy = true
+      @training_session.late_booking_minutes = @training.late_booking_minutes
+
 
       if @training_session.save
         create_for_weeks(params[:weeks], @training_session)
@@ -70,7 +72,8 @@ class TrainingSessionsController < ApplicationController
         class_kind: training_session.class_kind,
         begins_at: training_session.begins_at + i.weeks,
         enforce_cancellation_policy: training_session.enforce_cancellation_policy,
-        note: training_session.note
+        note: training_session.note,
+        late_booking_minutes: training_session.late_booking_minutes
       )
     end
   end

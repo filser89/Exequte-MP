@@ -16,7 +16,30 @@ module Api
         puts "today: #{DateTime.now.midnight}"
         puts "Date is today? #{date == DateTime.now.midnight}"
         time_range = date == DateTime.now.midnight ? Time.now..date.end_of_day : date.beginning_of_day..date.end_of_day
-        sessions = TrainingSession.includes(:bookings, :training, bookings: [:user], training: [:class_type]).where(begins_at: time_range, cancelled: false).order(begins_at: :asc).map { |ts| ts_to_hash(ts) }
+        if date == DateTime.now.midnight
+          sessions = []
+          time_range = (Time.now - 30.minutes)..date.end_of_day
+          session_all = TrainingSession.includes(:bookings, :training, bookings: [:user], training: [:class_type]).where(begins_at: time_range, cancelled: false)
+          session_all.each do | s |
+            puts "======#{s.late_booking_minutes}"
+            if s.late_booking_minutes != nil && s.late_booking_minutes > 0
+              puts "======#{s.name} session begins at #{s.begins_at}, delay is #{s.late_booking_minutes}"
+              late_cancel_interval = s.begins_at.advance(:minutes => s.late_booking_minutes)
+              if Time.now.before? late_cancel_interval
+                puts "======session begins at #{s.begins_at}, delay is #{s.late_booking_minutes} can show until #{late_cancel_interval}  "
+                sessions.append(s)
+              end
+            else
+              puts "===== no late booking minutes specificed, check if session has started already"
+              if Time.now.before? s.begins_at
+                sessions.append(s)
+              end
+            end
+          end
+          sessions = sessions.map { |ts| ts_to_hash(ts) }
+        else
+          sessions = TrainingSession.includes(:bookings, :training, bookings: [:user], training: [:class_type]).where(begins_at: time_range, cancelled: false).order(begins_at: :asc).map { |ts| ts_to_hash(ts) }
+        end
         render_success(sessions)
       end
 
@@ -144,6 +167,7 @@ module Api
       private
 
       def choose_date_range
+        #show also sessions that have already started in 20 minutes
         today = DateTime.now.midnight
         last_day = today + 14.days - 1.second
         @date_range = (today..last_day)
