@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_06_190138) do
+ActiveRecord::Schema.define(version: 2023_03_07_145656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -210,6 +210,11 @@ ActiveRecord::Schema.define(version: 2023_03_06_190138) do
     t.boolean "is_class_pack", default: false
     t.index ["membership_type_id"], name: "index_memberships_on_membership_type_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "value", null: false
   end
 
   create_table "training_sessions", force: :cascade do |t|

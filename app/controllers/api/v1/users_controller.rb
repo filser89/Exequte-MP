@@ -89,6 +89,15 @@ module Api
           options[:wx_open_id] = result['openid']
           options[:email] = "#{SecureRandom.hex(8)}@exequte.cn"
           options[:password] = '123456'
+          default_voucher_count = 1
+          begin
+            default_voucher_count = Settings.find_by(key: "first_time_users_voucher_count").value
+            puts "====================DEFAULT VOUCHER COUNT:#{default_voucher_count}==========="
+          rescue => e
+            puts  "===================SETTING NOT FOUND, USING 1 as DEFAULT ========================="
+            default_voucher_count = 1
+          end
+          options[:voucher_count] = default_voucher_count
           user = User.create(options)
         end
 
