@@ -165,6 +165,26 @@ class User < ApplicationRecord
     end
   end
 
+  def bookings_today?
+    self.bookings.today ? self.bookings.today.size : 0
+  end
+
+  def bookings_date?(date)
+    time_range = date == DateTime.now.midnight ? Time.now..date.end_of_day : date.beginning_of_day..date.end_of_day
+    puts "=====time_range:#{time_range}"
+    bookings_of_date = self.bookings.with_ts.settled.active.references(:training_sessions)
+                           .where('training_sessions.begins_at >= ? and training_sessions.begins_at <= ?', date.beginning_of_day, date.end_of_day)
+    if bookings_of_date
+      puts "======#{bookings_of_date}====="
+      puts "=====how many bookngs for #{date}"
+      puts "=====size: #{bookings_of_date.size}"
+      return bookings_of_date.size
+    else
+      puts "no active bookings for selected date"
+      return 0
+    end
+  end
+
   private
 
   def calc_standard_price
@@ -195,4 +215,5 @@ class User < ApplicationRecord
   def set_defaults
     self.name = DEFAULT_NAME if self.name.blank?
   end
+
 end

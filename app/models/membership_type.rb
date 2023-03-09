@@ -19,7 +19,18 @@ class MembershipType < ApplicationRecord
       duration: duration,
       price: price.to_i,
       vouchers: vouchers,
-      is_class_pack: is_class_pack
+      is_class_pack: is_class_pack,
+      bookings_per_day: bookings_per_day,
+      unlimited: unlimited?
     }
   end
+
+  def unlimited?
+    if !bookings_per_day || bookings_per_day == -1
+      return true
+    else
+      return false
+    end
+  end
+
 end

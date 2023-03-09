@@ -186,7 +186,26 @@ module Api
         h[:price] = training_session_price(training_session)
         h[:btn_pattern] = btn_pattern(training_session)
         h[:access_options] = access_options(training_session)
-        h[:usable_membership] = usable_membership(training_session).booking_hash if usable_membership(training_session)
+        membership_to_use = usable_membership(training_session)
+        begin
+          sessions_left = sessions_left_for_day(training_session)
+          puts "====how many sessions left:#{sessions_left}"
+          if membership_to_use
+            if sessions_left == -1
+              # -1 means unlimited membership
+              h[:usable_membership] = usable_membership(training_session).booking_hash
+            else
+              if sessions_left > 0
+                h[:usable_membership] = usable_membership(training_session).booking_hash_limited(sessions_left)
+              end
+            end
+          else
+            puts "==== no membership can be used"
+          end
+        rescue => e
+          puts "====something went wrong computing session left, return normal membership"
+          h[:usable_membership] = usable_membership(training_session).booking_hash if membership_to_use
+        end
         h[:usable_classpack] = usable_classpack(training_session).booking_hash if usable_classpack(training_session)
         h
       end
@@ -229,12 +248,69 @@ module Api
         options
       end
 
-      def usable_membership(training_session)
-        current_user.memberships.not_classpack.settled.find_by(
+      def sessions_left_for_day(training_session)
+        current_active_memberships = current_user.memberships.not_classpack.settled.find_by(
           'start_date <= ? AND end_date > ?',
           training_session.begins_at,
           training_session.begins_at
         )
+        begin
+          if current_active_memberships
+            if current_active_memberships.unlimited?
+              return -1
+            else
+              limit_bookings = current_active_memberships.bookings_per_day
+              bookings_for_date_count = current_user.bookings_date?(training_session.begins_at)
+              if bookings_for_date_count
+                return limit_bookings - bookings_for_date_count
+              else
+                return limit_bookings
+              end
+            end
+          end
+        rescue => e
+          puts "====something went wrong, return -1"
+          puts e
+          return -1
+        end
+      end
+
+      def usable_membership(training_session)
+        current_active_memberships = current_user.memberships.not_classpack.settled.find_by(
+          'start_date <= ? AND end_date > ?',
+          training_session.begins_at,
+          training_session.begins_at
+        )
+        begin
+          if current_active_memberships
+            puts "======== FOUND THIS MEMBERSHIP : #{current_active_memberships.name}, #{current_active_memberships.unlimited?}========"
+            if current_active_memberships.unlimited?
+              return current_active_memberships
+            else
+              puts "======== LIMITED MEMBERSHIP, CHECK DAILY BOOKINGS FOR DATE:#{training_session.begins_at.beginning_of_day}"
+              puts "======== LIMIT PER DAY: #{current_active_memberships.bookings_per_day} ===="
+              limit_bookings = current_active_memberships.bookings_per_day
+              bookings_for_date_count = current_user.bookings_date?(training_session.begins_at)
+              if bookings_for_date_count
+                puts "======== DATE:#{training_session.begins_at.beginning_of_day} BOOKINGS: #{bookings_for_date_count}"
+                if bookings_for_date_count < limit_bookings
+                  puts "======== BOOKED #{bookings_for_date_count} CLASS, CAN STILL BOOK======"
+                  return current_active_memberships
+                else
+                  puts "======== ALREADY EXHAUSTED BOOKINGS FOR TODAY, CANNOT PURCHASE MORE CLASSES======"
+                  return false
+                end
+              else
+                puts "======== NO BOOKINGS FOR THAT DAY, CAN STILL BOOK======"
+                return current_active_memberships
+              end
+            end
+          end
+        rescue => e
+          puts "====something went wrong, return current membership"
+          puts e
+          return current_active_memberships
+        end
       end
 
       def usable_classpack(training_session)

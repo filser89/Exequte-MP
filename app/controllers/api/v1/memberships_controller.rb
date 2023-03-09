@@ -20,6 +20,7 @@ module Api
         @membership.cn_name = @membership_type.cn_name
         @membership.smoothie = @membership_type.smoothie
         @membership.vouchers = @membership_type.vouchers
+        @membership.bookings_per_day = @membership_type.bookings_per_day
         @membership.end_date = end_date
         @membership.membership_type = @membership_type
         @membership.payment_status = 'pending'

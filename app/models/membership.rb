@@ -22,6 +22,13 @@ class Membership < ApplicationRecord
     h
   end
 
+  def booking_hash_limited(sessions_left)
+    h = standard_hash
+    h[:start_date] = DateTimeService.date_d_m_y(start_date)
+    h[:end_date] = DateTimeService.date_d_m_y(end_date)
+    h[:sessions_left] = sessions_left
+    h
+  end
   def standard_hash
     {
       id: id,
@@ -31,7 +38,9 @@ class Membership < ApplicationRecord
       end_date: DateTimeService.date_m_d_y(end_date),
       smoothie: smoothie,
       vouchers: vouchers,
-      is_class_pack: is_class_pack
+      is_class_pack: is_class_pack,
+      bookings_per_day: bookings_per_day ? bookings_per_day : -1,
+      unlimited: unlimited?
     }
   end
 
@@ -52,4 +61,36 @@ class Membership < ApplicationRecord
     self.vouchers += 1
     save
   end
+
+  def unlimited?
+    if !bookings_per_day || bookings_per_day == -1
+      return true
+    else
+      return false
+    end
+  end
+
+
+
+  # def bookings_left?
+  #   begin
+  #     if self.unlimited?
+  #       return -1
+  #     else
+  #       puts "=====user bookings======"
+  #       if user.bookings && user.bookings.today
+  #         puts "====#{user.bookings.today.size}===="
+  #         puts "===== left : #{self.bookings_per_day - user.bookings.today.size} "
+  #         return self.bookings_per_day - user.bookings.today.size
+  #       else
+  #         puts "===== no bookings today,can still book: #{self.bookings_per_day}"
+  #         return self.bookings_per_day
+  #       end
+  #     end
+  #   end
+  # rescue => e
+  #   puts "====something went wrong, return unlimited bookings"
+  #   puts e
+  #   return -1
+  # end
 end

@@ -23,6 +23,8 @@ class Booking < ApplicationRecord
   scope :for, -> (user) {where(user: user)}
   scope :cancelled, -> {where(cancelled: true).reorder('training_sessions.begins_at DESC')}
   scope :active, -> {where(cancelled: false)}
+  scope :today, -> {with_ts.settled.active.references(:training_sessions)
+                             .where('training_sessions.begins_at >= ? and training_sessions.begins_at <= ?', DateTime.now.midnight, Time.now.end_of_day)}
 
   def settled?
     payment_status.in?(SETTLED_PAYMENTS)
