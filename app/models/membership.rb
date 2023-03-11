@@ -35,7 +35,9 @@ class Membership < ApplicationRecord
       name: localize_name,
       price: price.to_i,
       start_date: DateTimeService.date_m_d_y(start_date),
+      start_date_locale: localize_start_date,
       end_date: DateTimeService.date_m_d_y(end_date),
+      end_date_locale: localize_end_date,
       smoothie: smoothie,
       vouchers: vouchers,
       is_class_pack: is_class_pack,
@@ -57,6 +59,13 @@ class Membership < ApplicationRecord
     save
   end
 
+  def localize_start_date
+    I18n.locale == :'zh-CN' ? DateTimeService.date_m_d_y_zh(start_date)  : DateTimeService.date_m_d_y(start_date)
+  end
+
+  def localize_end_date
+    I18n.locale == :'zh-CN' ? DateTimeService.date_m_d_y_zh(end_date)  : DateTimeService.date_m_d_y(end_date)
+  end
   def return_voucher!
     self.vouchers += 1
     save

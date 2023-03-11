@@ -71,7 +71,8 @@ class Booking < ApplicationRecord
       price: price,
       can_cancel: can_cancel?,
       first_booking: first_booking?,
-      status: status
+      status: status,
+      status_locale: localize_status
     }
   end
 
@@ -122,6 +123,20 @@ class Booking < ApplicationRecord
 
   def instructor
     training_session&.instructor&.first_name
+  end
+
+  def localize_status
+    status_field = self.status
+    case status_field
+    when "completed"
+      return I18n.locale == :'zh-CN' ? "上课了" : "completed"
+    when "cancelled"
+      return I18n.locale == :'zh-CN' ? "取消了" : "cancelled"
+    when "new"
+      return I18n.locale == :'zh-CN' ? "即将" : "new"
+    when "no show"
+      return I18n.locale == :'zh-CN' ? "没上课了" : "no show"
+    end
   end
 
 end

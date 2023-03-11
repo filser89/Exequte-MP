@@ -39,12 +39,14 @@ class TrainingSession < ApplicationRecord
   def date_list_hash
     h = standard_hash
     h[:date] = DateTimeService.date_d_m_wd(begins_at)
+    h[:date_locale] = localize_date
     h
   end
 
   def attendance_hash
     h = standard_hash
     h[:date] = DateTimeService.date_wd_d_m(begins_at)
+    h[:date_locale] = localize_date
     h[:bookings] = bookings.settled.where(cancelled: false).map(&:attendance_hash)
     h
   end
@@ -66,6 +68,9 @@ class TrainingSession < ApplicationRecord
       instructor_id: instructor.id,
       training_id: training.id,
       date: DateTimeService.date_long_wd_m_d_y(begins_at),
+      date_locale: localize_date_long,
+      date_locale_short: localize_date_short,
+      price: calc_price,
       dates_array: dates_for_membership,
       membership_date: begins_at.midnight,
       enforce_cancellation_policy: enforce_cancellation_policy,
@@ -92,9 +97,19 @@ class TrainingSession < ApplicationRecord
     I18n.locale == :'zh-CN' ? cn_description : description
   end
 
+  def localize_date
+    I18n.locale == :'zh-CN' ? DateTimeService.date_d_m_wd_zh(begins_at)  : DateTimeService.date_d_m_wd(begins_at)
+  end
+  def localize_date_short
+    I18n.locale == :'zh-CN' ? DateTimeService.date_d_m_wd_zh(begins_at)  : DateTimeService.date_wd_d_m(begins_at)
+  end
+  def localize_date_long
+    I18n.locale == :'zh-CN' ? DateTimeService.date_long_wd_m_d_y_zh(begins_at)  : DateTimeService.date_long_wd_m_d_y(begins_at)
+  end
+
   # returns a name with subtile if there is a subtile or just a name
   def full_name
-    self.localize_name + "#{self.subtitle.present? ? (': ' + self.localize('subtitle')) : ''}"
+    (self.localize_name ? self.localize_name : self.name)  + "#{self.subtitle.present? ? (': ' + self.localize('subtitle')) : ''}"
   end
 
   def self.notify_queue(training_session)
@@ -142,4 +157,7 @@ class TrainingSession < ApplicationRecord
     end
   end
 
+  def calc_price
+    price_7_cents ? price_7_cents / 100 : 0
+  end
 end
