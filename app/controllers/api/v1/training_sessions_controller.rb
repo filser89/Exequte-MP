@@ -63,6 +63,13 @@ module Api
                 else
                   puts "current user booked with membership, do nothing"
                 end
+                puts "notify cancellation for this booking"
+                begin
+                  TrainingSession.notify_cancellation_single(booking)
+                rescue => e
+                  puts e
+                  puts  "===================SOMETHING WENT WRONG SENDING NOTIFICATION SINGLE, ABORT========================="
+                end
                 #cancel the bookings
                 puts "==============canceling bookings========="
                 booking.cancelled = true
@@ -79,9 +86,9 @@ module Api
               end
              end
            end
-           puts "=========ABOUT TO SEND WECHAT TEMPLATE MSG FOR CLASS CANCELLATION========"
+           #puts "=========ABOUT TO SEND WECHAT TEMPLATE MSG FOR CLASS CANCELLATION========"
           #@todo modify below line to be a training session cancellation message
-          TrainingSession.notify_cancellation(@training_session)
+          #TrainingSession.notify_cancellation(@training_session)
           render_success({msg: "Cancelled"})
         else
           # render error

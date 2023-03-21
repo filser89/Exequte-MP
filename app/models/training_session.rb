@@ -131,6 +131,34 @@ class TrainingSession < ApplicationRecord
     end
   end
 
+  def self.notify_cancellation_single(booking)
+    puts "=======INSIDE NOTIFY CANCELLATION SINGLE======="
+      begin
+        puts "NOTIFICATION FOR CANCELLATION: USER #{booking.user.full_name}"
+        puts "booking.user.oa_open_id:#{booking.user.oa_open_id}"
+        puts "booking.user.union_id:#{booking.user.union_id}"
+        # Not sure what obj_hash does so can be an error next line
+        obj_hash  = {id: booking.training_session.id, model:  booking.training_session.model_name.name}
+        note_params = {
+          openid: booking.user.oa_open_id,
+          unionid: booking.user.union_id, # needed to retrieve oa_open_id if it is not present
+          pagepath: "pages/class-info/class-info?sessionId=#{booking.training_session.id}&instructorId=#{booking.training_session.instructor.id}",
+          ts_name: booking.training_session.full_name,
+          phone: booking.user.phone,
+          # ts_date: DateTimeService.date_d_m_y(training_session.begins_at),
+          ts_time: "#{DateTimeService.date_d_m_y(booking.training_session.begins_at)} #{DateTimeService.time_12_h_m(booking.training_session.begins_at)}"
+        }
+        wx_params = WechatNotifier.trainingsession_cancel(note_params)
+        puts "about to send sms notification"
+        sms_resp = SmsNotifier.trainingsession_cancel(note_params)
+        WechatWorker.perform_async('trainingsession_cancel', obj_hash, wx_params)
+        #WechatNotifier.notify!(wx_params)
+      rescue => exceptionThrown
+        puts exceptionThrown
+        puts  "===================SOMETHING WENT WRONG, ABORT========================="
+    end
+  end
+
   def self.notify_cancellation(training_session)
     puts "=======INSIDE NOTIFY CANCELLATION======="
     training_session.bookings.settled.each do | booking|
@@ -145,10 +173,13 @@ class TrainingSession < ApplicationRecord
           unionid: booking.user.union_id, # needed to retrieve oa_open_id if it is not present
           pagepath: "pages/class-info/class-info?sessionId=#{training_session.id}&instructorId=#{training_session.instructor.id}",
           ts_name: training_session.full_name,
+          phone: booking.user.phone,
           # ts_date: DateTimeService.date_d_m_y(training_session.begins_at),
           ts_time: "#{DateTimeService.date_d_m_y(training_session.begins_at)} #{DateTimeService.time_12_h_m(training_session.begins_at)}"
         }
         wx_params = WechatNotifier.trainingsession_cancel(note_params)
+        #puts "about to send sms notification"
+        #sms_resp = SmsNotifier.trainingsession_cancel(note_params)
         WechatWorker.perform_async('trainingsession_cancel', obj_hash, wx_params)
       rescue => exceptionThrown
         puts exceptionThrown

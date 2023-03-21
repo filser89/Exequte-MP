@@ -105,10 +105,7 @@ class WechatNotifier < ApplicationRecord
       "body_color" => COLORS[:body], # BLUE
       "footer_color" => COLORS[:footer], # Spare Leash Green
       "data" => {
-
-        # CUSTOM MESSAGES SENT TO USER
-        # Ekaterina can edit!
-        "first" => "Unfortunately this training session was cancelled.",
+        "first" => "This training session was cancelled.　你预约了的课被取消了。",
         "keyword1" => "#{params[:ts_name]}",
         "keyword2" => "exeQute JingAn",
         "keyword3" => "425, Yanping Rd, 1F",
