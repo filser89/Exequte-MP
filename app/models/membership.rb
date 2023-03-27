@@ -13,7 +13,8 @@ class Membership < ApplicationRecord
   scope :settled, -> {where(payment_status: "paid")}
   scope :classpack, -> {where(is_class_pack: true)}
   scope :not_classpack, -> {where(is_class_pack: false)}
-
+  scope :trial, -> {where(is_trial: true)}
+  scope :not_trial, -> {where(is_trial: false)}
 
   def booking_hash
     h = standard_hash
@@ -42,7 +43,8 @@ class Membership < ApplicationRecord
       vouchers: vouchers,
       is_class_pack: is_class_pack,
       bookings_per_day: bookings_per_day ? bookings_per_day : -1,
-      unlimited: unlimited?
+      unlimited: unlimited?,
+      is_trial: is_trial
     }
   end
 

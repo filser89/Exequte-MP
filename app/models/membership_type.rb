@@ -6,11 +6,15 @@ class MembershipType < ApplicationRecord
   validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   has_many :memberships
   has_many :users, through: :memberships
+  has_many :membership_trainings
+  has_many :trainings, through: :membership_trainings, source: :training
+  accepts_nested_attributes_for :membership_trainings
   default_scope -> { where(destroyed_at: nil) }
   scope :active, -> {where(active: true)}
   scope :classpack, -> {where(is_class_pack: true)}
   scope :not_classpack, -> {where(is_class_pack: false)}
-
+  scope :trial, -> {where(is_trial: true)}
+  scope :not_trial, -> {where(is_trial: false)}
 
   def standard_hash
     {
@@ -21,6 +25,7 @@ class MembershipType < ApplicationRecord
       vouchers: vouchers,
       is_class_pack: is_class_pack,
       bookings_per_day: bookings_per_day,
+      is_trial: is_trial,
       unlimited: unlimited?
     }
   end

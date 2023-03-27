@@ -15,7 +15,8 @@ class TrainingSession < ApplicationRecord
   has_many :bookings
   has_many :users, through: :bookings
   default_scope -> { where(destroyed_at: nil) }
-
+  scope :limited, -> {where(is_limited: true)}
+  scope :not_limited, -> {where(is_limited: false)}
 
   def upcoming_hash
     h = show_hash

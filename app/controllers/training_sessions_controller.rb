@@ -30,6 +30,7 @@ class TrainingSessionsController < ApplicationController
       @training_session.class_kind = @training.class_type.kind
       @training_session.enforce_cancellation_policy = true
       @training_session.late_booking_minutes = @training.late_booking_minutes
+      @training_session.is_limited = @training.is_limited
 
 
       if @training_session.save
@@ -73,7 +74,8 @@ class TrainingSessionsController < ApplicationController
         begins_at: training_session.begins_at + i.weeks,
         enforce_cancellation_policy: training_session.enforce_cancellation_policy,
         note: training_session.note,
-        late_booking_minutes: training_session.late_booking_minutes
+        late_booking_minutes: training_session.late_booking_minutes,
+        is_limited: training_session.is_limited
       )
     end
   end

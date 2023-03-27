@@ -326,6 +326,29 @@ module Api
           training_session.begins_at,
           training_session.begins_at
         )
+        # if training_session.is_limited
+        #   puts ">>>>>>>>>>this training session #{training_session.name} is limited, only allow certain type of memberships"
+        #   if current_active_classpack
+        #     class_pack_type = current_active_classpack.membership_type
+        #     puts ">>>>>>>>>>>>>>#{class_pack_type.name}"
+        #     is_allowed = false
+        #     training_session_name = training_session.training.name
+        #     class_pack_type.trainings.each do | t |
+        #       puts ">>>checking #{training_session_name} and #{t.name}"
+        #       if training_session_name == t.name
+        #         is_allowed = true
+        #         break
+        #       end
+        #     end
+        #     puts ">>>>is_allowed=#{is_allowed}"
+        #     if is_allowed
+        #       return current_active_classpack
+        #     else
+        #       puts ">>no class pack suitables"
+        #       return false
+        #     end
+        #   end
+        # end
       end
 
       def upcoming_membership(training_session)

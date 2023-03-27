@@ -11,9 +11,13 @@ class Training < ApplicationRecord
   belongs_to :class_type
   has_many :training_sessions
   has_many :bookings, through: :training_sessions
+  has_many :membership_trainings
+  has_many :membership_types, through: :membership_trainings, source: :membership_type
+  accepts_nested_attributes_for :membership_trainings
   has_one_attached :photo
   default_scope -> { where(destroyed_at: nil) }
-
+  scope :limited, -> {where(is_limited: true)}
+  scope :not_limited, -> {where(is_limited: false)}
 
   def localize_description
     I18n.locale == :'zh-CN' ? cn_description : description

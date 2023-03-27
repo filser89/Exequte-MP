@@ -26,6 +26,7 @@ class User < ApplicationRecord
   has_one_attached :avatar
   before_validation :set_defaults
   default_scope -> { where(destroyed_at: nil) }
+  scope :order_by_name, -> { order('first_name ASC')}
 
 
   def token

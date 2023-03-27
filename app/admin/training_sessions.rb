@@ -5,7 +5,7 @@ ActiveAdmin.register TrainingSession do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes
+  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited
   #
   # or
   #
@@ -37,6 +37,7 @@ ActiveAdmin.register TrainingSession do
     column :cancelled_at
     column :note
     column :late_booking_minutes
+    column :is_limited
     actions
   end
 
@@ -66,6 +67,7 @@ ActiveAdmin.register TrainingSession do
           f.input :cancelled_at
           f.input :note
           f.input :late_booking_minutes
+          f.input :is_limited
         end
       end
       tab "Prices" do
