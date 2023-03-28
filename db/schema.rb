@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_27_190138) do
+ActiveRecord::Schema.define(version: 2023_03_27_200649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -198,6 +198,7 @@ ActiveRecord::Schema.define(version: 2023_03_27_190138) do
     t.integer "bookings_per_day"
     t.bigint "training_id"
     t.boolean "is_trial", default: false
+    t.boolean "is_limited", default: false
     t.index ["training_id"], name: "index_membership_types_on_training_id"
   end
 
@@ -222,6 +223,7 @@ ActiveRecord::Schema.define(version: 2023_03_27_190138) do
     t.integer "bookings_per_day"
     t.bigint "training_id"
     t.boolean "is_trial", default: false
+    t.boolean "is_limited", default: false
     t.index ["membership_type_id"], name: "index_memberships_on_membership_type_id"
     t.index ["training_id"], name: "index_memberships_on_training_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"

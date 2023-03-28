@@ -15,6 +15,9 @@ class MembershipType < ApplicationRecord
   scope :not_classpack, -> {where(is_class_pack: false)}
   scope :trial, -> {where(is_trial: true)}
   scope :not_trial, -> {where(is_trial: false)}
+  scope :with_trainings, -> { includes(:trainings) }
+  scope :is_limited, -> {where(is_limited: true)}
+  scope :is_not_limited, -> {where(is_limited: false)}
 
   def standard_hash
     {

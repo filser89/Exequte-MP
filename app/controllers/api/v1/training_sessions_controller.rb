@@ -282,6 +282,26 @@ module Api
         end
       end
 
+      def usable_membership_for_limited_class(training_session, membership)
+        if membership
+            class_pack_type = membership.membership_type
+            is_allowed = false
+            training_session_name = training_session.training.name
+            class_pack_type.trainings.each do | t |
+              if training_session_name == t.name
+                is_allowed = true
+                break
+              end
+            end
+            if is_allowed
+              return true
+            else
+              return false
+            end
+          end
+      end
+
+
       def usable_membership(training_session)
         current_active_memberships = current_user.memberships.not_classpack.settled.find_by(
           'start_date <= ? AND end_date > ?',
@@ -290,6 +310,18 @@ module Api
         )
         begin
           if current_active_memberships
+            if training_session.training.is_limited
+              is_allowed = usable_membership_for_limited_class(training_session, current_active_memberships)
+              if (!is_allowed)
+                return false
+              end
+            else
+              current_active_memberships = current_user.memberships.not_classpack.is_not_limited.settled.find_by(
+                'start_date <= ? AND end_date > ?',
+                training_session.begins_at,
+                training_session.begins_at
+              )
+            end
             puts "======== FOUND THIS MEMBERSHIP : #{current_active_memberships.name}, #{current_active_memberships.unlimited?}========"
             if current_active_memberships.unlimited?
               return current_active_memberships
@@ -321,11 +353,34 @@ module Api
       end
 
       def usable_classpack(training_session)
-        current_user.memberships.classpack.find_by(
+        current_active_classpack = current_user.memberships.classpack.find_by(
           'start_date <= ? AND end_date > ? AND vouchers > 0',
           training_session.begins_at,
           training_session.begins_at
         )
+        begin
+          if training_session.training.is_limited
+            is_allowed = usable_membership_for_limited_class(training_session, current_active_classpack)
+            if (!is_allowed)
+              return false
+            else
+              return current_active_classpack
+            end
+          else
+            current_active_classpack = current_user.memberships.classpack.is_not_limited.find_by(
+              'start_date <= ? AND end_date > ? AND vouchers > 0',
+              training_session.begins_at,
+              training_session.begins_at
+            )
+            return current_active_classpack
+          end
+        rescue => e
+          puts "====something went wrong, return current classpack"
+          puts e
+          return current_active_classpack
+        end
+
+
         # if training_session.is_limited
         #   puts ">>>>>>>>>>this training session #{training_session.name} is limited, only allow certain type of memberships"
         #   if current_active_classpack
