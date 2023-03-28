@@ -19,13 +19,23 @@ class TrainingSessionsController < ApplicationController
       @training_session.duration = @training.duration
       @training_session.capacity = @training.capacity
       @training_session.calories = @training.calories
-      @training_session.price_1 = @training.class_type.price_1
-      @training_session.price_2 = @training.class_type.price_2
-      @training_session.price_3 = @training.class_type.price_3
-      @training_session.price_4 = @training.class_type.price_4
-      @training_session.price_5 = @training.class_type.price_5
-      @training_session.price_6 = @training.class_type.price_6
-      @training_session.price_7 = @training.class_type.price_7
+      if permited_params[:price_1_cents] == ""
+        @training_session.price_1 = @training.class_type.price_1
+        @training_session.price_2 = @training.class_type.price_2
+        @training_session.price_3 = @training.class_type.price_3
+        @training_session.price_4 = @training.class_type.price_4
+        @training_session.price_5 = @training.class_type.price_5
+        @training_session.price_6 = @training.class_type.price_6
+        @training_session.price_7 = @training.class_type.price_7
+      else
+        @training_session.price_1 = permited_params[:price_1_cents]
+        @training_session.price_2 = permited_params[:price_1_cents]
+        @training_session.price_3 = permited_params[:price_1_cents]
+        @training_session.price_4 = permited_params[:price_1_cents]
+        @training_session.price_5 = permited_params[:price_1_cents]
+        @training_session.price_6 = permited_params[:price_1_cents]
+        @training_session.price_7 = permited_params[:price_1_cents]
+      end
       @training_session.cancel_before = @training.class_type.cancel_before
       @training_session.class_kind = @training.class_type.kind
       @training_session.enforce_cancellation_policy = true
@@ -81,6 +91,6 @@ class TrainingSessionsController < ApplicationController
   end
 
   def permited_params
-    params.require(:training_session).permit(:training_id, :begins_at, :user_id)
+    params.require(:training_session).permit(:training_id, :begins_at, :user_id, :price_1_cents)
   end
 end
