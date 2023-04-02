@@ -36,13 +36,15 @@ class TrainingSessionsController < ApplicationController
         @training_session.price_6 = permited_params[:price_1_cents]
         @training_session.price_7 = permited_params[:price_1_cents]
       end
-      @training_session.cancel_before = @training.class_type.cancel_before
       @training_session.class_kind = @training.class_type.kind
       @training_session.enforce_cancellation_policy = true
       @training_session.late_booking_minutes = @training.late_booking_minutes
       @training_session.is_limited = @training.is_limited
-
-
+      if permited_params[:cancel_before] == ""
+        @training_session.cancel_before = @training.class_type.cancel_before
+      else
+        @training_session.cancel_before = permited_params[:cancel_before]
+      end
       if @training_session.save
         create_for_weeks(params[:weeks], @training_session)
         redirect_to @training_session
@@ -91,6 +93,6 @@ class TrainingSessionsController < ApplicationController
   end
 
   def permited_params
-    params.require(:training_session).permit(:training_id, :begins_at, :user_id, :price_1_cents)
+    params.require(:training_session).permit(:training_id, :begins_at, :user_id, :price_1_cents, :cancel_before)
   end
 end
