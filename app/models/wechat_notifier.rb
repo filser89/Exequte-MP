@@ -43,7 +43,7 @@ class WechatNotifier < ApplicationRecord
         "keyword2" => "exeQute JingAn",
         "keyword3" => "425, Yanping Rd, 1F",
         "keyword4" => "#{params[:ts_time]}",
-        "remark" => "Cancel 3hrs in advance!"
+        "remark" => "Cancel #{params[:ts_cancel_before]}hrs in advance!"
       }
     }
   end
