@@ -114,6 +114,8 @@ en:
     booking-confirmation:
       class_booked: "Class Booked!"
       come_in_advance: "Please come 15 min in advance!"
+      follow_account: "Follow the official account to receive class notifications for bookings."
+      scan: "(Press and hold to follow the official account)"
       go_to_my_classes: "Go to my classes"
       min: " min"
       kcal: " kCal"

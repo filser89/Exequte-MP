@@ -83,6 +83,8 @@ zh-CN:
     booking-confirmation:
       class_booked: "预约了！"
       come_in_advance: "请提前 15 分钟来！"
+      follow_account: "长按添关注公众号，接收预约上课通知。"
+      scan: "(长按添关注公众号)"
       go_to_my_classes: "打开我的预约"
       min: " 分钟"
       kcal: " 卡路里"
