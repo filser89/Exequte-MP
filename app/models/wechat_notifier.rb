@@ -21,7 +21,8 @@ class WechatNotifier < ApplicationRecord
       "booking_reminder" => booking_reminder,
       "notify_queue" => notify_queue,
       "new_banner" => new_banner,
-      "trainingsession_cancel" => trainingsession_cancel
+      "trainingsession_cancel" => trainingsession_cancel,
+      "noshow" => noshow
     }
   end
 
@@ -90,6 +91,30 @@ class WechatNotifier < ApplicationRecord
         "keyword2" => "exeQute JingAn",
         "keyword3" => "425, Yanping Rd, 1F",
         "keyword4" => "#{params[:activity_time]}",
+        "remark" => "Check it out now!"
+      }
+    }
+  end
+
+  def self.noshow(params={})
+    puts "INSIDE NO SHOW"
+    {
+      "template_id" => "siNd6GpH_dAD9k8gIHE0sz384YGb96Dx0uG3_Qr8FVQ", #新订单通知
+      "receiver" => params[:openid], # receiver's openid
+      "unionid" => params[:unionid], # will be used if openid is blank
+      "pagepath" => (params[:pagepath] || "PAGEPATH"), # Reirect to an MP page on tap
+      "header_color" => COLORS[:header], # RED
+      "body_color" => COLORS[:body], # BLUE
+      "footer_color" => COLORS[:footer], # Spare Leash Green
+      "data" => {
+
+        # CUSTOM MESSAGES SENT TO USER
+        # Ekaterina can edit!
+        "first" => "NO-SHOW UPDATE",
+        "keyword1" => "#{params[:user_name]}",
+        "keyword2" => "#{params[:membership_id]}",
+        "keyword3" => "#{params[:ts_time]}",
+        "keyword4" => "#{params[:ts_name]}",
         "remark" => "Check it out now!"
       }
     }
