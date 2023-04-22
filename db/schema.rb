@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_27_200649) do
+ActiveRecord::Schema.define(version: 2023_04_21_145656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,6 +114,30 @@ ActiveRecord::Schema.define(version: 2023_03_27_200649) do
     t.boolean "active", default: true
   end
 
+  create_table "exercises", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.string "cn_name"
+    t.string "cn_description"
+    t.datetime "destroyed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "exercises_workouts", force: :cascade do |t|
+    t.bigint "workout_id"
+    t.bigint "exercise_id"
+    t.integer "reps"
+    t.integer "sets"
+    t.float "weight"
+    t.integer "time_limit"
+    t.datetime "destroyed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["exercise_id"], name: "index_exercises_workouts_on_exercise_id"
+    t.index ["workout_id"], name: "index_exercises_workouts_on_workout_id"
+  end
+
   create_table "info_item_patterns", force: :cascade do |t|
     t.integer "margin_bottom"
     t.integer "font_size"
@@ -173,6 +197,13 @@ ActiveRecord::Schema.define(version: 2023_03_27_200649) do
     t.string "cn_title_four"
     t.datetime "destroyed_at"
     t.boolean "terms", default: false
+  end
+
+  create_table "logs", force: :cascade do |t|
+    t.string "log_type", null: false
+    t.string "value", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "membership_trainings", force: :cascade do |t|
@@ -358,6 +389,18 @@ ActiveRecord::Schema.define(version: 2023_03_27_200649) do
     t.datetime "waiver_signed_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "workouts", force: :cascade do |t|
+    t.bigint "training_id"
+    t.string "name"
+    t.string "workout_type"
+    t.string "cn_name"
+    t.string "cn_description"
+    t.datetime "destroyed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["training_id"], name: "index_workouts_on_training_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

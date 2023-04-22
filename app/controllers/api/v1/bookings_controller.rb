@@ -122,7 +122,16 @@ module Api
                 else
                   puts "===================ERROR SAVING MEMBERSHIP========================="
                 end
+                @logs = Log.new()
+                @logs.log_type = "LATE CANCEL BOOKING"
+                @logs.value = "#{@booking.user.full_name} (id:#{@booking.user_id}) did a late cancellation on class #{@booking.training_session.name} (time: #{@booking.training_session.begins_at} ) with membership #{@membership.name} #{@membership.id}. The membership expiration date is now #{@membership.end_date}"
+                if @logs.save
+                  puts "log save successful"
+                else
+                  puts "error saving log"
+                end
               rescue => e
+                puts e
                 puts  "===================MEMBERSHIP NOT FOUND========================="
               end
             end
