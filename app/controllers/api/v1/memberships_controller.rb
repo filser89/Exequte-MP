@@ -23,6 +23,7 @@ module Api
         @membership.bookings_per_day = @membership_type.bookings_per_day
         @membership.is_trial = @membership_type.is_trial
         @membership.is_limited = @membership_type.is_limited
+        @membership.is_class_pack = @membership_type.is_class_pack
         @membership.end_date = end_date
         @membership.membership_type = @membership_type
         @membership.payment_status = 'pending'

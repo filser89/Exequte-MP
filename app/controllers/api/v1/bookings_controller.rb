@@ -14,6 +14,20 @@ module Api
       end
 
       def create
+        begin
+          if current_user.bookings.where(cancelled: false, training_session: @training_session, payment_status: ['paid', 'none']).present?
+            @logs = Log.new()
+            @logs.log_type = "MULTIPLE BOOKING ATTEMPT"
+            @logs.value = "#{current_user.full_name} (id:#{current_user.user_id}) is trying to book the class again #{@training_session.name} (time: #{@training_session.name} ) "
+            if @logs.save
+              puts "log save successful"
+            else
+              puts "error saving log"
+            end
+          end
+        rescue => e
+        end
+
         return render_success({msg: 'The class is full, please queue up'}) unless @training_session.can_book?
 
         return render_success({msg: 'Please fill in your profile'}) unless current_user.first_name.present?
@@ -112,46 +126,58 @@ module Api
           else
             puts "===================LATE CANCELLATION========================="
             if @booking.booked_with == "membership"
-              puts "===================REMOVING ONE DAY========================="
-              begin
-                puts @booking.membership_id
-                @membership = Membership.find(@booking.membership_id)
-                @membership.change_end_date(-1)
-                if @membership.save
-                  puts "===================MEMBERSHIP IS SAVED========================="
-                else
-                  puts "===================ERROR SAVING MEMBERSHIP========================="
+              if @booking.training_session.enforce_cancellation_policy
+                puts "===================REMOVING ONE DAY========================="
+                begin
+                  puts @booking.membership_id
+                  @membership = Membership.find(@booking.membership_id)
+                  @membership.change_end_date(-1)
+                  if @membership.save
+                    puts "===================MEMBERSHIP IS SAVED========================="
+                  else
+                    puts "===================ERROR SAVING MEMBERSHIP========================="
+                  end
+                  @logs = Log.new()
+                  @logs.log_type = "LATE CANCEL BOOKING (ENFORCED)"
+                  @logs.value = "#{@booking.user.full_name} (id:#{@booking.user_id}) did a late cancellation on class #{@booking.training_session.name} (time: #{@booking.training_session.begins_at} ) with membership #{@membership.name} #{@membership.id}. The membership expiration date is now #{@membership.end_date}"
+                  if @logs.save
+                    puts "log save successful"
+                  else
+                    puts "error saving log"
+                  end
+                  # puts "NOTIFICATION FOR NOSHOW #{@booking.user.full_name}"
+                  # puts "booking.user.oa_open_id:#{@booking.user.oa_open_id}"
+                  # puts "booking.user.union_id:#{@booking.user.union_id}"
+                  # # Not sure what obj_hash does so can be an error next line
+                  # obj_hash  = {id: @booking.training_session.id, model:  @booking.training_session.model_name.name}
+                  # note_params = {
+                  #   openid: @booking.user.oa_open_id,
+                  #   unionid: @booking.user.union_id, # needed to retrieve oa_open_id if it is not present
+                  #   pagepath: "pages/class-info/class-info?sessionId=#{@booking.training_session.id}&instructorId=#{@booking.training_session.instructor.id}",
+                  #   user_name: @booking.user.full_name,
+                  #   ts_name: @booking.training_session.full_name,
+                  #   membership_id: @booking.membership_id,
+                  #   phone: @booking.user.phone,
+                  #   # ts_date: DateTimeService.date_d_m_y(training_session.begins_at),
+                  #   ts_time: "#{DateTimeService.date_d_m_y(@booking.training_session.begins_at)} #{DateTimeService.time_12_h_m(@booking.training_session.begins_at)}"
+                  # }
+                  # wx_params = WechatNotifier.noshow(note_params)
+                  # WechatWorker.perform_async('noshow', obj_hash, wx_params)
+                  # #WechatNotifier.notify!(wx_params)
+                rescue => e
+                  puts e
+                  puts  "===================MEMBERSHIP NOT FOUND========================="
                 end
-                @logs = Log.new()
-                @logs.log_type = "LATE CANCEL BOOKING"
-                @logs.value = "#{@booking.user.full_name} (id:#{@booking.user_id}) did a late cancellation on class #{@booking.training_session.name} (time: #{@booking.training_session.begins_at} ) with membership #{@membership.name} #{@membership.id}. The membership expiration date is now #{@membership.end_date}"
-                if @logs.save
-                  puts "log save successful"
-                else
-                  puts "error saving log"
-                end
-                # puts "NOTIFICATION FOR NOSHOW #{@booking.user.full_name}"
-                # puts "booking.user.oa_open_id:#{@booking.user.oa_open_id}"
-                # puts "booking.user.union_id:#{@booking.user.union_id}"
-                # # Not sure what obj_hash does so can be an error next line
-                # obj_hash  = {id: @booking.training_session.id, model:  @booking.training_session.model_name.name}
-                # note_params = {
-                #   openid: @booking.user.oa_open_id,
-                #   unionid: @booking.user.union_id, # needed to retrieve oa_open_id if it is not present
-                #   pagepath: "pages/class-info/class-info?sessionId=#{@booking.training_session.id}&instructorId=#{@booking.training_session.instructor.id}",
-                #   user_name: @booking.user.full_name,
-                #   ts_name: @booking.training_session.full_name,
-                #   membership_id: @booking.membership_id,
-                #   phone: @booking.user.phone,
-                #   # ts_date: DateTimeService.date_d_m_y(training_session.begins_at),
-                #   ts_time: "#{DateTimeService.date_d_m_y(@booking.training_session.begins_at)} #{DateTimeService.time_12_h_m(@booking.training_session.begins_at)}"
-                # }
-                # wx_params = WechatNotifier.noshow(note_params)
-                # WechatWorker.perform_async('noshow', obj_hash, wx_params)
-                # #WechatNotifier.notify!(wx_params)
-              rescue => e
-                puts e
-                puts  "===================MEMBERSHIP NOT FOUND========================="
+              end
+            else
+              puts "===================ENFORCE CANCELLATION POLICY IS FALSE, DO NOT REMOVE DAYS, BUT STILL LOG IT========================="
+              @logs = Log.new()
+              @logs.log_type = "LATE CANCEL BOOKING NOT ENFORCED"
+              @logs.value = "#{@booking.user.full_name} (id:#{@booking.user_id}) did a late cancellation on class #{@booking.training_session.name} (time: #{@booking.training_session.begins_at} )."
+              if @logs.save
+                puts "log save successful"
+              else
+                puts "error saving log"
               end
             end
           end
