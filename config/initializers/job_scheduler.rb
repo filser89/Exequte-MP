@@ -12,7 +12,7 @@ scheduler = Rufus::Scheduler.new
 scheduler.cron '22 23 * * *' do
   # every day at 23:30 (11:30pm)
   puts "======RUNNING DAILY NO SHOW CANCELLATION POLICY ======="
-  processed_users = {}
+  processed_users = []
   time_range = Time.now.beginning_of_day..Time.now.end_of_day
   training_sessions = TrainingSession.where(
     begins_at:  time_range,
@@ -21,9 +21,10 @@ scheduler.cron '22 23 * * *' do
   training_sessions.each do | training|
     puts "==========checking the training:#{training.name}, begins_at:#{training.begins_at}========"
     training.bookings.settled.where(cancelled: false, attended: false, booked_with: "membership").each do | booking|
-      check_user = booking.user
+      check_user = booking.user_id
       if !processed_users[check_user]
         puts "#{booking.user.full_name} did a no-show on class #{booking.training_session.name} with #{booking.membership_id}"
+        processed_users[check_user] = true
         begin
           membership = Membership.find(booking.membership_id)
           noshow_automatically_deduct = true
@@ -33,7 +34,7 @@ scheduler.cron '22 23 * * *' do
             puts  "===================SETTING NOT FOUND, USING FALSE as DEFAULT ========================="
             noshow_automatically_deduct = false
           end
-          noshow_text = "#{booking.user.full_name} (id:#{booking.user_id}) did a no-show on class #{booking.training_session.name} (time: #{booking.training_session.begins_at} ) with membership #{booking.membership_id}. AUTOMATIC 1 DAY PENALTY APPLIED, Their membership expiration date is now #{membership.end_date}"
+          noshow_text = "BOOKING ID:#{booking.id} #{booking.user.full_name} (id:#{booking.user_id}) did a no-show on class #{booking.training_session.name} (time: #{booking.training_session.begins_at} ) with membership #{booking.membership_id}. AUTOMATIC 1 DAY PENALTY APPLIED, Their membership expiration date is now #{membership.end_date}"
           if noshow_automatically_deduct
             membership.change_end_date(-1)
             if membership.save
@@ -42,7 +43,7 @@ scheduler.cron '22 23 * * *' do
               puts "===================ERROR SAVING MEMBERSHIP========================="
             end
           else
-            noshow_text = "#{booking.user.full_name} (id:#{booking.user_id}) did a no-show on class #{booking.training_session.name} (time: #{booking.training_session.begins_at} ) with membership #{booking.membership_id}."
+            noshow_text = "BOOKING ID:#{booking.id} | #{booking.user.full_name} (id:#{booking.user_id}) did a no-show on class #{booking.training_session.name} (time: #{booking.training_session.begins_at} ) with membership #{booking.membership_id}."
           end
           puts "about to add a log in the log table"
           @logs = Log.new()
@@ -78,7 +79,6 @@ scheduler.cron '22 23 * * *' do
             puts exceptionThrown
             puts  "===================SOMETHING WENT WRONG, ABORT========================="
           end
-          processed_users[check_user] = true
         rescue => e
           puts  "===================NO-SHOW MEMBERSHIP NOT FOUND, ABORT========================="
         end
