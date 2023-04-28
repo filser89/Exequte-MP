@@ -13,6 +13,7 @@ scheduler.cron '22 23 * * *' do
   # every day at 23:30 (11:30pm)
   puts "======RUNNING DAILY NO SHOW CANCELLATION POLICY ======="
   processed_users = []
+  processed_bookings = []
   time_range = Time.now.beginning_of_day..Time.now.end_of_day
   training_sessions = TrainingSession.where(
     begins_at:  time_range,
@@ -22,12 +23,13 @@ scheduler.cron '22 23 * * *' do
     puts "==========checking the training:#{training.name}, begins_at:#{training.begins_at}========"
     training.bookings.settled.where(cancelled: false, attended: false, booked_with: "membership").each do | booking|
       check_user = booking.user_id
-      if !processed_users[check_user]
+      booking_id = booking.id
+      if processed_users[check_user] != "checked" && processed_bookings[booking_id] != "checked"
         puts "#{booking.user.full_name} did a no-show on class #{booking.training_session.name} with #{booking.membership_id}"
-        processed_users[check_user] = true
+        processed_users[check_user] = "checked"
+        processed_bookings[booking_id] = "checked"
         begin
           membership = Membership.find(booking.membership_id)
-          noshow_automatically_deduct = true
           begin
             noshow_automatically_deduct = Settings.find_by(key: "noshow_automatically_deduct").value
           rescue => e
@@ -35,7 +37,7 @@ scheduler.cron '22 23 * * *' do
             noshow_automatically_deduct = false
           end
           noshow_text = "BOOKING ID:#{booking.id} #{booking.user.full_name} (id:#{booking.user_id}) did a no-show on class #{booking.training_session.name} (time: #{booking.training_session.begins_at} ) with membership #{booking.membership_id}. AUTOMATIC 1 DAY PENALTY APPLIED, Their membership expiration date is now #{membership.end_date}"
-          if noshow_automatically_deduct
+          if noshow_automatically_deduct == "true"
             membership.change_end_date(-1)
             if membership.save
               puts "===================NO-SHOW DEDUCT MEMBERSHIP IS SAVED========================="
