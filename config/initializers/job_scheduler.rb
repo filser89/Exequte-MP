@@ -14,7 +14,7 @@ redis = Redis.new
 
 scheduler = Rufus::Scheduler.new
 
-scheduler.cron '05 22 * * *' do
+scheduler.cron '22 22 * * *' do
   # every day at 23:30 (11:30pm)
   lock = RedisLock.new('daily_no_show_cancellation_policy_lock', redis)
   if lock.lock
@@ -31,7 +31,6 @@ scheduler.cron '05 22 * * *' do
     rescue => e
       puts "something went wrong running the function"
     end
-    processed_users = []
     processed_bookings = []
     time_range = Time.now.beginning_of_day..Time.now.end_of_day
     training_sessions = TrainingSession.where(
@@ -41,11 +40,9 @@ scheduler.cron '05 22 * * *' do
     training_sessions.each do | training|
       puts "==========checking the training:#{training.name}, begins_at:#{training.begins_at}========"
       training.bookings.settled.where(cancelled: false, attended: false, booked_with: "membership").each do | booking|
-        check_user = booking.user_id
         booking_id = booking.id
-        if processed_users[check_user] != "checked" && processed_bookings[booking_id] != "checked"
+        if processed_bookings[booking_id] != "checked"
           puts "#{booking.user.full_name} did a no-show on class #{booking.training_session.name} with #{booking.membership_id}"
-          processed_users[check_user] = "checked"
           processed_bookings[booking_id] = "checked"
           begin
             membership = Membership.find(booking.membership_id)
