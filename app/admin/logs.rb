@@ -1,18 +1,25 @@
 ActiveAdmin.register Log do
 
-  # See permitted parameters documentation:
-  # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # Uncomment all parameters which should be permitted for assignment
-  #
-  # permit_params :current
-  #
-  # or
-  #
-  # permit_params do
-  #   permitted = [:current]
-  #   permitted << :other if params[:action] == 'create' && current_user.admin?
-  #   permitted
-  # end
-  permit_params :log_type, :info
+  permit_params :log_type, :value
+
+  action_item :view, only: :index do
+    render "logs/filter_logs", context: self
+  end
+
+  collection_action :generate_logs, method: :get do
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+    Log.run_noshow(start_date, end_date)
+    redirect_to admin_logs_path, notice: "No-Show routine run successfully"
+  end
+
+  index do
+    selectable_column
+    column :id
+    column :log_type
+    column :value
+    column :created_at
+    actions
+  end
+
 end

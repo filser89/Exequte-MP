@@ -9,9 +9,21 @@
 require 'rufus/scheduler'
 scheduler = Rufus::Scheduler.new
 
-scheduler.cron '22 23 * * *' do
+scheduler.cron '21 30 * * *' do
   # every day at 23:30 (11:30pm)
   puts "======RUNNING DAILY NO SHOW CANCELLATION POLICY ======="
+  begin
+    @logs = Log.new()
+    @logs.log_type = "NO-SHOW RUN"
+    @logs.value = "running no-show at #{Time.now}"
+    if @logs.save
+      puts "log save successful"
+    else
+      puts "error saving log"
+    end
+  rescue => e
+    puts "something went wrong running the function"
+  end
   processed_users = []
   processed_bookings = []
   time_range = Time.now.beginning_of_day..Time.now.end_of_day
@@ -32,9 +44,11 @@ scheduler.cron '22 23 * * *' do
           membership = Membership.find(booking.membership_id)
           begin
             noshow_automatically_deduct = Settings.find_by(key: "noshow_automatically_deduct").value
+            send_notification_to_jay = Settings.find_by(key: "send_notification_to_jay").value
           rescue => e
             puts  "===================SETTING NOT FOUND, USING FALSE as DEFAULT ========================="
             noshow_automatically_deduct = false
+            send_notification_to_jay = false
           end
           noshow_text = "BOOKING ID:#{booking.id} #{booking.user.full_name} (id:#{booking.user_id}) did a no-show on class #{booking.training_session.name} (time: #{booking.training_session.begins_at} ) with membership #{booking.membership_id}. AUTOMATIC 1 DAY PENALTY APPLIED, Their membership expiration date is now #{membership.end_date}"
           if noshow_automatically_deduct == "true"
@@ -56,30 +70,32 @@ scheduler.cron '22 23 * * *' do
           else
             puts "error saving log"
           end
-          begin
-            puts "NOTIFICATION FOR NOSHOW #{booking.user.full_name}"
-            puts "booking.user.oa_open_id:#{booking.user.oa_open_id}"
-            puts "booking.user.union_id:#{booking.user.union_id}"
-            #send notification to Jay's personal wechat
-            # Not sure what obj_hash does so can be an error next line
-            obj_hash  = {id: booking.training_session.id, model:  booking.training_session.model_name.name}
-            note_params = {
-              openid: "oS9Rj6yc2qhkFgP5Z5q-sttzZ1dk",
-              unionid: "oJVlf6F2Mwc8xj4V5uPbvXDcvBH4", # needed to retrieve oa_open_id if it is not present
-              pagepath: "pages/class-info/class-info?sessionId=#{booking.training_session.id}&instructorId=#{booking.training_session.instructor.id}",
-              user_name: booking.user.full_name,
-              ts_name: booking.training_session.full_name,
-              membership_id: booking.membership_id,
-              phone: booking.user.phone,
-              # ts_date: DateTimeService.date_d_m_y(training_session.begins_at),
-              ts_time: "#{DateTimeService.date_d_m_y(booking.training_session.begins_at)} #{DateTimeService.time_12_h_m(booking.training_session.begins_at)}"
-            }
-            wx_params = WechatNotifier.noshow(note_params)
-            WechatWorker.perform_async('noshow', obj_hash, wx_params)
-            #WechatNotifier.notify!(wx_params)
-          rescue => exceptionThrown
-            puts exceptionThrown
-            puts  "===================SOMETHING WENT WRONG, ABORT========================="
+          if send_notification_to_jay == "true"
+            begin
+              puts "NOTIFICATION FOR NOSHOW #{booking.user.full_name}"
+              puts "booking.user.oa_open_id:#{booking.user.oa_open_id}"
+              puts "booking.user.union_id:#{booking.user.union_id}"
+              #send notification to Jay's personal wechat
+              # Not sure what obj_hash does so can be an error next line
+              obj_hash  = {id: booking.training_session.id, model:  booking.training_session.model_name.name}
+              note_params = {
+                openid: "oS9Rj6yc2qhkFgP5Z5q-sttzZ1dk",
+                unionid: "oJVlf6F2Mwc8xj4V5uPbvXDcvBH4", # needed to retrieve oa_open_id if it is not present
+                pagepath: "pages/class-info/class-info?sessionId=#{booking.training_session.id}&instructorId=#{booking.training_session.instructor.id}",
+                user_name: booking.user.full_name,
+                ts_name: booking.training_session.full_name,
+                membership_id: booking.membership_id,
+                phone: booking.user.phone,
+                # ts_date: DateTimeService.date_d_m_y(training_session.begins_at),
+                ts_time: "#{DateTimeService.date_d_m_y(booking.training_session.begins_at)} #{DateTimeService.time_12_h_m(booking.training_session.begins_at)}"
+              }
+              wx_params = WechatNotifier.noshow(note_params)
+              WechatWorker.perform_async('noshow', obj_hash, wx_params)
+              #WechatNotifier.notify!(wx_params)
+            rescue => exceptionThrown
+              puts exceptionThrown
+              puts  "===================SOMETHING WENT WRONG, ABORT========================="
+            end
           end
         rescue => e
           puts  "===================NO-SHOW MEMBERSHIP NOT FOUND, ABORT========================="
