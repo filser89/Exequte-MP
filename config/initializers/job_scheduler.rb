@@ -9,7 +9,7 @@
 require 'rufus/scheduler'
 scheduler = Rufus::Scheduler.new
 
-scheduler.cron '21 30 * * *' do
+scheduler.cron '21 40 * * *' do
   # every day at 23:30 (11:30pm)
   puts "======RUNNING DAILY NO SHOW CANCELLATION POLICY ======="
   begin
