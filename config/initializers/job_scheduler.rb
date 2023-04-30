@@ -8,18 +8,18 @@
 # end
 require 'rufus/scheduler'
 require 'redis'
-require 'redis-namespace'
 
-redis = Redis.new
-redis_ns = Redis::Namespace.new(:exequte_scheduler, redis: redis)
+redis = Redis.new(url: ENV['REDIS_URL'])
+ENV.fetch("REDIS_URL")
 
 scheduler = Rufus::Scheduler.new
 
-scheduler.cron '55 22 * * *' do
+scheduler.cron '13 23 * * *' do
   # every day at 23:30 (11:30pm)
-  lock_key = 'daily_no_show_cancellation_policy_lock'
-  if redis_ns.setnx(lock_key, Time.now.to_i)
-    redis_ns.expire(lock_key, 360)
+  puts "setting lock"
+  lock = redis.setnx('daily_no_show_cancellation_policy_lock', true) # Try to set the lock
+  if lock
+    redis.expire('daily_no_show_cancellation_policy_lock', 60) # Set the lock to expire in 60 seconds
     begin
       @logs = Log.new()
       @logs.log_type = "NO-SHOW RUN"
@@ -120,6 +120,6 @@ scheduler.cron '55 22 * * *' do
         end
       end
     end
-    redis_ns.del(lock_key)
+    #redis.del('daily_no_show_cancellation_policy_lock') # Release the lock
   end
 end
