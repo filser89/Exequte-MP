@@ -50,7 +50,7 @@ gem 'faker'
 gem 'rest-client'
 
 gem 'redis'
-gem 'redis-lock'
+gem 'redis-namespace'
 gem 'httparty' # HTTP requests, API calls
 gem 'jwt' #authentication
 gem 'simple_form'
