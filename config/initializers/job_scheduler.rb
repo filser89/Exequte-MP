@@ -10,7 +10,6 @@ require 'rufus/scheduler'
 require 'redis'
 
 redis = Redis.new(url: ENV['REDIS_URL'])
-ENV.fetch("REDIS_URL")
 
 scheduler = Rufus::Scheduler.new
 
