@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_21_145656) do
+ActiveRecord::Schema.define(version: 2023_05_02_165657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -227,10 +227,8 @@ ActiveRecord::Schema.define(version: 2023_04_21_145656) do
     t.integer "vouchers"
     t.boolean "is_class_pack", default: false
     t.integer "bookings_per_day"
-    t.bigint "training_id"
     t.boolean "is_trial", default: false
     t.boolean "is_limited", default: false
-    t.index ["training_id"], name: "index_membership_types_on_training_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -252,11 +250,9 @@ ActiveRecord::Schema.define(version: 2023_04_21_145656) do
     t.integer "vouchers"
     t.boolean "is_class_pack", default: false
     t.integer "bookings_per_day"
-    t.bigint "training_id"
     t.boolean "is_trial", default: false
     t.boolean "is_limited", default: false
     t.index ["membership_type_id"], name: "index_memberships_on_membership_type_id"
-    t.index ["training_id"], name: "index_memberships_on_training_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
@@ -308,6 +304,11 @@ ActiveRecord::Schema.define(version: 2023_04_21_145656) do
     t.index ["user_id"], name: "index_training_sessions_on_user_id"
   end
 
+  create_table "training_sessions_workouts", id: false, force: :cascade do |t|
+    t.bigint "training_session_id", null: false
+    t.bigint "workout_id", null: false
+  end
+
   create_table "trainings", force: :cascade do |t|
     t.string "name", null: false
     t.integer "calories"
@@ -325,6 +326,14 @@ ActiveRecord::Schema.define(version: 2023_04_21_145656) do
     t.integer "late_booking_minutes"
     t.boolean "is_limited", default: false
     t.index ["class_type_id"], name: "index_trainings_on_class_type_id"
+  end
+
+  create_table "trainings_workouts", id: false, force: :cascade do |t|
+    t.bigint "training_id"
+    t.bigint "workout_id"
+    t.index ["training_id", "workout_id"], name: "index_trainings_workouts_on_training_id_and_workout_id", unique: true
+    t.index ["training_id"], name: "index_trainings_workouts_on_training_id"
+    t.index ["workout_id"], name: "index_trainings_workouts_on_workout_id"
   end
 
   create_table "user_coupons", force: :cascade do |t|
@@ -393,6 +402,7 @@ ActiveRecord::Schema.define(version: 2023_04_21_145656) do
 
   create_table "workouts", force: :cascade do |t|
     t.bigint "training_id"
+    t.bigint "training_session_id"
     t.string "name"
     t.string "workout_type"
     t.string "cn_name"
@@ -400,7 +410,9 @@ ActiveRecord::Schema.define(version: 2023_04_21_145656) do
     t.datetime "destroyed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "description"
     t.index ["training_id"], name: "index_workouts_on_training_id"
+    t.index ["training_session_id"], name: "index_workouts_on_training_session_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -409,9 +421,7 @@ ActiveRecord::Schema.define(version: 2023_04_21_145656) do
   add_foreign_key "bookings", "users"
   add_foreign_key "info_items", "info_item_patterns"
   add_foreign_key "info_items", "infos"
-  add_foreign_key "membership_types", "trainings"
   add_foreign_key "memberships", "membership_types"
-  add_foreign_key "memberships", "trainings"
   add_foreign_key "memberships", "users"
   add_foreign_key "training_sessions", "trainings"
   add_foreign_key "training_sessions", "users"

@@ -13,6 +13,7 @@ class Training < ApplicationRecord
   has_many :bookings, through: :training_sessions
   has_many :membership_trainings
   has_many :membership_types, through: :membership_trainings, source: :membership_type
+  has_and_belongs_to_many :workouts
   accepts_nested_attributes_for :membership_trainings
   has_one_attached :photo
   default_scope -> { where(destroyed_at: nil) }

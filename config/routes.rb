@@ -8,6 +8,15 @@ Rails.application.routes.draw do
   resources :training_sessions, only: %i[new create show]
   resources :info_items, only: %i[new create show]
   resources :trainings, only: %i[new create show]
+
+  #helper methods for the workout backend
+  namespace :admin do
+    resources :workouts do
+      resources :exercises, only: [:index]
+      resources :exercise_workouts, only: [:edit, :update, :destroy]
+    end
+  end
+
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
 

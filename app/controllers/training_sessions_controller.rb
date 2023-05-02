@@ -5,8 +5,8 @@ class TrainingSessionsController < ApplicationController
   end
 
   def create
-    @training_session = TrainingSession.new(permited_params)
-    if permited_params[:training_id] == ""
+    @training_session = TrainingSession.new(permitted_params)
+    if permitted_params[:training_id] == ""
       render :new
     else
       @training = @training_session.training
@@ -19,7 +19,7 @@ class TrainingSessionsController < ApplicationController
       @training_session.duration = @training.duration
       @training_session.capacity = @training.capacity
       @training_session.calories = @training.calories
-      if permited_params[:price_1_cents] == ""
+      if permitted_params[:price_1_cents] == ""
         @training_session.price_1 = @training.class_type.price_1
         @training_session.price_2 = @training.class_type.price_2
         @training_session.price_3 = @training.class_type.price_3
@@ -28,22 +28,29 @@ class TrainingSessionsController < ApplicationController
         @training_session.price_6 = @training.class_type.price_6
         @training_session.price_7 = @training.class_type.price_7
       else
-        @training_session.price_1 = permited_params[:price_1_cents]
-        @training_session.price_2 = permited_params[:price_1_cents]
-        @training_session.price_3 = permited_params[:price_1_cents]
-        @training_session.price_4 = permited_params[:price_1_cents]
-        @training_session.price_5 = permited_params[:price_1_cents]
-        @training_session.price_6 = permited_params[:price_1_cents]
-        @training_session.price_7 = permited_params[:price_1_cents]
+        @training_session.price_1 = permitted_params[:price_1_cents]
+        @training_session.price_2 = permitted_params[:price_1_cents]
+        @training_session.price_3 = permitted_params[:price_1_cents]
+        @training_session.price_4 = permitted_params[:price_1_cents]
+        @training_session.price_5 = permitted_params[:price_1_cents]
+        @training_session.price_6 = permitted_params[:price_1_cents]
+        @training_session.price_7 = permitted_params[:price_1_cents]
       end
+
+      if permitted_params[:workout_ids] != ""
+        puts "found a workout id"
+        puts permitted_params[:workout_ids]
+        @training_session.workout_ids = permitted_params[:workout_ids]
+      end
+
       @training_session.class_kind = @training.class_type.kind
       @training_session.enforce_cancellation_policy = true
       @training_session.late_booking_minutes = @training.late_booking_minutes
       @training_session.is_limited = @training.is_limited
-      if permited_params[:cancel_before] == ""
+      if permitted_params[:cancel_before] == ""
         @training_session.cancel_before = @training.class_type.cancel_before
       else
-        @training_session.cancel_before = permited_params[:cancel_before]
+        @training_session.cancel_before = permitted_params[:cancel_before]
       end
       if @training_session.save
         create_for_weeks(params[:weeks], @training_session)
@@ -65,6 +72,7 @@ class TrainingSessionsController < ApplicationController
       ts = TrainingSession.create(
         training: training_session.training,
         instructor: training_session.instructor,
+        workouts: training_session.workouts,
         name: training_session.name,
         cn_name: training_session.cn_name,
         subtitle: training_session.subtitle,
@@ -92,7 +100,7 @@ class TrainingSessionsController < ApplicationController
     end
   end
 
-  def permited_params
-    params.require(:training_session).permit(:training_id, :begins_at, :user_id, :price_1_cents, :cancel_before)
+  def permitted_params
+    params.require(:training_session).permit(:training_id, :begins_at, :user_id, :price_1_cents, :cancel_before, workout_ids: [])
   end
 end

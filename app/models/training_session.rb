@@ -14,6 +14,7 @@ class TrainingSession < ApplicationRecord
   belongs_to :instructor, class_name: "User", foreign_key: :user_id
   has_many :bookings
   has_many :users, through: :bookings
+  has_and_belongs_to_many :workouts
   default_scope -> { where(destroyed_at: nil) }
   scope :limited, -> {where(is_limited: true)}
   scope :not_limited, -> {where(is_limited: false)}

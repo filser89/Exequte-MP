@@ -214,6 +214,15 @@ module Api
           h[:usable_membership] = usable_membership(training_session).booking_hash if membership_to_use
         end
         h[:usable_classpack] = usable_classpack(training_session).booking_hash if usable_classpack(training_session)
+        begin
+        workout = show_workout(training_session)
+        if workout
+          puts "found associated workout"
+          h[:workout] = workout
+        end
+        rescue => e
+          puts e
+        end
         h
       end
 
@@ -421,6 +430,13 @@ module Api
 
       def classpack_option(training_session)
         return 'classpack' if usable_classpack(training_session)
+      end
+
+      def show_workout(training_session)
+        if training_session.workouts
+          current = training_session.workouts[0]
+          return current.show_hash
+        end
       end
     end
   end
