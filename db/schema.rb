@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_02_165657) do
+ActiveRecord::Schema.define(version: 2023_05_18_185657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,13 +127,16 @@ ActiveRecord::Schema.define(version: 2023_05_02_165657) do
   create_table "exercises_workouts", force: :cascade do |t|
     t.bigint "workout_id"
     t.bigint "exercise_id"
-    t.integer "reps"
     t.integer "sets"
-    t.float "weight"
     t.integer "time_limit"
     t.datetime "destroyed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "format"
+    t.string "block"
+    t.string "reps_gold"
+    t.string "reps_silver"
+    t.string "reps_bronze"
     t.index ["exercise_id"], name: "index_exercises_workouts_on_exercise_id"
     t.index ["workout_id"], name: "index_exercises_workouts_on_workout_id"
   end
@@ -411,6 +414,23 @@ ActiveRecord::Schema.define(version: 2023_05_02_165657) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "description"
+    t.string "quote"
+    t.string "cn_quote"
+    t.string "title"
+    t.string "cn_title"
+    t.string "level"
+    t.integer "total_duration", default: 60
+    t.integer "warmup_duration", default: 12
+    t.integer "warmup_exercise_duration", default: 1
+    t.integer "blocks_duration", default: 35
+    t.integer "blocks_rounds", default: 5
+    t.string "blocks_duration_text"
+    t.integer "blocks_exercise_duration", default: 1
+    t.integer "cooldown_duration", default: 5
+    t.integer "breathing_duration", default: 2
+    t.string "block_a_format"
+    t.string "block_b_format"
+    t.string "block_c_format"
     t.index ["training_id"], name: "index_workouts_on_training_id"
     t.index ["training_session_id"], name: "index_workouts_on_training_session_id"
   end
