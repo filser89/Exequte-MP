@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
 
   resources :training_sessions, only: %i[new create show]
+  resources :workouts, only: %i[new create show]
   resources :info_items, only: %i[new create show]
   resources :trainings, only: %i[new create show]
 

@@ -1,39 +1,6 @@
-# ActiveAdmin.register Workout do
-#
-#   # See permitted parameters documentation:
-#   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-#   #
-#   # Uncomment all parameters which should be permitted for assignment
-#   #
-#   permit_params :name, :cn_name, :workout_type, :description, :cn_description, training_ids: []
-#
-#   form do |f|
-#     f.semantic_errors # shows errors on :base
-#     f.input :name
-#     f.input :workout_type, as: :select, collection: Workout.workout_types.keys
-#     f.input :exercises_workouts, as: :select, collection: Exercise.all
-#     # f.input :exercises, as: :check_boxes, collection: Exercise.all
-#     f.actions         # adds the 'Submit' and 'Cancel' buttons
-#   end
-#   #
-#
-#
-#
-#
-#
-#
-#   # or
-#   #
-#   # permit_params do
-#   #   permitted = [:name, :duration, :cn_name, :price_cents, :price_currency, :smoothie]
-#   #   permitted << :other if params[:action] == 'create' && current_user.admin?
-#   #   permitted
-#   # end
-#
-# end
-# In your Active Admin configuration file (e.g. app/admin/workouts.rb)
 ActiveAdmin.register Workout do
-  permit_params :photo, :video, :name, :cn_name, :description, :cn_description, :quote, :cn_quote, :title, :cn_title, :level, :total_duration, :warmup_duration, :warmup_exercise_duration, :blocks_duration, :block_a_format, :block_b_format, :block_c_format, :blocks_rounds, :blocks_duration_text, :blocks_exercise_duration, :cooldown_duration, :breathing_duration, :workout_type, :training_session_id, :training_id, training_ids: [], training_session_ids: [],  exercises_workouts_attributes: [:id, :exercise_id, :format, :block, :reps_gold, :reps_silver, :reps_bronze, :sets, :time_limit, :_destroy]
+  #permit_params :photo, :video, :name, :cn_name, :description, :cn_description, :quote, :cn_quote, :title, :cn_title, :level, :total_duration, :warmup_duration, :warmup_exercise_duration, :blocks_duration, :block_a_format, :block_b_format, :block_c_format, :finisher_format, :block_a_title, :block_b_title, :block_c_title, :finisher_title, :block_a_duration_format, :block_b_duration_format, :block_c_duration_format, :finisher_duration_format, :block_a_reps_text, :block_b_reps_text, :block_c_reps_text, :finisher_reps_text, :warmup_duration_format,  :title_footer, :cn_title_footer, :blocks_rounds, :blocks_duration_text, :blocks_exercise_duration, :cooldown_duration, :breathing_duration, :workout_type, :training_session_id, :training_id, training_ids: [], training_session_ids: [],  exercises_workouts_attributes: [:id, :exercise_id, :format, :block, :reps_gold, :reps_silver, :reps_bronze, :sets, :time_limit, :_destroy]
+  permit_params :photo, :video, :name, :cn_name, :description, :cn_description, :quote, :cn_quote, :title, :cn_title, :level, :total_duration, :warmup_duration, :warmup_exercise_duration, :blocks_duration, :block_a_format, :block_b_format, :block_c_format, :finisher_format, :block_a_title, :block_b_title, :block_c_title, :finisher_title, :block_a_duration_format, :block_b_duration_format, :block_c_duration_format, :finisher_duration_format, :block_a_reps_text, :block_b_reps_text, :block_c_reps_text, :finisher_reps_text, :warmup_duration_format, :title_footer, :cn_title_footer, :blocks_rounds, :blocks_duration_text, :blocks_exercise_duration, :cooldown_duration, :breathing_duration, :workout_type, :training_session_id, :training_id, training_ids: [], training_session_ids: [], exercises_workouts_attributes: [:id, :exercise_id, :format, :block, :reps_gold, :reps_silver, :reps_bronze, :sets, :time_limit, :_destroy, :batch_index, :order]
 
   index do
     selectable_column
@@ -82,6 +49,8 @@ ActiveAdmin.register Workout do
       row :cn_quote
       row :title
       row :cn_title
+      row :title_footer
+      row :cn_title_footer
       row :level
       row :total_duration
       row :warmup_duration
@@ -89,6 +58,20 @@ ActiveAdmin.register Workout do
       row :block_a_format
       row :block_b_format
       row :block_c_format
+      row :finisher_format
+      row :block_a_title
+      row :block_b_title
+      row :block_c_title
+      row :finisher_title
+      row :block_a_reps_text
+      row :block_b_reps_text
+      row :block_c_reps_text
+      row :finisher_reps_text
+      row :block_a_duration_format
+      row :block_b_duration_format
+      row :block_c_duration_format
+      row :finisher_duration_format
+      row :warmup_duration_format
       row :blocks_duration
       row :blocks_rounds
       row :blocks_duration_text
@@ -119,19 +102,49 @@ ActiveAdmin.register Workout do
     end
 
     panel 'Exercises' do
-      table_for workout.exercises_workouts do
-        column :exercise
-        column :block
-        column :format
-        column :reps_gold
-        column :reps_silver
-        column :reps_bronze
-        column :sets
-        column :time_limit
-        column :created_at
-        column :updated_at
+      grouped_exercises_workouts = workout.exercises_workouts.order(:block, :order).group_by(&:block)
+
+      ordered_blocks = ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher', 'cooldown', 'breathing']
+
+      ordered_blocks.each do |block_name|
+        exercise_workouts = grouped_exercises_workouts[block_name]
+
+        next if exercise_workouts.blank?
+
+        span block_name.capitalize, class: 'group-heading' do
+          table_for exercise_workouts do
+            column :order
+            column :exercise
+            column :block
+            column :format
+            column :reps_gold
+            column :reps_silver
+            column :reps_bronze
+            column :sets
+            column :time_limit
+            column :created_at
+            column :updated_at
+          end
+        end
       end
     end
+
+
+    # panel 'Exercises' do
+    #   table_for workout.exercises_workouts.order(:block, :order) do
+    #     column :order
+    #     column :exercise
+    #     column :block
+    #     column :format
+    #     column :reps_gold
+    #     column :reps_silver
+    #     column :reps_bronze
+    #     column :sets
+    #     column :time_limit
+    #     column :created_at
+    #     column :updated_at
+    #   end
+    # end
 
     active_admin_comments
   end
@@ -144,19 +157,35 @@ ActiveAdmin.register Workout do
       f.input :cn_name
       f.input :description
       f.input :cn_description
-      f.input :quote
+      f.input :quote, input_html: { value: '"Keep your face always toward the sunshine, and shadows will fall behind you."' }
       f.input :cn_quote
       f.input :title
       f.input :cn_title
-      f.input :level
+      f.input :title_footer
+      f.input :cn_title_footer
+      f.input :level, input_html: { value: '5' }
       f.input :total_duration
       f.input :warmup_duration
       f.input :warmup_exercise_duration
-      f.input :block_a_format
-      f.input :block_b_format
-      f.input :block_c_format
+      f.input :block_a_format, input_html: { value: 'EMOM' }
+      f.input :block_b_format, input_html: { value: 'EMOM' }
+      f.input :block_c_format, input_html: { value: 'EMOM' }
+      f.input :finisher_format, input_html: { value: 'TABATA' }
+      f.input :block_a_title, input_html: { value: 'Block A' }
+      f.input :block_b_title, input_html: { value: 'Block B' }
+      f.input :block_c_title, input_html: { value: 'Block C' }
+      f.input :finisher_title, input_html: { value: 'Finisher' }
+      f.input :block_a_reps_text
+      f.input :block_b_reps_text
+      f.input :block_c_reps_text
+      f.input :finisher_reps_text
+      f.input :block_a_duration_format, input_html: { value: '20 min AMRAP' }
+      f.input :block_b_duration_format, input_html: { value: '20 min AMRAP' }
+      f.input :block_c_duration_format, input_html: { value: '20 min AMRAP' }
+      f.input :finisher_duration_format, input_html: { value: 'Tabata' }
+      f.input :warmup_duration_format, input_html: { value: '6 min AMRAP' }
       f.input :blocks_duration
-      f.input :blocks_duration_text
+      f.input :blocks_duration_text, input_html: { value: '40 min AMRAP' }
       f.input :blocks_rounds
       f.input :blocks_exercise_duration
       f.input :cooldown_duration
@@ -170,17 +199,120 @@ ActiveAdmin.register Workout do
 
     f.inputs 'Exercises' do
       f.has_many :exercises_workouts, heading: false, allow_destroy: true, new_record: true do |ew|
-        ew.input :exercise, as: :select, collection: Exercise.all.map { |e| [e.name, e.id] }
-        ew.input :block, as: :select, collection: ['warm-up', 'block-a', 'block-b', 'block-c', 'cooldown', 'breathing']
-        ew.input :format
+        exercises_collection = Exercise.all.order_by_name.map { |e| [e.name, e.id] }
+        ew.input :exercise, as: :select, collection: exercises_collection, selected: exercises_collection.first[1]
+        # ew.input :exercise, as: :select, collection: Exercise.all.order_by_name.map { |e| [e.name, e.id] }
+        ew.input :block, as: :select, collection: ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher' , 'cooldown', 'breathing']
+        ew.input :format, as: :string, input_html: { id: "format-input-#{ew.object.id}" }
+        ew.input :format, as: :select, collection: ['TABATA', 'EMOM', 'AMRAP', 'OTHER'], prompt: 'Select Format', input_html: { id: "format-select-#{ew.object.id}" }
         ew.input :reps_gold
         ew.input :reps_silver
         ew.input :reps_bronze
         ew.input :sets
         ew.input :time_limit
+        ew.input :order, as: :number
+      end
+      # Add new batch inputs for three exercises_workouts
+      if f.object.new_record?
+        3.times do |index|
+          f.semantic_fields_for :exercises_workouts, f.object.exercises_workouts[index] || f.object.exercises_workouts.build(batch_index: index) do |ef|
+            ef.inputs "Warm-Up Exercise # #{index + 1}" do
+              exercises_collection = Exercise.all.order_by_name.map { |e| [e.name, e.id] }
+              ef.input :exercise, as: :select, collection: exercises_collection, selected: exercises_collection.first[1]
+              ef.input :block, as: :select, collection: ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher', 'cooldown', 'breathing'], selected: 'warm-up'
+              ef.input :format, as: :string, input_html: { id: "format-input-#{ef.object_id}" }
+              ef.input :format, as: :select, collection: ['TABATA', 'EMOM', 'AMRAP', 'OTHER'], prompt: 'Select Format', input_html: { id: "format-select-#{ef.object_id}" } , selected: 'AMRAP'
+              ef.input :reps_gold
+              ef.input :reps_silver
+              ef.input :reps_bronze
+              ef.input :sets
+              ef.input :time_limit
+              ef.input :order, as: :number
+              # Add Remove button for batch input records
+              ef.input :_destroy, as: :boolean, label: 'Remove'
+            end
+          end
+        end
+        3.times do |index|
+          f.semantic_fields_for :exercises_workouts, f.object.exercises_workouts[index] || f.object.exercises_workouts.build(batch_index: index) do |ef|
+            ef.inputs "Block A Exercise # #{index + 1}" do
+              exercises_collection = Exercise.all.order_by_name.map { |e| [e.name, e.id] }
+              ef.input :exercise, as: :select, collection: exercises_collection, selected: exercises_collection.first[1]
+              ef.input :block, as: :select, collection: ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher', 'cooldown', 'breathing'], selected: 'block-a'
+              ef.input :format, as: :string, input_html: { id: "format-input-#{ef.object_id}" }
+              ef.input :format, as: :select, collection: ['TABATA', 'EMOM', 'AMRAP', 'OTHER'], prompt: 'Select Format', input_html: { id: "format-select-#{ef.object_id}" } , selected: 'EMOM'
+              ef.input :reps_gold
+              ef.input :reps_silver
+              ef.input :reps_bronze
+              ef.input :sets
+              ef.input :time_limit
+              ef.input :order, as: :number
+              # Add Remove button for batch input records
+              ef.input :_destroy, as: :boolean, label: 'Remove'
+            end
+          end
+        end
+        3.times do |index|
+          f.semantic_fields_for :exercises_workouts, f.object.exercises_workouts[index] || f.object.exercises_workouts.build(batch_index: index) do |ef|
+            ef.inputs "Block B Exercise # #{index + 1}" do
+              exercises_collection = Exercise.all.order_by_name.map { |e| [e.name, e.id] }
+              ef.input :exercise, as: :select, collection: exercises_collection, selected: exercises_collection.first[1]
+              ef.input :block, as: :select, collection: ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher', 'cooldown', 'breathing'], selected: 'block-b'
+              ef.input :format, as: :string, input_html: { id: "format-input-#{ef.object_id}" }
+              ef.input :format, as: :select, collection: ['TABATA', 'EMOM', 'AMRAP', 'OTHER'], prompt: 'Select Format', input_html: { id: "format-select-#{ef.object_id}" } , selected: 'EMOM'
+              ef.input :reps_gold
+              ef.input :reps_silver
+              ef.input :reps_bronze
+              ef.input :sets
+              ef.input :time_limit
+              ef.input :order, as: :number
+              # Add Remove button for batch input records
+              ef.input :_destroy, as: :boolean, label: 'Remove'
+            end
+          end
+        end
+        3.times do |index|
+          f.semantic_fields_for :exercises_workouts, f.object.exercises_workouts[index] || f.object.exercises_workouts.build(batch_index: index) do |ef|
+            ef.inputs "Block C Exercise # #{index + 1}" do
+              exercises_collection = Exercise.all.order_by_name.map { |e| [e.name, e.id] }
+              ef.input :exercise, as: :select, collection: exercises_collection, selected: exercises_collection.first[1]
+              ef.input :block, as: :select, collection: ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher', 'cooldown', 'breathing'], selected: 'block-c'
+              ef.input :format, as: :string, input_html: { id: "format-input-#{ef.object_id}" }
+              ef.input :format, as: :select, collection: ['TABATA', 'EMOM', 'AMRAP', 'OTHER'], prompt: 'Select Format', input_html: { id: "format-select-#{ef.object_id}" } , selected: 'EMOM'
+              ef.input :reps_gold
+              ef.input :reps_silver
+              ef.input :reps_bronze
+              ef.input :sets
+              ef.input :time_limit
+              ef.input :order, as: :number
+              # Add Remove button for batch input records
+              ef.input :_destroy, as: :boolean, label: 'Remove'
+            end
+          end
+        end
+        1.times do |index|
+          f.semantic_fields_for :exercises_workouts, f.object.exercises_workouts[index] || f.object.exercises_workouts.build(batch_index: index) do |ef|
+            ef.inputs "Finisher Exercise #" do
+              exercises_collection = Exercise.all.order_by_name.map { |e| [e.name, e.id] }
+              ef.input :exercise, as: :select, collection: exercises_collection, selected: exercises_collection.first[1]
+              ef.input :block, as: :select, collection: ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher', 'cooldown', 'breathing'], selected: 'finisher'
+              ef.input :format, as: :string, input_html: { id: "format-input-#{ef.object_id}" }
+              ef.input :format, as: :select, collection: ['TABATA', 'EMOM', 'AMRAP', 'OTHER'], prompt: 'Select Format', input_html: { id: "format-select-#{ef.object_id}" } , selected: 'EMOM'
+              ef.input :reps_gold
+              ef.input :reps_silver
+              ef.input :reps_bronze
+              ef.input :sets
+              ef.input :time_limit
+              ef.input :order, as: :number
+
+              # Add Remove button for batch input records
+              ef.input :_destroy, as: :boolean, label: 'Remove'
+            end
+          end
+        end
       end
     end
-
+    render partial: 'admin/javascript'
     f.actions
   end
 end

@@ -9,6 +9,8 @@ class Workout < ApplicationRecord
   has_many :exercises_workouts
   has_many :exercises, through: :exercises_workouts
   accepts_nested_attributes_for :exercises_workouts, allow_destroy: true
+  scope :order_by_name, -> { order('name ASC')}
+  scope :order_by_title, -> { order('title ASC')}
 
   def show_hash
     {
@@ -21,16 +23,24 @@ class Workout < ApplicationRecord
       cn_quote: cn_quote,
       title: title,
       cn_title: cn_title,
+      title_footer: title_footer,
+      cn_title_footer: cn_title_footer,
       level: level,
       total_duration: total_duration,
       warmup_duration: warmup_duration,
       warmup_exercise_duration: warmup_exercise_duration,
+      cooldown_duration: cooldown_duration,
+      breathing_duration: breathing_duration,
       blocks_rounds: blocks_rounds,
       blocks_duration: blocks_duration,
       blocks_duration_text: blocks_duration_text,
       blocks_exercise_duration: blocks_exercise_duration,
-      cooldown_duration: cooldown_duration,
-      breathing_duration: breathing_duration,
+      block_a_format: block_a_format,
+      block_b_format: block_b_format,
+      block_c_format: block_c_format,
+      block_a_title: block_a_title,
+      block_b_title: block_a_title,
+      block_c_title: block_c_title,
       photo: photo.attached? ? photo.service_url : "",
       video: video.attached? ? video.service_url : "",
       exercises_workouts: exercises_workouts.map do |ew|

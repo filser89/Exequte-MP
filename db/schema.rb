@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_18_185657) do
+ActiveRecord::Schema.define(version: 2023_05_30_140708) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -137,6 +137,8 @@ ActiveRecord::Schema.define(version: 2023_05_18_185657) do
     t.string "reps_gold"
     t.string "reps_silver"
     t.string "reps_bronze"
+    t.integer "batch_index"
+    t.integer "order"
     t.index ["exercise_id"], name: "index_exercises_workouts_on_exercise_id"
     t.index ["workout_id"], name: "index_exercises_workouts_on_workout_id"
   end
@@ -431,6 +433,22 @@ ActiveRecord::Schema.define(version: 2023_05_18_185657) do
     t.string "block_a_format"
     t.string "block_b_format"
     t.string "block_c_format"
+    t.string "block_a_title"
+    t.string "block_b_title"
+    t.string "block_c_title"
+    t.string "block_a_duration_format"
+    t.string "block_b_duration_format"
+    t.string "block_c_duration_format"
+    t.string "block_a_reps_text"
+    t.string "block_b_reps_text"
+    t.string "block_c_reps_text"
+    t.string "warmup_duration_format"
+    t.string "title_footer"
+    t.string "cn_title_footer"
+    t.string "finisher_title"
+    t.string "finisher_format"
+    t.string "finisher_duration_format"
+    t.string "finisher_reps_text"
     t.index ["training_id"], name: "index_workouts_on_training_id"
     t.index ["training_session_id"], name: "index_workouts_on_training_session_id"
   end
