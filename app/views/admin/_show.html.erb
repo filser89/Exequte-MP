@@ -2,7 +2,7 @@
     function showWorkoutDetails(workoutId, hideCanvas) {
         console.log('about to fetch workout with id : ' + workoutId)
         // Make a GET request to fetch the specific workout details
-        fetch(`http://0.0.0.0:3000/api/v1/workouts/${workoutId}`)
+        fetch(`/api/v1/workouts/${workoutId}`)
             .then(response => response.json())
             .then(data => {
                 if (data && data.data) {
