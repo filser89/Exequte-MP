@@ -2,11 +2,11 @@
     function initializeAndDrawCanvas(json, hideCanvas) {
         // Define an array of font names and URLs
         var fontList = [
-            {name: 'Lato Black', url: 'url(/workout/font/lato-black.ttf)'},
-            {name: 'Play Bold', url: 'url(/workout/font/play-bold.ttf)'},
-            {name: 'Myriad Pro Bold', url: 'url(/workout/font/myriad.ttf)'},
-            {name: 'Vermin Vibes', url: 'url(/workout/font/vermin-2.ttf)'},
-            {name: 'High Voltage', url: 'url(/workout/font/highvoltage.ttf)'}
+            {name: 'Lato Black', url: 'url(https://exequte.oss-cn-shanghai.aliyuncs.com/lato-black.ttf)'},
+            {name: 'Play Bold', url: 'url(https://exequte.oss-cn-shanghai.aliyuncs.com/play-bold.ttf)'},
+            {name: 'Myriad Pro Bold', url: 'url(https://exequte.oss-cn-shanghai.aliyuncs.com/myriad.ttf)'},
+            {name: 'Vermin Vibes', url: 'url(https://exequte.oss-cn-shanghai.aliyuncs.com/vermin-2.ttf)'},
+            {name: 'High Voltage', url: 'url(https://exequte.oss-cn-shanghai.aliyuncs.com/highvoltage.ttf)'}
         ];
 
         // Create an array to store loaded fonts
@@ -161,7 +161,8 @@
 
         // Draw the background image
         var backgroundImage = new Image();
-        backgroundImage.src = '/workout/img/bg-no-text.png';
+        backgroundImage.src = 'https://exequte.oss-cn-shanghai.aliyuncs.com/bg-no-text.png';
+        backgroundImage.crossOrigin = "anonymous";
         backgroundImage.onload = function () {
             //background
             ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
@@ -458,7 +459,8 @@
             ctx.fillText(footer_text, 680, 900);
             // Draw the logo
             var logo = new Image();
-            logo.src = '/workout/img/logo-top.png';
+            logo.src = 'https://exequte.oss-cn-shanghai.aliyuncs.com/logo-top.png';
+            logo.crossOrigin = "anonymous";
             logo.onload = function () {
                 ctx.drawImage(logo, 10, 80, 100, 100); // Adjust the position and size as needed
             };
@@ -475,7 +477,8 @@
             }
             // Draw the QR code image
             var qrCode = new Image();
-            qrCode.src = '/workout/img/qr-code.png';
+            qrCode.src = 'https://exequte.oss-cn-shanghai.aliyuncs.com/qr-code.png';
+            qrCode.crossOrigin = "anonymous";
             qrCode.onload = function () {
                 var qrCodeX = 364; // Shifted to the right
                 var qrCodeY = canvas.height - 125; // Positioned slightly above the bottom
@@ -489,8 +492,8 @@
                 // applyTitleEffects(ctx, tileX, tileY, tileWidth, tileHeight);
 
                 // Save the canvas as an image
-                var image = canvas.toDataURL('image/png');
-                console.log(image); // This is the generated image as a data URL
+                //var image = canvas.toDataURL('image/png');
+                //console.log(image); // This is the generated image as a data URL
             };
         };
     }
