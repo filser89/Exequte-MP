@@ -26,7 +26,13 @@ ActiveAdmin.register TrainingSession do
     column :note
     column :late_booking_minutes
     column :is_limited
-    actions
+    actions do |training_session|
+      if training_session.workout_current.present?
+      link_to 'Download Template', '#', data: { workout_id: training_session.workout_current.id, workout_name: training_session.workout_current.name } , class: 'download_link member_link', onclick: 'downloadWorkoutTemplate(this);return false;'
+      end
+    end
+    render partial: 'admin/index'
+    render partial: 'admin/template'
   end
 
 
@@ -91,6 +97,18 @@ ActiveAdmin.register TrainingSession do
       row :late_booking_minutes
       row :is_limited
       row :price_1
+      row :template do |training_session|
+        if training_session.workout_current.present?
+            a 'Download Template', class: 'clickable-btn', 'data-workout-id': training_session.workout_current.id, 'data-workout-name': training_session.workout_current.name, onclick: 'downloadWorkoutTemplate(this);return false;' do
+              'Download Template'
+            end
+            a 'Show Template', class: 'clickable-btn', 'data-workout-id': training_session.workout_current.id, 'data-workout-name': training_session.workout_current.name, onclick: 'showWorkoutTemplate(this, false);return false;' do
+              'Show Template'
+            end
+            render partial: 'admin/index'
+            render partial: 'admin/template'
+        end
+      end
     end
   end
 end

@@ -1,6 +1,6 @@
 ActiveAdmin.register Workout do
   #permit_params :photo, :video, :name, :cn_name, :description, :cn_description, :quote, :cn_quote, :title, :cn_title, :level, :total_duration, :warmup_duration, :warmup_exercise_duration, :blocks_duration, :block_a_format, :block_b_format, :block_c_format, :finisher_format, :block_a_title, :block_b_title, :block_c_title, :finisher_title, :block_a_duration_format, :block_b_duration_format, :block_c_duration_format, :finisher_duration_format, :block_a_reps_text, :block_b_reps_text, :block_c_reps_text, :finisher_reps_text, :warmup_duration_format,  :title_footer, :cn_title_footer, :blocks_rounds, :blocks_duration_text, :blocks_exercise_duration, :cooldown_duration, :breathing_duration, :workout_type, :training_session_id, :training_id, training_ids: [], training_session_ids: [],  exercises_workouts_attributes: [:id, :exercise_id, :format, :block, :reps_gold, :reps_silver, :reps_bronze, :sets, :time_limit, :_destroy]
-  permit_params :photo, :video, :name, :cn_name, :description, :cn_description, :quote, :cn_quote, :title, :cn_title, :level, :total_duration, :warmup_duration, :warmup_exercise_duration, :blocks_duration, :block_a_format, :block_b_format, :block_c_format, :finisher_format, :block_a_title, :block_b_title, :block_c_title, :finisher_title, :block_a_duration_format, :block_b_duration_format, :block_c_duration_format, :finisher_duration_format, :block_a_reps_text, :block_b_reps_text, :block_c_reps_text, :finisher_reps_text, :warmup_duration_format, :title_footer, :cn_title_footer, :blocks_rounds, :blocks_duration_text, :blocks_exercise_duration, :cooldown_duration, :breathing_duration, :workout_type, :training_session_id, :training_id, training_ids: [], training_session_ids: [], exercises_workouts_attributes: [:id, :exercise_id, :format, :block, :reps_gold, :reps_silver, :reps_bronze, :sets, :time_limit, :_destroy, :batch_index, :order]
+  permit_params :photo, :video, :name, :cn_name, :description, :cn_description, :quote, :cn_quote, :title, :cn_title, :level, :total_duration, :warmup_duration, :warmup_exercise_duration, :blocks_duration, :block_a_format, :block_b_format, :block_c_format, :finisher_format, :block_a_title, :block_b_title, :block_c_title, :finisher_title, :block_a_duration_format, :block_b_duration_format, :block_c_duration_format, :finisher_duration_format, :block_a_reps_text, :block_b_reps_text, :block_c_reps_text, :finisher_reps_text, :warmup_duration_format, :title_footer, :cn_title_footer, :blocks_rounds, :blocks_duration_text, :blocks_exercise_duration, :cooldown_duration, :breathing_duration, :workout_type, :training_session_id, :training_id, training_ids: [], training_session_ids: [], exercises_workouts_attributes: [:id, :exercise_id, :format, :block, :reps, :reps_gold, :reps_silver, :reps_bronze, :sets, :time_limit, :_destroy, :batch_index, :order]
 
   index do
     selectable_column
@@ -35,11 +35,16 @@ ActiveAdmin.register Workout do
     end
     column :updated_at
     column :created_at
-    actions
+    actions do |workout|
+      link_to 'Download Template', '#', data: { workout_id: workout.id, workout_name: workout.name } , class: 'download_link member_link', onclick: 'downloadWorkoutTemplate(this);return false;'
+    end
+    render partial: 'admin/index'
+    render partial: 'admin/template'
   end
 
   show do
     attributes_table do
+      row :id
       row :name
       row :cn_name
       row :workout_type
@@ -99,6 +104,16 @@ ActiveAdmin.register Workout do
           video_tag workout.video.service_url, controls: true
         end
       end
+      row :json do |workout|
+        div class: 'collapsible' do
+          span class: 'collapsible-header', onclick: '(function(event){var content = event.target.nextElementSibling; content.style.display = content.style.display === "none" ? "block" : "none";})(event)' do
+            'JSON'
+          end
+          div class: 'collapsible-content', style: 'display: none' do
+            pre JSON.pretty_generate(workout.show_hash_blocks)
+          end
+        end
+      end
     end
 
     panel 'Exercises' do
@@ -117,6 +132,7 @@ ActiveAdmin.register Workout do
             column :exercise
             column :block
             column :format
+            column :reps
             column :reps_gold
             column :reps_silver
             column :reps_bronze
@@ -129,23 +145,8 @@ ActiveAdmin.register Workout do
       end
     end
 
-
-    # panel 'Exercises' do
-    #   table_for workout.exercises_workouts.order(:block, :order) do
-    #     column :order
-    #     column :exercise
-    #     column :block
-    #     column :format
-    #     column :reps_gold
-    #     column :reps_silver
-    #     column :reps_bronze
-    #     column :sets
-    #     column :time_limit
-    #     column :created_at
-    #     column :updated_at
-    #   end
-    # end
-
+    render partial: 'admin/show'
+    render partial: 'admin/template'
     active_admin_comments
   end
 
@@ -157,37 +158,52 @@ ActiveAdmin.register Workout do
       f.input :cn_name
       f.input :description
       f.input :cn_description
-      f.input :quote, input_html: { value: '"Keep your face always toward the sunshine, and shadows will fall behind you."' }
+      # Default values for new records only
+      if f.object.new_record?
+        f.input :quote, input_html: { value: '"Keep your face always toward the sunshine, and shadows will fall behind you."' }
+        f.input :level, input_html: { value: '5' }
+        f.input :block_a_format, input_html: { value: 'EMOM' }
+        f.input :block_b_format, input_html: { value: 'EMOM' }
+        f.input :block_c_format, input_html: { value: 'EMOM' }
+        f.input :finisher_format, input_html: { value: 'TABATA' }
+        f.input :block_a_title, input_html: { value: 'Block A' }
+        f.input :block_b_title, input_html: { value: 'Block B' }
+        f.input :block_c_title, input_html: { value: 'Block C' }
+        f.input :finisher_title, input_html: { value: 'Finisher' }
+        f.input :block_a_duration_format, input_html: { value: '20 min AMRAP' }
+        f.input :block_b_duration_format, input_html: { value: '20 min AMRAP' }
+        f.input :block_c_duration_format, input_html: { value: '20 min AMRAP' }
+        f.input :finisher_duration_format, input_html: { value: 'Tabata' }
+        f.input :warmup_duration_format, input_html: { value: '6 min AMRAP' }
+        f.input :blocks_duration_text, input_html: { value: '40 min AMRAP' }
+      end
+      f.input :quote
       f.input :cn_quote
       f.input :title
       f.input :cn_title
       f.input :title_footer
       f.input :cn_title_footer
-      f.input :level, input_html: { value: '5' }
+      f.input :level
       f.input :total_duration
+      f.input :blocks_duration
+      f.input :blocks_duration_text
+      f.input :blocks_rounds
+      f.input :blocks_exercise_duration
       f.input :warmup_duration
       f.input :warmup_exercise_duration
-      f.input :block_a_format, input_html: { value: 'EMOM' }
-      f.input :block_b_format, input_html: { value: 'EMOM' }
-      f.input :block_c_format, input_html: { value: 'EMOM' }
-      f.input :finisher_format, input_html: { value: 'TABATA' }
-      f.input :block_a_title, input_html: { value: 'Block A' }
-      f.input :block_b_title, input_html: { value: 'Block B' }
-      f.input :block_c_title, input_html: { value: 'Block C' }
-      f.input :finisher_title, input_html: { value: 'Finisher' }
+      f.input :block_a_title
+      f.input :block_b_title
+      f.input :block_c_title
+      f.input :finisher_title
       f.input :block_a_reps_text
       f.input :block_b_reps_text
       f.input :block_c_reps_text
       f.input :finisher_reps_text
-      f.input :block_a_duration_format, input_html: { value: '20 min AMRAP' }
-      f.input :block_b_duration_format, input_html: { value: '20 min AMRAP' }
-      f.input :block_c_duration_format, input_html: { value: '20 min AMRAP' }
-      f.input :finisher_duration_format, input_html: { value: 'Tabata' }
-      f.input :warmup_duration_format, input_html: { value: '6 min AMRAP' }
-      f.input :blocks_duration
-      f.input :blocks_duration_text, input_html: { value: '40 min AMRAP' }
-      f.input :blocks_rounds
-      f.input :blocks_exercise_duration
+      f.input :warmup_duration_format
+      f.input :block_a_duration_format
+      f.input :block_b_duration_format
+      f.input :block_c_duration_format
+      f.input :finisher_duration_format
       f.input :cooldown_duration
       f.input :breathing_duration
       f.input :workout_type, as: :select, collection: ['power', 'plyo', 'deload', 'hiit']
@@ -197,14 +213,16 @@ ActiveAdmin.register Workout do
       f.input :video, as: :file
     end
 
+
     f.inputs 'Exercises' do
       f.has_many :exercises_workouts, heading: false, allow_destroy: true, new_record: true do |ew|
         exercises_collection = Exercise.all.order_by_name.map { |e| [e.name, e.id] }
-        ew.input :exercise, as: :select, collection: exercises_collection, selected: exercises_collection.first[1]
+        ew.input :exercise, as: :select, collection: exercises_collection
         # ew.input :exercise, as: :select, collection: Exercise.all.order_by_name.map { |e| [e.name, e.id] }
         ew.input :block, as: :select, collection: ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher' , 'cooldown', 'breathing']
         ew.input :format, as: :string, input_html: { id: "format-input-#{ew.object.id}" }
         ew.input :format, as: :select, collection: ['TABATA', 'EMOM', 'AMRAP', 'OTHER'], prompt: 'Select Format', input_html: { id: "format-select-#{ew.object.id}" }
+        ew.input :reps
         ew.input :reps_gold
         ew.input :reps_silver
         ew.input :reps_bronze
@@ -222,6 +240,7 @@ ActiveAdmin.register Workout do
               ef.input :block, as: :select, collection: ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher', 'cooldown', 'breathing'], selected: 'warm-up'
               ef.input :format, as: :string, input_html: { id: "format-input-#{ef.object_id}" }
               ef.input :format, as: :select, collection: ['TABATA', 'EMOM', 'AMRAP', 'OTHER'], prompt: 'Select Format', input_html: { id: "format-select-#{ef.object_id}" } , selected: 'AMRAP'
+              ef.input :reps
               ef.input :reps_gold
               ef.input :reps_silver
               ef.input :reps_bronze
@@ -241,6 +260,7 @@ ActiveAdmin.register Workout do
               ef.input :block, as: :select, collection: ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher', 'cooldown', 'breathing'], selected: 'block-a'
               ef.input :format, as: :string, input_html: { id: "format-input-#{ef.object_id}" }
               ef.input :format, as: :select, collection: ['TABATA', 'EMOM', 'AMRAP', 'OTHER'], prompt: 'Select Format', input_html: { id: "format-select-#{ef.object_id}" } , selected: 'EMOM'
+              ef.input :reps
               ef.input :reps_gold
               ef.input :reps_silver
               ef.input :reps_bronze
@@ -260,6 +280,7 @@ ActiveAdmin.register Workout do
               ef.input :block, as: :select, collection: ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher', 'cooldown', 'breathing'], selected: 'block-b'
               ef.input :format, as: :string, input_html: { id: "format-input-#{ef.object_id}" }
               ef.input :format, as: :select, collection: ['TABATA', 'EMOM', 'AMRAP', 'OTHER'], prompt: 'Select Format', input_html: { id: "format-select-#{ef.object_id}" } , selected: 'EMOM'
+              ef.input :reps
               ef.input :reps_gold
               ef.input :reps_silver
               ef.input :reps_bronze
@@ -279,6 +300,7 @@ ActiveAdmin.register Workout do
               ef.input :block, as: :select, collection: ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher', 'cooldown', 'breathing'], selected: 'block-c'
               ef.input :format, as: :string, input_html: { id: "format-input-#{ef.object_id}" }
               ef.input :format, as: :select, collection: ['TABATA', 'EMOM', 'AMRAP', 'OTHER'], prompt: 'Select Format', input_html: { id: "format-select-#{ef.object_id}" } , selected: 'EMOM'
+              ef.input :reps
               ef.input :reps_gold
               ef.input :reps_silver
               ef.input :reps_bronze
@@ -298,6 +320,7 @@ ActiveAdmin.register Workout do
               ef.input :block, as: :select, collection: ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher', 'cooldown', 'breathing'], selected: 'finisher'
               ef.input :format, as: :string, input_html: { id: "format-input-#{ef.object_id}" }
               ef.input :format, as: :select, collection: ['TABATA', 'EMOM', 'AMRAP', 'OTHER'], prompt: 'Select Format', input_html: { id: "format-select-#{ef.object_id}" } , selected: 'EMOM'
+              ef.input :reps
               ef.input :reps_gold
               ef.input :reps_silver
               ef.input :reps_bronze
@@ -312,7 +335,7 @@ ActiveAdmin.register Workout do
         end
       end
     end
-    render partial: 'admin/javascript'
+    render partial: 'admin/form'
     f.actions
   end
 end

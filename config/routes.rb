@@ -85,6 +85,13 @@ Rails.application.routes.draw do
       # INFOS
       resources :infos, only: [:index]
 
+      # WORKOUTS
+      resources :workouts, only: [:index, :show] do
+        member do
+          get :show_all
+        end
+      end
+
       # WECHAT PAYMENT NOTIFICATIONS
       post "memberships/notify", to: 'memberships#payment_confirmed', format: :xml
       post "bookings/notify", to: 'bookings#payment_confirmed', format: :xml

@@ -1,6 +1,10 @@
 <script>
     // Enable/disable format input based on format select
     document.addEventListener('DOMContentLoaded', function() {
+        window.toggleJSON = function(event) {
+            var content = event.target.nextElementSibling;
+            content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        }
         function toggleFormatInput(selectId, inputId) {
             var selectBox = document.getElementById(selectId);
             var formatInput = document.getElementById(inputId);

@@ -193,4 +193,20 @@ class TrainingSession < ApplicationRecord
   def calc_price
     price_7_cents ? price_7_cents / 100 : 0
   end
+
+  def show_workout
+    if workouts.present?
+      puts "training session has associated workout"
+      current_workout = workouts[0]
+      return current_workout.show_hash_blocks
+    end
+  end
+
+  def workout_current
+    if workouts.present?
+      puts "training session has associated workout"
+      current_workout = workouts[0]
+      return current_workout
+    end
+  end
 end
