@@ -17,7 +17,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.2'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 4.0'
+# gem 'webpacker', '~> 4.0'
+gem 'webpacker', path: "webpacker-4.3.0"
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
