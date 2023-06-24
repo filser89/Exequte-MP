@@ -1,6 +1,6 @@
 ActiveAdmin.register TrainingSession do
 
-  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, workout_ids: []
+  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, :location, :current_block, workout_ids: []
 
   index do
     selectable_column
@@ -26,6 +26,8 @@ ActiveAdmin.register TrainingSession do
     column :note
     column :late_booking_minutes
     column :is_limited
+    column :location
+    column :current_block
     actions do |training_session|
       if training_session.workout_current.present?
       link_to 'Download Template', '#', data: { workout_id: training_session.workout_current.id, workout_name: training_session.workout_current.name } , class: 'download_link member_link', onclick: 'downloadWorkoutTemplate(this);return false;'
@@ -63,6 +65,8 @@ ActiveAdmin.register TrainingSession do
           f.input :note
           f.input :late_booking_minutes
           f.input :is_limited
+          f.input :location
+          f.input :current_block
         end
       end
       tab "Prices" do
@@ -97,6 +101,8 @@ ActiveAdmin.register TrainingSession do
       row :late_booking_minutes
       row :is_limited
       row :price_1
+      row :location
+      row :current_block
       row :template do |training_session|
         if training_session.workout_current.present?
             a 'Download Template', class: 'clickable-btn', 'data-workout-id': training_session.workout_current.id, 'data-workout-name': training_session.workout_current.name, onclick: 'downloadWorkoutTemplate(this);return false;' do

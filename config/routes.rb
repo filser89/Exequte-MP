@@ -57,6 +57,8 @@ Rails.application.routes.draw do
           get :dates_list
           get :instructor_sessions
           get :admin_sessions
+          get :current
+          get :current_switch_block
           get :sessions
         end
       end
