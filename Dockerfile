@@ -12,7 +12,6 @@ COPY Gemfile* /tmp/
 COPY package.json /tmp/
 COPY yarn.lock /tmp/
 COPY mimemagic-01f92d86d15d /tmp/mimemagic-01f92d86d15d
-COPY webpacker-4.3.0 /tmp/webpacker-4.3.0
 WORKDIR /tmp
 RUN gem install bundler -v 2.2.2
 RUN bundle install --jobs 5 --retry 5 --without development test
