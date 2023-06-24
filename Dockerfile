@@ -1,6 +1,6 @@
 FROM ruby:2.6.6
 # Install NodeJS and Yarn
-RUN apt-get update
+RUN apt-get --allow-releaseinfo-change update
 RUN apt-get -y install curl
 RUN apt-get install -my gnupg
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
