@@ -53,6 +53,15 @@ class TrainingSession < ApplicationRecord
     h
   end
 
+  def show_workout_ts
+    h = standard_hash
+    if workouts.present?
+      puts "training session has associated workout"
+      h[:workout] = show_workout
+    end
+    h
+  end
+
   def standard_hash
     h = {
       id: id,
@@ -77,7 +86,9 @@ class TrainingSession < ApplicationRecord
       membership_date: begins_at.midnight,
       enforce_cancellation_policy: enforce_cancellation_policy,
       note: note,
-      late_booking_minutes: late_booking_minutes
+      late_booking_minutes: late_booking_minutes,
+      location: location,
+      current_block: current_block
     }
     h[:image_url] =  training.photo.service_url if training.photo.attached?
     h

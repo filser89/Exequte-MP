@@ -3,6 +3,9 @@ module Api
     class TrainingSessionsController < Api::BaseController
       before_action :find_training_session, only: [:show, :add_user_to_queue, :session_attendance, :cancel, :change_capacity]
       before_action :choose_date_range, only: %i[index dates_list]
+      skip_before_action :authenticate_api_key!, only: [:current, :current_switch_block]
+      skip_before_action :authenticate_user_from_token!, only: [:current, :current_switch_block]
+
 
       def index
         render_success(@date_range.to_a)#.map { |d| DateTimeService.date_wd_d_m(d) })
@@ -156,6 +159,45 @@ module Api
                         .map(&:upcoming_hash)
         sessions = [upcoming_ts, history_ts]
         render_success(sessions)
+      end
+
+      def current
+        location = params[:location]
+        current_session_time_start_bottom_range = DateTime.now - 60.minutes
+        current_session_time_start_top_range = DateTime.now + 60.minutes
+        current_session_time_start_range = (current_session_time_start_bottom_range..current_session_time_start_top_range)
+        puts "--------#{current_session_time_start_range}---------"
+        current_ts = TrainingSession.where(
+          begins_at: current_session_time_start_range,
+          location: location.present? ? location : '',
+          cancelled: false)
+          .map(&:show_workout_ts)
+        puts current_ts
+        render_success(current_ts)
+      end
+
+      def current_switch_block
+        block_name = params[:name]
+        location = params[:location]
+        current_session_time_start_bottom_range = DateTime.now - 60.minutes
+        current_session_time_start_top_range = DateTime.now + 60.minutes
+        current_session_time_start_range = (current_session_time_start_bottom_range..current_session_time_start_top_range)
+        puts "--------#{current_session_time_start_range}---------"
+        current_ts = TrainingSession.find_by(
+          begins_at: current_session_time_start_range,
+          location: location.present? ? location : '',
+          cancelled: false)
+        if current_ts.present?
+          puts "==================training session #{current_ts.name}"
+          puts "==================training session #{current_ts.name}  had this training capacity  #{current_ts.current_block}, changing to #{block_name} ==============="
+          current_ts.current_block = block_name
+          if current_ts.save
+            puts "=========training session block updated successfully========"
+            render_success({msg: "block changed"})
+          else
+            render_error({ message: 'Something went wrong' })
+          end
+        end
       end
 
       def dates_list
