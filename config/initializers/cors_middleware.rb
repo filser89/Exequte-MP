@@ -7,7 +7,7 @@ class CorsMiddleware
 
   def call(env)
     headers = {
-      'Access-Control-Allow-Origin' => 'http://localhost:63342', # Replace this with the appropriate origin(s) that should have access
+      'Access-Control-Allow-Origin' => %w[http://localhost:63342 https://workout.exequte.cn], # Replace this with the appropriate origin(s) that should have access
       'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers' => 'Origin, Content-Type, Accept, Authorization',
       'Access-Control-Allow-Credentials' => 'true'
@@ -17,7 +17,7 @@ class CorsMiddleware
       headers['Access-Control-Max-Age'] = '1728000'
       headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type, Accept, Origin, User-Agent, Cache-Control, X-Requested-With'
       headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
-      headers['Access-Control-Allow-Origin'] = 'http://localhost:63342' # Replace this with the appropriate origin(s) that should have access
+      headers['Access-Control-Allow-Origin'] = %w[http://localhost:63342 https://workout.exequte.cn] # Replace this with the appropriate origin(s) that should have access
 
       return [200, headers, []]
     end
@@ -28,7 +28,7 @@ class CorsMiddleware
   end
 end
 
-if Rails.env == "development"
-  puts "dev environment, add cors exception"
-  Rails.application.config.middleware.insert_before 0, CorsMiddleware
-end
+puts "add cors exception"
+Rails.application.config.middleware.insert_before 0, CorsMiddleware
+
+
