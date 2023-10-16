@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_17_100138) do
+ActiveRecord::Schema.define(version: 2023_10_10_092752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,8 @@ ActiveRecord::Schema.define(version: 2023_06_17_100138) do
     t.string "payment_status"
     t.jsonb "payment"
     t.datetime "destroyed_at"
+    t.bigint "hrm_id"
+    t.index ["hrm_id"], name: "index_bookings_on_hrm_id"
     t.index ["membership_id"], name: "index_bookings_on_membership_id"
     t.index ["training_session_id"], name: "index_bookings_on_training_session_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
@@ -142,6 +144,15 @@ ActiveRecord::Schema.define(version: 2023_06_17_100138) do
     t.string "reps"
     t.index ["exercise_id"], name: "index_exercises_workouts_on_exercise_id"
     t.index ["workout_id"], name: "index_exercises_workouts_on_workout_id"
+  end
+
+  create_table "hrms", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "hub", null: false
+    t.string "display_name", null: false
+    t.boolean "is_used", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "info_item_patterns", force: :cascade do |t|
@@ -457,6 +468,7 @@ ActiveRecord::Schema.define(version: 2023_06_17_100138) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "bookings", "hrms"
   add_foreign_key "bookings", "memberships"
   add_foreign_key "bookings", "training_sessions"
   add_foreign_key "bookings", "users"
