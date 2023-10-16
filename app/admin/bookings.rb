@@ -8,7 +8,7 @@ ActiveAdmin.register Booking do
   # Uncomment all parameters which should be permitted for assignment
   #
   includes :user, training_session: [:instructor]
-  permit_params :user_id, :training_session_id, :price_cents, :price_currency, :cancelled, :cancelled_at, :attended, :booked_with, :membership_id
+  permit_params :user_id, :training_session_id, :price_cents, :price_currency, :cancelled, :cancelled_at, :attended, :booked_with, :membership_id, :hrm_id
   json_editor
 
   filter :user_id, :as => :select, :collection => User.all.map {|user| [user.last_name, user.id]}, label: 'Client Last Name'
@@ -48,6 +48,9 @@ ActiveAdmin.register Booking do
     column :booked_with
     column :payment_status
     column :membership_id
+    column :hrm do |booking|
+      booking.hrm.display_name if booking.hrm.present?
+    end
     column :created_at
     column :updated_at
     actions
@@ -78,6 +81,8 @@ ActiveAdmin.register Booking do
   form do |f|
     f.semantic_errors # shows errors on :base
     f.inputs except: [:user, :booked_with]       # builds an input field for every attribute
+    # Add an input for HRM association
+    f.input :hrm, as: :select, collection: Hrm.all.map { |hrm| [hrm.display_name, hrm.id] }, include_blank: true, label: 'HRM'
     f.input :booked_with, collection: Booking::BOOKING_OPTIONS
     f.actions         # adds the 'Submit' and 'Cancel' buttons
   end

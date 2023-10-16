@@ -7,6 +7,7 @@ class Booking < ApplicationRecord
   belongs_to :user
   belongs_to :training_session
   belongs_to :membership, optional: true
+  belongs_to :hrm, optional: true
   validates :booked_with, inclusion: BOOKING_OPTIONS
   after_create  :notify_new
 
