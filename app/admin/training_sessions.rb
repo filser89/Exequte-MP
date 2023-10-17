@@ -1,6 +1,19 @@
 ActiveAdmin.register TrainingSession do
 
-  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, :location, :current_block, workout_ids: []
+  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, :location, :current_block, workout_ids: [], photos: [], videos: []
+
+  member_action :delete_training_session_photo, method: :delete do
+    begin
+      @attachment = ActiveStorage::Attachment.find(params[:id])
+      key = @attachment.blob.key
+      puts "About to remove the following picture with key: #{key}"
+      @attachment.purge
+      redirect_back(fallback_location: edit_admin_training_session_path)
+    rescue => e
+      puts "Something went wrong: #{e.message}"
+      # Handle the error, e.g., redirect to an error page or display a flash message.
+    end
+  end
 
   index do
     selectable_column
@@ -73,6 +86,12 @@ ActiveAdmin.register TrainingSession do
         f.semantic_errors # shows errors on :base
         f.inputs :price_1, :price_2, :price_3,:price_4, :price_5, :price_6, :price_7
       end
+      tab "Media" do
+        # Add a section for uploading multiple photos
+        f.input :photos, as: :file, input_html: { multiple: true }
+        # # Add a section for uploading multiple videos
+        f.input :videos, as: :file, input_html: { multiple: true }
+      end
     end
     f.actions         # adds the 'Submit' and 'Cancel' buttons
   end
@@ -113,6 +132,34 @@ ActiveAdmin.register TrainingSession do
             end
             render partial: 'admin/index'
             render partial: 'admin/template'
+        end
+      end
+      row :photos do
+        div do
+          training_session.photos.each do |img|
+            div class: "photo-item" do
+              div do
+                image_tag url_for(img), size: "200x200"
+              end
+              div do
+                link_to 'Delete', delete_training_session_photo_admin_training_session_path(img), method: :delete, data: { confirm: 'Are you sure?' }
+              end
+            end
+          end
+        end
+      end
+      row :videos do
+        div do
+          training_session.videos.each do |img|
+            div class: "video-item" do
+              div do
+                video_tag url_for(img), controls: true
+              end
+              div do
+                link_to 'Delete', delete_training_session_photo_admin_training_session_path(img), method: :delete, data: { confirm: 'Are you sure?' }
+              end
+            end
+          end
         end
       end
     end

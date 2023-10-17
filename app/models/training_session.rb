@@ -12,6 +12,8 @@ class TrainingSession < ApplicationRecord
   validates :capacity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   belongs_to :training
   belongs_to :instructor, class_name: "User", foreign_key: :user_id
+  has_many_attached :photos
+  has_many_attached :videos
   has_many :bookings
   has_many :users, through: :bookings
   has_and_belongs_to_many :workouts
@@ -35,7 +37,17 @@ class TrainingSession < ApplicationRecord
     h = standard_hash
     h[:description] = localize_description
     h[:cancel_before] = cancel_before
+    h[:photos_urls] = photos_service_urls
+    h[:videos_urls] = videos_service_urls
     h
+  end
+
+  def photos_service_urls
+    photos.map { |photo| photo.service_url }
+  end
+
+  def videos_service_urls
+    videos.map { |video| video.service_url }
   end
 
   def date_list_hash
