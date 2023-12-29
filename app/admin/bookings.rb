@@ -77,6 +77,55 @@ ActiveAdmin.register Booking do
     column :instructor
   end
 
+  show do
+    attributes_table do
+      row :id
+      row :client_first_name
+      row :client_last_name
+      row :user_id
+      row :class_time
+      row :training_session_id
+      row :class_name
+      row :subtitle
+      row :price_cents
+      row :cancelled
+      row :cancelled_at
+      row :attended
+      row :booked_with
+      row :payment_status
+      row :membership_id
+      row :hrm do |booking|
+        booking.hrm.display_name if booking.hrm.present?
+      end
+      row :created_at
+      row :updated_at
+    end
+
+    # Display the heart rate data associated with the booking
+    if resource.heart_rate_data.present?
+      panel 'Heart Rate Data' do
+        attributes_table_for resource.heart_rate_data do
+          row :id
+          row :hrm_data_raw
+          row :hrm_data
+          row :hrm_graph do |heart_rate_data|
+            if heart_rate_data.hrm_graph.present?
+              image_tag "data:image/png;base64,#{heart_rate_data.hrm_graph['base64Data']}", height: '100px'
+            end
+          end
+          row :hrm_zone_graph do |heart_rate_data|
+            if heart_rate_data.hrm_zone_graph.present?
+              image_tag "data:image/png;base64,#{heart_rate_data.hrm_zone_graph['base64Data']}", height: '100px'
+            end
+          end
+          row :created_at
+          row :updated_at
+        end
+      end
+    end
+    active_admin_comments
+  end
+
 
   form do |f|
     f.semantic_errors # shows errors on :base

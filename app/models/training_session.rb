@@ -17,6 +17,9 @@ class TrainingSession < ApplicationRecord
   has_many :bookings
   has_many :users, through: :bookings
   has_and_belongs_to_many :workouts
+  has_many :hrm_assignments
+  has_many :hrms, through: :hrm_assignments
+  has_one_attached :poster_photo
   default_scope -> { where(destroyed_at: nil) }
   scope :limited, -> {where(is_limited: true)}
   scope :not_limited, -> {where(is_limited: false)}
@@ -72,6 +75,28 @@ class TrainingSession < ApplicationRecord
       h[:workout] = show_workout
     end
     h
+  end
+
+  def show_assignment_ts
+    {
+      id: id,
+      calories: calories,
+      duration: duration,
+      instructor_name: instructor.name,
+      capacity: capacity,
+      name: localize_name,
+      subtitle: localize('subtitle'),
+      class_type: training.class_type.kind,
+      from: DateTimeService.time_24_h_m(begins_at),
+      to: DateTimeService.time_24_h_m(begins_at + duration.minutes),
+      date_locale: localize_date_long,
+      date_locale_short: localize_date_short,
+      begins_at: begins_at,
+      location: location,
+      hrm_assignments: hrm_assignments_with_user,
+      poster_photo: poster_photo.attached? ? poster_photo.service_url : "",
+      current_block: current_block
+    }
   end
 
   def standard_hash
@@ -225,6 +250,36 @@ class TrainingSession < ApplicationRecord
     end
   end
 
+  # ul do
+  #   hrm_assignments = HrmAssignment.where(training_session_id: training_session.id, assigned: true)
+  #   hrm_assignments.each do |hrm_assignment|
+  #     hrm = Hrm.find(hrm_assignment.hrm_id)
+  #     booking = training_session.bookings.find_by(hrm_assignment: hrm_assignment)
+  #     li do
+  #       "#{hrm.name} (Assigned to: #{booking.user.full_name if booking})"
+  #     end
+  #   end
+
+  def hrm_assignments_with_user
+    hrm_assignments.where(assigned: true).map do |hrm_assignment|
+      hrm = hrm_assignment.hrm
+      booking = bookings.find_by(hrm_assignment: hrm_assignment)
+      {
+        hrm_name: hrm.name,
+        hrm_display_name: hrm.display_name,
+        assigned_to: booking&.user&.workout_name,
+        user: {
+          gender: booking&.user&.gender.present? && ["Male", "Female"].include?(booking&.user.gender) ? booking&.user.gender : "Female",
+          weight: booking&.user&.current_weight || 60,
+          age: get_age(booking&.user) || 30,
+
+          avatar: booking&.user&.avatar.attached? ? booking&.user&.avatar.service_url : nil,
+        },
+        assigned: hrm_assignment.assigned
+      }
+    end
+  end
+
   def workout_current
     if workouts.present?
       puts "training session has associated workout"
@@ -232,4 +287,30 @@ class TrainingSession < ApplicationRecord
       return current_workout
     end
   end
+
+  def available_hrms
+    assigned_hrms = hrm_assignments.where(assigned: true).pluck(:hrm_id)
+    Hrm.where.not(id: assigned_hrms)
+  end
+
+  def ends_at
+    self.begins_at + self.duration.minutes
+  end
+
+  def get_age(user)
+    return nil if user.birthday.nil? # Return nil if there's no birthdate
+    birthdate = user.birthday.to_date
+    current_date = Date.today
+    age = current_date.year - birthdate.year
+    if current_date.month < birthdate.month || (current_date.month == birthdate.month && current_date.day < birthdate.day)
+      age -= 1
+    end
+    puts "age:#{age}"
+    if age == 0
+      return nil
+    else
+      return age
+    end
+  end
+
 end

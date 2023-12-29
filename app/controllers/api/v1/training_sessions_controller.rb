@@ -3,8 +3,8 @@ module Api
     class TrainingSessionsController < Api::BaseController
       before_action :find_training_session, only: [:show, :add_user_to_queue, :session_attendance, :cancel, :change_capacity]
       before_action :choose_date_range, only: %i[index dates_list]
-      skip_before_action :authenticate_api_key!, only: [:current, :current_switch_block]
-      skip_before_action :authenticate_user_from_token!, only: [:current, :current_switch_block]
+      skip_before_action :authenticate_api_key!, only: [:current, :current_hrm, :current_switch_block]
+      skip_before_action :authenticate_user_from_token!, only: [:current, :current_hrm, :current_switch_block]
 
 
       def index
@@ -13,6 +13,12 @@ module Api
 
       def sessions
         date_str = params[:date]
+        # Check if date_str is nil
+        if date_str.nil? || date_str.empty?
+          empty_sessions = []
+          render_success(empty_sessions)
+          return
+        end
         date_str[-6] = '+'
         date = date_str.to_datetime
         puts "Date: #{date}"
@@ -176,7 +182,44 @@ module Api
         render_success(current_ts)
       end
 
-      def current_switch_block
+      def current_hrm_old
+        location = params[:location]
+        current_session_time_start_bottom_range = DateTime.now - 60.minutes
+        current_session_time_start_top_range = DateTime.now + 60.minutes
+        current_session_time_start_range = (current_session_time_start_bottom_range..current_session_time_start_top_range)
+        puts "--------#{current_session_time_start_range}---------"
+
+        # Fetch current training sessions with hrm_assignments
+        current_sessions_with_hrm = TrainingSession.includes(:hrm_assignments)
+                                                   .where(
+                                                     begins_at: current_session_time_start_range,
+                                                     location: location.present? ? location : '',
+                                                     cancelled: false
+                                                   )
+
+        current_ts = current_sessions_with_hrm.map(&:show_assignment_ts)
+        puts current_ts
+        render_success(current_ts)
+      end
+
+      def current_hrm
+        location = params[:location]
+        current_time = DateTime.now
+        # Fetch current training sessions with hrm_assignments
+        current_sessions_with_hrm = TrainingSession.includes(:hrm_assignments)
+                                                   .where(
+                                                     "begins_at <= ? AND ? <= (begins_at + duration * interval '1 minute') AND location = ? AND cancelled = ?",
+                                                     current_time,
+                                                     current_time,
+                                                     location.present? ? location : '',
+                                                     false
+                                                   )
+        current_ts = current_sessions_with_hrm.map(&:show_assignment_ts)
+        puts current_ts
+        render_success(current_ts)
+      end
+
+      def current_switch_block_old
         block_name = params[:name]
         location = params[:location]
         current_session_time_start_bottom_range = DateTime.now - 60.minutes
@@ -189,7 +232,7 @@ module Api
           cancelled: false)
         if current_ts.present?
           puts "==================training session #{current_ts.name}"
-          puts "==================training session #{current_ts.name}  had this training capacity  #{current_ts.current_block}, changing to #{block_name} ==============="
+          puts "==================training session #{current_ts.name}  had this training block  #{current_ts.current_block}, changing to #{block_name} ==============="
           current_ts.current_block = block_name
           if current_ts.save
             puts "=========training session block updated successfully========"
@@ -197,6 +240,44 @@ module Api
           else
             render_error({ message: 'Something went wrong' })
           end
+        else
+          puts "==================no active training session found"
+        end
+      end
+
+      def current_switch_block
+        block_name = params[:name]
+        location = params[:location]
+        current_time = DateTime.now
+
+        # Fetch current training sessions with hrm_assignments
+        current_ts = TrainingSession.where("begins_at <= ? AND ? <= (begins_at + duration * interval '1 minute') AND location = ? AND cancelled = ?",
+                                           current_time,
+                                           current_time,
+                                           location.present? ? location : '',
+                                           false
+        ).first  # Use .first to get a single record
+
+        if current_ts.present?
+          puts "==================training session #{current_ts.name}"
+          puts "==================training session #{current_ts.name}  had this training block  #{current_ts.current_block}, changing to #{block_name} ==============="
+
+          # Check if current_ts has the attribute current_block
+          if current_ts.respond_to?(:current_block)
+            current_ts.current_block = block_name
+
+            if current_ts.save
+              puts "=========training session block updated successfully========"
+              render_success({msg: "block changed"})
+            else
+              render_error({ message: 'Something went wrong' })
+            end
+          else
+            puts "==================current_ts does not respond to current_block"
+            render_error({ message: 'current_ts does not respond to current_block' })
+          end
+        else
+          puts "==================no active training session found"
         end
       end
 
@@ -234,6 +315,7 @@ module Api
         h = training_session.standard_hash
         h[:price] = training_session_price(training_session)
         h[:btn_pattern] = btn_pattern(training_session)
+        h[:hrm] = hrm_assigned(training_session)
         h[:access_options] = access_options(training_session)
         membership_to_use = usable_membership(training_session)
         begin
@@ -272,6 +354,20 @@ module Api
         kind = training_session.class_kind
         prices = current_user.prices
         training_session.attributes[prices[kind]].fdiv(100)
+      end
+
+      def hrm_assigned(training_session)
+        booked = current_user.bookings.with_ts.any? { |b| b.training_session.id == training_session.id && !b.cancelled && b.settled? }
+        if booked
+          current_user.bookings.with_ts.each do | b|
+            if b.training_session.id == training_session.id && !b.cancelled && b.settled?
+              if b.hrm
+                return b.hrm
+              end
+              break
+            end
+          end
+        end
       end
 
       def btn_pattern(training_session)

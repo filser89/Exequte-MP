@@ -58,6 +58,7 @@ Rails.application.routes.draw do
           get :instructor_sessions
           get :admin_sessions
           get :current
+          get :current_hrm
           get :current_switch_block
           get :sessions
         end
@@ -91,6 +92,15 @@ Rails.application.routes.draw do
       resources :workouts, only: [:index, :show] do
         member do
           get :show_all
+        end
+      end
+
+      # HRM
+      resources :hrms, only: [:index, :show] do
+        collection do
+          get :get_data
+          get :get_graph
+          get :get_data_graph
         end
       end
 

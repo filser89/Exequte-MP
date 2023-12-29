@@ -1,6 +1,6 @@
 ActiveAdmin.register TrainingSession do
 
-  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, :location, :current_block, workout_ids: [], photos: [], videos: []
+  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, :location, :poster_photo, :current_block, workout_ids: [], photos: [], videos: []
 
   member_action :delete_training_session_photo, method: :delete do
     begin
@@ -91,6 +91,7 @@ ActiveAdmin.register TrainingSession do
         f.input :photos, as: :file, input_html: { multiple: true }
         # # Add a section for uploading multiple videos
         f.input :videos, as: :file, input_html: { multiple: true }
+        f.input :poster_photo, as: :file
       end
     end
     f.actions         # adds the 'Submit' and 'Cancel' buttons
@@ -122,6 +123,11 @@ ActiveAdmin.register TrainingSession do
       row :price_1
       row :location
       row :current_block
+      row :poster_photo do |ts|
+        if ts.poster_photo.attached?
+          image_tag ts.poster_photo, width: 200
+        end
+      end
       row :template do |training_session|
         if training_session.workout_current.present?
             a 'Download Template', class: 'clickable-btn', 'data-workout-id': training_session.workout_current.id, 'data-workout-name': training_session.workout_current.name, onclick: 'downloadWorkoutTemplate(this);return false;' do
@@ -158,6 +164,33 @@ ActiveAdmin.register TrainingSession do
               div do
                 link_to 'Delete', delete_training_session_photo_admin_training_session_path(img), method: :delete, data: { confirm: 'Are you sure?' }
               end
+            end
+          end
+        end
+      end
+      row "Assigned HRMs" do |training_session|
+        ul do
+          hrm_assignments = HrmAssignment.where(training_session_id: training_session.id, assigned: true)
+          hrm_assignments.each do |hrm_assignment|
+            hrm = Hrm.find(hrm_assignment.hrm_id)
+            booking = training_session.bookings.find_by(hrm_assignment: hrm_assignment)
+            li do
+              "#{hrm.name} (Assigned to: #{booking.user.full_name if booking})"
+            end
+          end
+        end
+      end
+
+
+      row "Free HRM" do |training_session|
+        ul do
+          # Get HRMs associated with the training session
+          assigned_hrm_ids = training_session.hrm_assignments.where(assigned: true).pluck(:hrm_id)
+          # Find unassigned HRMs
+          unassigned_hrms = Hrm.where.not(id: assigned_hrm_ids)
+          unassigned_hrms.each do |hrm|
+            li do
+              hrm.name
             end
           end
         end

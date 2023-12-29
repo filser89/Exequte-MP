@@ -58,6 +58,16 @@ module Api
               puts  "===================CLASS-PACK MEMBERSHIP NOT FOUND========================="
             end
           end
+          #assign HRM devices
+          begin
+          if @booking.payment_status == 'none'
+            puts  "===================ASSIGNING HRM========================="
+            @booking.assign_hrm_to_training_session
+            puts  "===================HRM ASSIGNED========================="
+          end
+          rescue => e
+            puts  "===================ERROR ASSIGNING HRM========================="
+          end
           response = {booking: @booking.standard_hash}
           response[:res] = @booking.init_payment if @booking.booked_with == "drop-in"
           render_success(response)
@@ -80,6 +90,12 @@ module Api
           @booking.update(payment_status: 'paid', payment: result.to_json)
           puts "===================BOOKING UPDATED========================="
           p @booking
+          begin
+            puts  "===================ASSIGNING HRM========================="
+            @booking.assign_hrm_to_training_session
+          rescue => e
+              puts  "===================ERROR ASSIGNING HRM========================="
+          end
           render xml: { return_code: 'SUCCESS', return_msg: 'OK' }.to_xml(root: 'xml', dasherize: false)
         else
           puts "===================SIGNATURE ERROR========================="
@@ -182,6 +198,12 @@ module Api
             end
           end
           TrainingSession.notify_queue(@booking.training_session)
+          begin
+            puts  "===================REMOVING HRM AFTER CANCELLATION========================="
+            @booking.unassign_hrm_to_training_session
+            puts  "===================HRM ASSIGNED REMOVED========================="
+          rescue => e
+          end
           render_success({msg: "Cancelled"})
         else
           # render error

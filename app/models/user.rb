@@ -217,4 +217,15 @@ class User < ApplicationRecord
     self.name = DEFAULT_NAME if self.name.blank?
   end
 
+  def age
+    return nil if birthday.nil? # Return nil if there's no birthdate
+    birthdate = birthday.to_date
+    current_date = Date.today
+    age = current_date.year - birthdate.year
+    if current_date.month < birthdate.month || (current_date.month == birthdate.month && current_date.day < birthdate.day)
+      age -= 1
+    end
+    age
+  end
+
 end

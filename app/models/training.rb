@@ -16,6 +16,7 @@ class Training < ApplicationRecord
   has_and_belongs_to_many :workouts
   accepts_nested_attributes_for :membership_trainings
   has_one_attached :photo
+  has_one_attached :poster_photo
   default_scope -> { where(destroyed_at: nil) }
   scope :limited, -> {where(is_limited: true)}
   scope :not_limited, -> {where(is_limited: false)}
