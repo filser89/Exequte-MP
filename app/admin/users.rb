@@ -7,7 +7,7 @@ ActiveAdmin.register User do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :email, :encrypted_password, :reset_password_token, :reset_password_sent_at, :remember_created_at, :name, :city, :wechat, :phone, :gender, :admin, :wx_open_id, :wx_session_key, :first_name, :last_name, :workout_name, :emergency_name, :emergency_phone, :birthday, :nationality, :profession, :profession_activity_level, :favorite_song, :music_styles, :sports, :favorite_food, :voucher_count, :instructor, :instructor_bio, :cn_instructor_bio, :height, :current_weight, :current_body_fat, :current_shapes, :target, :target_weight, :target_body_fat, :target_shapes, :mp_email, :instructor_photo, :waiver_signed, :waiver_signed_at  #, :password, :password_confirmation
+  permit_params :email, :encrypted_password, :reset_password_token, :reset_password_sent_at, :remember_created_at, :name, :city, :wechat, :phone, :gender, :admin, :wx_open_id, :wx_session_key, :first_name, :last_name, :workout_name, :emergency_name, :emergency_phone, :birthday, :nationality, :profession, :profession_activity_level, :favorite_song, :music_styles, :sports, :favorite_food, :voucher_count, :instructor, :instructor_bio, :cn_instructor_bio, :height, :current_weight, :current_body_fat, :current_shapes, :target, :target_weight, :target_body_fat, :target_shapes, :mp_email, :instructor_photo, :waiver_signed, :waiver_signed_at, :avatar
   #
   # or
   #
@@ -31,9 +31,84 @@ ActiveAdmin.register User do
   # end
 
 
+  show do
+    tabs do
+      tab "Primary" do
+        attributes_table do
+          row :id
+          row :first_name
+          row :last_name
+          row :workout_name
+          row :wechat
+          row :phone
+          row :mp_email
+          row :emergency_name
+          row :emergency_phone
+          row :voucher_count
+          row :instructor
+          row :admin
+          row :waiver_signed
+          row :waiver_signed_at
+        end
+      end
+      tab "Secondary" do
+        attributes_table do
+          row :birthday
+          row :nationality
+          row :profession
+          row :profession_activity_level
+          row :favorite_song
+          row :favorite_food
+        end
+      end
+      tab "Instructor" do
+        attributes_table do
+          row :instructor_bio
+          row :cn_instructor_bio
+          row :instructor_photo do |user|
+            if user.instructor_photo.attached?
+              image_tag url_for(user.instructor_photo), size: "50x50"
+            else
+              "No Avatar"
+            end
+          end
+        end
+      end
+      tab "Body" do
+        attributes_table do
+          row :height
+          row :current_weight
+          row :current_body_fat
+          row :current_shapes
+          row :target
+          row :target_weight
+          row :target_body_fat
+        end
+      end
+      tab "Avatar" do
+        attributes_table do
+          row :avatar do |user|
+            if user.avatar.attached?
+              image_tag url_for(user.avatar), size: "50x50"
+            else
+              "No Avatar"
+            end
+          end
+        end
+      end
+    end
+  end
+
   index do
     selectable_column
     column :id
+    column :avatar do |user|
+      if user.avatar.attached?
+        image_tag url_for(user.avatar), size: "50x50"
+      else
+        "No Avatar"
+      end
+    end
     column :first_name
     column :last_name
     column :gender
@@ -79,6 +154,11 @@ ActiveAdmin.register User do
           f.input :target, collection: User::TARGETS
         end
         f.inputs :target_weight, :target_body_fat
+      end
+      tab "Avatar" do
+        f.inputs do
+          f.input :avatar, as: :file, hint: f.object.avatar.attached? ? image_tag(url_for(f.object.avatar)) : content_tag(:span, "No avatar yet")
+        end
       end
     end
     f.actions         # adds the 'Submit' and 'Cancel' buttons

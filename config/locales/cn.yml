@@ -55,6 +55,8 @@ zh-CN:
       check_other_dates: "查询其他日期"
       book_now: "预约"
       confirm_date: "确认日期"
+      hrm_checkin: "为了收HRM，请上课10分钟前在前台登记"
+      hrm_data: "心脏数据"
     booking:
       access_options: "预约方式"
       join_for_free: "免费参加"
@@ -133,6 +135,7 @@ zh-CN:
       time: "时间: "
       cancel_class: "取消预约"
       currency: "元"
+      hrm_checkin: "为了收HRM，请上课10分钟前在前台登记"
     profile:
       customer_service: "联系我们!"
       welcome: "Welcome to eXequte"
@@ -214,3 +217,7 @@ zh-CN:
     customer-service:
       scan: "长按添加客服"
       back: "返回"
+    hrm-data:
+      chart: "表"
+      refresh: "刷新"
+

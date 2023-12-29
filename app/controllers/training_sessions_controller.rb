@@ -52,6 +52,7 @@ class TrainingSessionsController < ApplicationController
       else
         @training_session.cancel_before = permitted_params[:cancel_before]
       end
+      @training_session.poster_photo = @training.poster_photo
       if @training_session.save
         create_for_weeks(params[:weeks], @training_session)
         redirect_to @training_session
@@ -95,7 +96,8 @@ class TrainingSessionsController < ApplicationController
         enforce_cancellation_policy: training_session.enforce_cancellation_policy,
         note: training_session.note,
         late_booking_minutes: training_session.late_booking_minutes,
-        is_limited: training_session.is_limited
+        is_limited: training_session.is_limited,
+        poster_photo: training_session.poster_photo
       )
     end
   end

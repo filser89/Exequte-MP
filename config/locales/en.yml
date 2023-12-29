@@ -86,6 +86,7 @@ en:
       check_other_dates: "Check other dates"
       book_now: "Book Now"
       confirm_date: "Confirm Date"
+      hrm_checkin: "Register at reception 10 min before class to collect the HRM"
     booking:
       access_options: "Access Options"
       join_for_free: "Join for free"
@@ -165,6 +166,8 @@ en:
       address: "Address: "
       cancel_class: "CANCEL CLASS"
       currency: " RMB"
+      hrm_checkin: "Register at reception 10 min before class to collect the HRM"
+      hrm_data: "DATA"
     profile:
       customer_service: "Contact Us!"
       welcome: "Welcome to eXequte"
@@ -246,3 +249,6 @@ en:
     customer-service:
       scan: "Press and hold to add our customer service"
       back: "Back"
+    hrm-data:
+      chart: "chart"
+      refresh: "Refresh"

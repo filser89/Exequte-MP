@@ -74,7 +74,7 @@
   });
 
   function switchBlock(blockName) {
-    fetch('http://0.0.0.0:3000/api/v1/training_sessions/current_switch_block?name=' + blockName)
+    fetch('https://exequte.cn/api/v1/training_sessions/current_switch_block?name=' + blockName)
             .then(response => response.json())
             .then(data => {
               console.log(data);
@@ -97,7 +97,7 @@
   }
 
   function loadCurrentWorkout() {
-    fetch('http://0.0.0.0:3000/api/v1/training_sessions/current')
+    fetch('https://exequte.cn/api/v1/training_sessions/current')
             .then(response => response.json())
             .then(data => {
               showCurrentWorkout(data.data);

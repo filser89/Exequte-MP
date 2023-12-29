@@ -8,8 +8,15 @@ class Booking < ApplicationRecord
   belongs_to :training_session
   belongs_to :membership, optional: true
   belongs_to :hrm, optional: true
+  belongs_to :hrm_assignment, class_name: 'HrmAssignment', optional: true
+
+  has_one :heart_rate_data, dependent: :destroy
+  has_one_attached :heart_rate_data_picture
+
   validates :booked_with, inclusion: BOOKING_OPTIONS
   after_create  :notify_new
+  # after_update :unassign_hrm_to_training_session, if: :cancelled_changed?
+
 
   default_scope -> { where(destroyed_at: nil) }
   scope :settled, -> { where(payment_status: SETTLED_PAYMENTS) }
@@ -73,7 +80,8 @@ class Booking < ApplicationRecord
       can_cancel: can_cancel?,
       first_booking: first_booking?,
       status: status,
-      status_locale: localize_status
+      status_locale: localize_status,
+      hrm: hrm
     }
   end
 
@@ -138,6 +146,31 @@ class Booking < ApplicationRecord
     when "no show"
       return I18n.locale == :'zh-CN' ? "没上课了" : "no show"
     end
+  end
+
+  def assign_hrm_to_training_session
+    # Check if an HRM is already assigned to this booking
+    return if hrm
+    available_hrms = training_session.available_hrms
+    puts "Available HRMS:"
+    available_hrms.each do |hrm|
+      puts hrm.name
+    end
+
+    if available_hrms.any?
+      hrm = available_hrms.first
+      puts "Inside #{hrm.name}"
+      hrm_assignment = HrmAssignment.create(hrm: hrm, training_session: training_session, assigned: true)
+      update(hrm: hrm, hrm_assignment: hrm_assignment)
+    end
+  end
+
+
+  def unassign_hrm_to_training_session
+    # Check if an HRM is assigned to this booking
+    return unless hrm_assignment
+    hrm_assignment.update(assigned: false)
+    update(hrm_assignment: nil)
   end
 
 end

@@ -233,7 +233,7 @@
   function checkCurrentBlock() {
     // Query the API for the current session
 
-    fetch('http://0.0.0.0:3000/api/v1/training_sessions/current')
+    fetch('https://exequte.cn/api/v1/training_sessions/current')
             .then(response => response.json())
             .then(data => {
               const session = data.data[0];

@@ -37,7 +37,7 @@ ActiveAdmin.register Training do
           ul do
             workout.exercises_workouts.each do |exercise_workout|
               li do
-                "#{exercise_workout.exercise.name}: #{exercise_workout.reps_gold} reps, Time: #{exercise_workout.time_limit.present? ? exercise_workout.time_limit  : 'no time limit'}"
+                "#{exercise_workout.exercise&.name}: #{exercise_workout.reps_gold} reps, Time: #{exercise_workout.time_limit.present? ? exercise_workout.time_limit : 'no time limit'}"
               end
             end
           end

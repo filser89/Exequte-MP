@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_10_092752) do
+ActiveRecord::Schema.define(version: 2023_12_13_085607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,6 +76,8 @@ ActiveRecord::Schema.define(version: 2023_10_10_092752) do
     t.jsonb "payment"
     t.datetime "destroyed_at"
     t.bigint "hrm_id"
+    t.bigint "hrm_assignment_id"
+    t.index ["hrm_assignment_id"], name: "index_bookings_on_hrm_assignment_id"
     t.index ["hrm_id"], name: "index_bookings_on_hrm_id"
     t.index ["membership_id"], name: "index_bookings_on_membership_id"
     t.index ["training_session_id"], name: "index_bookings_on_training_session_id"
@@ -144,6 +146,28 @@ ActiveRecord::Schema.define(version: 2023_10_10_092752) do
     t.string "reps"
     t.index ["exercise_id"], name: "index_exercises_workouts_on_exercise_id"
     t.index ["workout_id"], name: "index_exercises_workouts_on_workout_id"
+  end
+
+  create_table "heart_rate_data", force: :cascade do |t|
+    t.bigint "booking_id"
+    t.jsonb "hrm_data_raw", default: [], null: false
+    t.jsonb "hrm_data", default: {}, null: false
+    t.jsonb "hrm_graph", default: {}, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.jsonb "hrm_zone_graph", default: {}, null: false
+    t.jsonb "hrm_combined_graph", default: {}, null: false
+    t.index ["booking_id"], name: "index_heart_rate_data_on_booking_id"
+  end
+
+  create_table "hrm_assignments", force: :cascade do |t|
+    t.bigint "hrm_id", null: false
+    t.bigint "training_session_id", null: false
+    t.boolean "assigned", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["hrm_id"], name: "index_hrm_assignments_on_hrm_id"
+    t.index ["training_session_id"], name: "index_hrm_assignments_on_training_session_id"
   end
 
   create_table "hrms", force: :cascade do |t|
@@ -468,10 +492,14 @@ ActiveRecord::Schema.define(version: 2023_10_10_092752) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "bookings", "hrm_assignments"
   add_foreign_key "bookings", "hrms"
   add_foreign_key "bookings", "memberships"
   add_foreign_key "bookings", "training_sessions"
   add_foreign_key "bookings", "users"
+  add_foreign_key "heart_rate_data", "bookings"
+  add_foreign_key "hrm_assignments", "hrms"
+  add_foreign_key "hrm_assignments", "training_sessions"
   add_foreign_key "info_items", "info_item_patterns"
   add_foreign_key "info_items", "infos"
   add_foreign_key "memberships", "membership_types"
