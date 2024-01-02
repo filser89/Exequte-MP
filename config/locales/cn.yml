@@ -11,6 +11,19 @@ zh-CN:
       wx_app_error: "Wechat MP APP key or secret missing"
       tencent_error: "Tencent error or JS code expired"
   miniprogram:
+    home:
+      sign_up: '注册'
+      #coming-up component
+      coming_up: "COMING UP"
+      no_sessions_today: "No sessions today"
+      min: " min"
+      kcal: " kCal"
+      booked: "BOOKED"
+      commit: "COMMIT"
+      in_queue: "IN QUEUE"
+      queue_up: "QUEUE UP"
+    wallet:
+      sign_up: '注册'
     about:
       coach: "教练 "
       address: "地址: "
