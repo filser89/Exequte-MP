@@ -42,6 +42,21 @@ en:
       wx_app_error: "Wechat MP APP key or secret missing"
       tencent_error: "Tencent error or JS code expired"
   miniprogram:
+    home:
+      sign_up: 'SIGN UP'
+      sign_up_explanation: 'Click here to sign up with eXequte and start your new transformational journey.'
+      #coming-up component
+      coming_up: "COMING UP"
+      no_sessions_today: "No sessions today"
+      min: " min"
+      kcal: " kCal"
+      booked: "BOOKED"
+      commit: "COMMIT"
+      in_queue: "IN QUEUE"
+      queue_up: "QUEUE UP"
+    wallet:
+      sign_up: 'SIGN UP'
+      sign_up_explanation: 'Click here to sign up with eXequte and start your new transformational journey.'
     about:
       coach: "Coach "
       address: "Address: "

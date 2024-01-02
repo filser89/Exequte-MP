@@ -88,6 +88,9 @@ Rails.application.routes.draw do
       # INFOS
       resources :infos, only: [:index]
 
+      # SETTINGS
+      resources :settings, only: [:index]
+
       # WORKOUTS
       resources :workouts, only: [:index, :show] do
         member do
