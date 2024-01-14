@@ -24,6 +24,11 @@ zh-CN:
       queue_up: "QUEUE UP"
     wallet:
       sign_up: '注册'
+      topup: '充值余额'
+      current_credits: "余额"
+      current_card: "会员等级"
+      active_until: "有效到"
+      no_credits: "没卡的钱包是难过的钱包"
     about:
       coach: "教练 "
       address: "地址: "
@@ -49,6 +54,8 @@ zh-CN:
       cancellation_2: "小时之内"
       date: "日期: "
       price: "费用: "
+      currency: "元"
+      credits: "金币"
       time: "时间: "
       booked: "预约了"
       commit: "预约"
@@ -95,6 +102,9 @@ zh-CN:
       date: "日期: "
       price: "费用: "
       time: "时间: "
+      credits: "金币"
+      insufficient_credit: "余额不够，点出充值"
+      upgrade_desc: "升级会员解锁这个预订！"
     booking-confirmation:
       class_booked: "预约了！"
       come_in_advance: "请提前 15 分钟来！"
@@ -112,6 +122,7 @@ zh-CN:
       time: "时间: "
       address: "地址: "
       xq_address: "延平路425号一楼（昌平路7号线，5号出口）"
+      book_another: "继续预订更多的课！"
     my-classes:
       upcoming: "即将"
       history: "过去"
@@ -170,6 +181,7 @@ zh-CN:
       classes_left: "剩预约"
       classes_left_today: "当天剩预约"
       active_until: "有效到"
+      privilege_label: "会员等级"
     profile-update:
       waiver_title: "知情同意书"
       waiver_form: "我，下面提到的参与者，已经同意参加 ExeQute 训练，\

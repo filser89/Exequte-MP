@@ -11,6 +11,20 @@ class ApplicationRecord < ActiveRecord::Base
     I18n.locale == :'zh-CN' ? cn_name : name
   end
 
+  def localize_description
+    return unless description && cn_description
+
+    localized_description = I18n.locale == :'zh-CN' ? cn_description : description
+
+    # Check for the presence of "\n" in the localized_description
+    if localized_description.include?("\\n")
+      localized_description.split("\\n")
+    else
+      [localized_description]
+    end
+  end
+
+
   def created_at_mndt
     created_at.midnight.to_datetime
   end

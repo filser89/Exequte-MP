@@ -6,7 +6,7 @@ ActiveAdmin.register Membership do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :membership_type_id, :user_id, :name, :cn_name, :price_cents, :price_currency, :start_date, :end_date, :smoothie, :vouchers, :is_class_pack, :is_trial, :is_limited, :bookings_per_day,  :payment_status
+  permit_params :membership_type_id, :user_id, :name, :cn_name, :price_cents, :price_currency, :start_date, :end_date, :smoothie, :vouchers, :is_class_pack, :is_trial, :is_limited, :credits, :book_before, :description, :cn_description, :settings, :is_unlimited, :bookings_per_day,  :payment_status
   #
   # or
   #
@@ -33,6 +33,11 @@ ActiveAdmin.register Membership do
       f.input :is_class_pack
       f.input :is_trial
       f.input :is_limited
+      f.input :credits
+      f.input :book_before
+      f.input :settings
+      f.input :description
+      f.input :cn_description
       f.input :bookings_per_day
       f.input :payment_status
     end

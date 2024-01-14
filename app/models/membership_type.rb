@@ -25,11 +25,16 @@ class MembershipType < ApplicationRecord
       name: localize_name,
       duration: duration,
       price: price.to_i,
+      credits: credits,
       vouchers: vouchers,
+      book_before: book_before,
+      description: localize_description,
       is_class_pack: is_class_pack,
       bookings_per_day: bookings_per_day,
       is_trial: is_trial,
-      unlimited: unlimited?
+      unlimited: unlimited?,
+      settings: settings,
+      is_unlimited: is_unlimited
     }
   end
 

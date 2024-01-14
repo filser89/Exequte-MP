@@ -1,7 +1,7 @@
 class Booking < ApplicationRecord
   include WxPayable
   include MessageScheduler
-  BOOKING_OPTIONS = [nil, 'free', 'drop-in', 'membership', 'voucher', 'class-pack']
+  BOOKING_OPTIONS = [nil, 'free', 'drop-in', 'membership', 'voucher', 'class-pack', 'credits']
   SETTLED_PAYMENTS = %w[paid none]
   monetize :price_cents
   belongs_to :user
@@ -34,6 +34,8 @@ class Booking < ApplicationRecord
   scope :today, -> {with_ts.settled.active.references(:training_sessions)
                              .where('training_sessions.begins_at >= ? and training_sessions.begins_at <= ?', DateTime.now.midnight, Time.now.end_of_day)}
 
+  scope :with_hrm, -> { where.not(hrm_id: nil) }
+
   def settled?
     payment_status.in?(SETTLED_PAYMENTS)
   end
@@ -46,6 +48,14 @@ class Booking < ApplicationRecord
   end
 
   def history_hash
+    h = show_hash
+    h[:instructor_id] = training_session.instructor.id
+    h[:session][:date] = DateTimeService.date_d_m_y(training_session.begins_at)
+    # h[:status] = status
+    h
+  end
+
+  def hrm_hash
     h = show_hash
     h[:instructor_id] = training_session.instructor.id
     h[:session][:date] = DateTimeService.date_d_m_y(training_session.begins_at)
@@ -169,8 +179,68 @@ class Booking < ApplicationRecord
   def unassign_hrm_to_training_session
     # Check if an HRM is assigned to this booking
     return unless hrm_assignment
-    hrm_assignment.update(assigned: false)
-    update(hrm_assignment: nil)
+
+    begin
+      # Save the current hrm_assignment ID
+      hrm_assignment_id = hrm_assignment.id
+
+      # Set the hrm_assignment to nil
+      self.hrm_assignment = nil
+
+      # Save the booking to disassociate the hrm_assignment
+      save!
+
+      # Destroy the original HrmAssignment record
+      HrmAssignment.destroy(hrm_assignment_id)
+    rescue StandardError => e
+      puts "Error while unassigning HRM: #{e.message}"
+    end
   end
 
+  def set_heart_rate_data(force)
+    begin
+    start_timestamp = training_session.begins_at - 8.hours
+    end_timestamp = training_session.ends_at - 8.hours
+    bandId = hrm.id
+    # Create an instance of HrmService
+    hrm_service = HrmService.new
+    # Call the fetch_heart_rate_data method
+    gender = user&.gender.present? && ["Male", "Female"].include?(user&.gender) ? user&.gender : "Female"
+    weight = user&.current_weight || 60
+    age = user&.age || 30
+
+    puts "setting the heart rate data (values) for user #{user&.workout_name} gender: #{gender},weight: #{weight}, age:#{age}"
+    puts "start_timestamp: #{start_timestamp},end_timestamp: #{end_timestamp}"
+
+    # Check if heart rate data already exists for this booking and user (unless flag force = true, in that case force refresh)
+    if heart_rate_data.nil? || force == true
+      puts "calling api"
+      heart_rate_data = hrm_service.fetch_heart_rate_values(
+        bandId,
+        start_timestamp,
+        end_timestamp,
+        gender,
+        weight,
+        age
+      )
+
+      if heart_rate_data["error"]
+        puts "HRM api returned error, not saving in DB"
+        puts "#{heart_rate_data["error"]}"
+      else
+        heart_rate_data_attributes = {
+          hrm_data_raw: heart_rate_data['hrm_data_raw'],
+          hrm_data: heart_rate_data['hrm_data']
+        }
+        # Create and associate HeartRateData with Booking
+        self.create_heart_rate_data!(heart_rate_data_attributes)
+        save!
+      end
+    end
+    rescue => e
+      puts "error saving heart rate data"
+      puts e
+    end
+  end
 end
+

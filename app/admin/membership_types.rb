@@ -5,7 +5,7 @@ ActiveAdmin.register MembershipType do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :name, :duration, :cn_name, :price_cents, :price_currency, :smoothie, :active, :vouchers, :is_class_pack, :is_trial, :is_limited, :bookings_per_day, training_ids: []
+  permit_params :name, :duration, :cn_name, :price_cents, :price_currency, :smoothie, :active, :vouchers, :is_class_pack, :is_trial, :is_limited, :bookings_per_day, :credits, :book_before, :description, :cn_description,  :settings, :is_unlimited, training_ids: []
 
   form do |f|
     f.semantic_errors # shows errors on :base

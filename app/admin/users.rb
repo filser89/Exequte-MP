@@ -7,7 +7,7 @@ ActiveAdmin.register User do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :email, :encrypted_password, :reset_password_token, :reset_password_sent_at, :remember_created_at, :name, :city, :wechat, :phone, :gender, :admin, :wx_open_id, :wx_session_key, :first_name, :last_name, :workout_name, :emergency_name, :emergency_phone, :birthday, :nationality, :profession, :profession_activity_level, :favorite_song, :music_styles, :sports, :favorite_food, :voucher_count, :instructor, :instructor_bio, :cn_instructor_bio, :height, :current_weight, :current_body_fat, :current_shapes, :target, :target_weight, :target_body_fat, :target_shapes, :mp_email, :instructor_photo, :waiver_signed, :waiver_signed_at, :avatar
+  permit_params :email, :encrypted_password, :reset_password_token, :reset_password_sent_at, :remember_created_at, :name, :city, :wechat, :phone, :gender, :admin, :wx_open_id, :wx_session_key, :first_name, :last_name, :workout_name, :emergency_name, :emergency_phone, :birthday, :nationality, :profession, :profession_activity_level, :favorite_song, :music_styles, :sports, :favorite_food, :voucher_count, :instructor, :instructor_bio, :cn_instructor_bio, :height, :current_weight, :current_body_fat, :current_shapes, :target, :target_weight, :target_body_fat, :target_shapes, :mp_email, :instructor_photo, :waiver_signed, :waiver_signed_at, :avatar, :credits
   #
   # or
   #
@@ -38,6 +38,7 @@ ActiveAdmin.register User do
           row :id
           row :first_name
           row :last_name
+          row :credits
           row :workout_name
           row :wechat
           row :phone
@@ -111,6 +112,7 @@ ActiveAdmin.register User do
     end
     column :first_name
     column :last_name
+    column :credits
     column :gender
     column :mp_email
     column :phone
@@ -131,7 +133,7 @@ ActiveAdmin.register User do
     tabs do
       tab "Primary" do
         f.semantic_errors # shows errors on :base
-        f.inputs :first_name, :last_name, :workout_name, :wechat, :phone, :mp_email, :emergency_name, :emergency_phone, :voucher_count, :instructor, :admin, :waiver_signed, :waiver_signed_at #, :password, :password_confirmation # builds an input field for every attribute
+        f.inputs :first_name, :last_name, :credits, :workout_name, :wechat, :phone, :mp_email, :emergency_name, :emergency_phone, :voucher_count, :instructor, :admin, :waiver_signed, :waiver_signed_at #, :password, :password_confirmation # builds an input field for every attribute
         # , :password, :password_confirmation
         f.inputs do
           f.input :gender, collection: User::GENDERS

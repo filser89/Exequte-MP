@@ -56,7 +56,12 @@ en:
       queue_up: "QUEUE UP"
     wallet:
       sign_up: 'SIGN UP'
+      topup: 'TOP UP YOUR CREDITS'
       sign_up_explanation: 'Click here to sign up with eXequte and start your new transformational journey.'
+      current_credits: "CURRENT CREDITS"
+      current_card: "CARDS"
+      active_until: "Active until"
+      no_credits: "An empty wallet is a sad wallet."
     about:
       coach: "Coach "
       address: "Address: "
@@ -82,6 +87,8 @@ en:
       cancellation_2: " hours in advance."
       date: "Date: "
       price: "Price: "
+      currency: "元"
+      credits: "Credits"
       time: "Time: "
       booked: "BOOKED"
       commit: "COMMIT"
@@ -127,12 +134,16 @@ en:
       date: "Date: "
       price: "Price: "
       time: "Time: "
+      credits: "CREDITS"
+      insufficient_credit: "Not enough credits, click here to Top Up"
+      upgrade_desc: "Upgrade your membership to unlock this early booking!"
     booking-confirmation:
       class_booked: "Class Booked!"
       come_in_advance: "Please come 15 min in advance!"
       follow_account: "Follow the official account to receive class notifications for bookings."
       scan: "(Press and hold to follow the official account)"
       go_to_my_classes: "Go to my classes"
+      book_another: "Book more classes"
       min: " min"
       kcal: " kCal"
       coach: "Coach "
@@ -204,6 +215,7 @@ en:
       classes_left: "classes left"
       classes_left_today: "booking left for this day"
       active_until: "Active until"
+      privilege_label: "CARD TYPE"
     profile-update:
       waiver_title: "Informed Consent Form"
       waiver_form: "I, the participant named below, have agreed to participate in the ExeQute workouts,\

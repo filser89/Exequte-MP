@@ -5,7 +5,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
     :recoverable, :rememberable, :validatable
   DAYS_TO_CALC_AVERAGE = 7
-  DEFAULT_NAME = "#{Rails.application.class.module_parent} User".freeze
+  DEFAULT_NAME = "eXequter".freeze
   ACTIVITY_LEVELS = [nil, '', 'No activity (0x weekly)', 'Light (1-2x weekly)', 'Moderate (2-3x weekly)', 'High (4-5x weekly)', 'Extreme (5+ weekly)'].freeze
   GENDERS = [nil, '', 'Male', 'Female', 'Trans / Non-binary / Other', 'Prefer not to disclose']
   TARGETS = [nil, "", "lose", "gain", "maintain"].freeze
@@ -24,6 +24,9 @@ class User < ApplicationRecord
 
   has_one_attached :instructor_photo
   has_one_attached :avatar
+  has_many :training_session_rankings
+  has_many :ranked_sessions, through: :training_session_rankings, source: :training_session
+
   before_validation :set_defaults
   default_scope -> { where(destroyed_at: nil) }
   scope :order_by_name, -> { order('first_name ASC')}
@@ -73,10 +76,12 @@ class User < ApplicationRecord
     h[:average_attendence] = average_attendence
     h[:attended_classes] = attended_classes
     h[:memberships] = valid_memberships.map(&:standard_hash)
+    h[:current_privilege] = current_privilege&.standard_hash
     h[:avatar_url] = avatar.service_url if avatar.attached?
     h[:has_body_data] = has_body_data?
     h[:waiver_signed] = waiver_signed
     h[:waiver_signed_at] = waiver_signed_at
+    h[:credits] = credits
     h
   end
 
@@ -90,6 +95,14 @@ class User < ApplicationRecord
     h
   end
 
+  def ranking_hash
+    h = {
+      workout_name: workout_name,
+      first_name: first_name
+    }
+    h[:avatar_url] = avatar.service_url if avatar.attached?
+    h
+  end
   def standard_hash
     {
       id: id,
@@ -107,7 +120,8 @@ class User < ApplicationRecord
       profile_filled: first_name.present?,
       has_wx_info: wx_info.present?,
       waiver_signed: waiver_signed,
-      waiver_signed_at: waiver_signed_at
+      waiver_signed_at: waiver_signed_at,
+      credits: credits
     }
   end
 
@@ -123,6 +137,19 @@ class User < ApplicationRecord
 
   def valid_memberships
     memberships.settled.where('end_date >= ? AND is_class_pack = false OR end_date >= ? AND is_class_pack = true AND vouchers > 0', DateTime.now.midnight, DateTime.now.midnight)
+  end
+
+  def current_privilege
+    begin
+      #check the membership that can book the earliest, and use this as membership power judge
+      memberships_list = memberships&.settled&.where('end_date >= ? AND is_class_pack = false AND credits > 0', DateTime.now.midnight)
+      highest_price_membership = memberships_list&.max_by { |membership| membership.membership_type&.book_before.to_i }
+      puts highest_price_membership
+      highest_price_membership || nil
+    rescue => e
+      puts e
+      return nil
+    end
   end
 
   def prices
@@ -143,6 +170,17 @@ class User < ApplicationRecord
     save
   end
 
+  def use_credits(num)
+    num = num.nil? ? 20 : num
+    self.credits = [self.credits - num, 0].max
+    save
+  end
+
+  def return_credits(num)!
+    self.credits += num
+    save
+  end
+
   def localize_instructor_bio
     I18n.locale == :'zh-CN' ? cn_instructor_bio : instructor_bio
   end
@@ -151,6 +189,20 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def get_valid_name
+    return "#{first_name} #{last_name}" if first_name && last_name && !first_name.empty? && !last_name.empty?
+    return first_name if first_name && !first_name.empty?
+    return last_name if last_name && !last_name.empty?
+    return workout_name if workout_name && !workout_name.empty?
+  end
+
+  def get_coach_name
+    return workout_name if workout_name && !workout_name.empty?
+    return first_name if first_name && !first_name.empty?
+    return last_name if last_name && !first_name.empty?
+
+    name
+  end
 
   def attach_avatar_from_url(url)
     avatar.attach({ io: FileDownloaderService.download(url), filename: FileDownloaderService.filename })
@@ -186,6 +238,29 @@ class User < ApplicationRecord
     end
   end
 
+  def classes_won_last_year
+    last_year_rankings = training_session_rankings
+                           .joins(:training_session)
+                           .where("training_sessions.begins_at >= ? AND training_sessions.begins_at <= ?", 1.year.ago, Time.now)
+                           .where("training_session_rankings.rank = 1")
+
+    last_year_rankings.count
+  end
+
+  def age
+    return nil if birthday.nil? # Return nil if there's no birthdate
+    birthdate = birthday.to_date
+    current_date = Date.today
+    age = current_date.year - birthdate.year
+    if current_date.month < birthdate.month || (current_date.month == birthdate.month && current_date.day < birthdate.day)
+      age -= 1
+    end
+    if age < 10
+      return nil
+    end
+    age
+  end
+
   private
 
   def calc_standard_price
@@ -215,17 +290,6 @@ class User < ApplicationRecord
 
   def set_defaults
     self.name = DEFAULT_NAME if self.name.blank?
-  end
-
-  def age
-    return nil if birthday.nil? # Return nil if there's no birthdate
-    birthdate = birthday.to_date
-    current_date = Date.today
-    age = current_date.year - birthdate.year
-    if current_date.month < birthdate.month || (current_date.month == birthdate.month && current_date.day < birthdate.day)
-      age -= 1
-    end
-    age
   end
 
 end

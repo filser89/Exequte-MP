@@ -17,7 +17,8 @@ class Membership < ApplicationRecord
   scope :not_trial, -> {where(is_trial: false)}
   scope :is_limited, -> {where(is_limited: true)}
   scope :is_not_limited, -> {where(is_limited: false)}
-
+  scope :is_unlimited, -> {where(is_unlimited: true)}
+  scope :is_not_unlimited, -> {where(is_unlimited: false)}
 
   def booking_hash
     h = standard_hash
@@ -45,8 +46,12 @@ class Membership < ApplicationRecord
       smoothie: smoothie,
       vouchers: vouchers,
       is_class_pack: is_class_pack,
+      credits: credits,
+      book_before: book_before,
+      description: localize_description,
       bookings_per_day: bookings_per_day ? bookings_per_day : -1,
       unlimited: unlimited?,
+      is_unlimited: is_unlimited,
       is_trial: is_trial
     }
   end
@@ -64,6 +69,11 @@ class Membership < ApplicationRecord
     save
   end
 
+  def use_credit!
+    self.credits -= 1
+    save
+  end
+
   def localize_start_date
     I18n.locale == :'zh-CN' ? DateTimeService.date_m_d_y_zh(start_date)  : DateTimeService.date_m_d_y(start_date)
   end
@@ -73,6 +83,11 @@ class Membership < ApplicationRecord
   end
   def return_voucher!
     self.vouchers += 1
+    save
+  end
+
+  def return_credit!
+    self.credits += 1
     save
   end
 

@@ -20,6 +20,9 @@ class TrainingSession < ApplicationRecord
   has_many :hrm_assignments
   has_many :hrms, through: :hrm_assignments
   has_one_attached :poster_photo
+  has_many :training_session_rankings
+  has_many :ranked_users, through: :training_session_rankings, source: :user
+
   default_scope -> { where(destroyed_at: nil) }
   scope :limited, -> {where(is_limited: true)}
   scope :not_limited, -> {where(is_limited: false)}
@@ -82,7 +85,7 @@ class TrainingSession < ApplicationRecord
       id: id,
       calories: calories,
       duration: duration,
-      instructor_name: instructor.name,
+      instructor_name: instructor.get_coach_name,
       capacity: capacity,
       name: localize_name,
       subtitle: localize('subtitle'),
@@ -119,6 +122,7 @@ class TrainingSession < ApplicationRecord
       date_locale: localize_date_long,
       date_locale_short: localize_date_short,
       price: calc_price,
+      credits: credits.nil? ? 20 : credits, # Check if credits is nil and set default to 20
       dates_array: dates_for_membership,
       membership_date: begins_at.midnight,
       enforce_cancellation_policy: enforce_cancellation_policy,
@@ -264,6 +268,10 @@ class TrainingSession < ApplicationRecord
     hrm_assignments.where(assigned: true).map do |hrm_assignment|
       hrm = hrm_assignment.hrm
       booking = bookings.find_by(hrm_assignment: hrm_assignment)
+      avatar_url = nil
+      if booking && booking.user && booking.user.avatar && booking.user.avatar.respond_to?('attached?') && booking.user.avatar.attached?
+        avatar_url = booking&.user&.avatar.service_url
+      end
       {
         hrm_name: hrm.name,
         hrm_display_name: hrm.display_name,
@@ -271,9 +279,11 @@ class TrainingSession < ApplicationRecord
         user: {
           gender: booking&.user&.gender.present? && ["Male", "Female"].include?(booking&.user.gender) ? booking&.user.gender : "Female",
           weight: booking&.user&.current_weight || 60,
-          age: get_age(booking&.user) || 30,
-
-          avatar: booking&.user&.avatar.attached? ? booking&.user&.avatar.service_url : nil,
+          age: booking&.user&.age || 30,
+          workout_name: booking&.user&.workout_name,
+          first_name:  booking&.user&.first_name,
+          last_name: booking&.user&.last_name,
+          avatar: avatar_url,
         },
         assigned: hrm_assignment.assigned
       }
@@ -297,20 +307,46 @@ class TrainingSession < ApplicationRecord
     self.begins_at + self.duration.minutes
   end
 
-  def get_age(user)
-    return nil if user.birthday.nil? # Return nil if there's no birthdate
-    birthdate = user.birthday.to_date
-    current_date = Date.today
-    age = current_date.year - birthdate.year
-    if current_date.month < birthdate.month || (current_date.month == birthdate.month && current_date.day < birthdate.day)
-      age -= 1
-    end
-    puts "age:#{age}"
-    if age == 0
-      return nil
-    else
-      return age
-    end
+  def set_ranking
+    begin
+      puts "inside set ranking"
+      if bookings.any?
+        # Create a hash to store user_id => calories_burned mapping
+        calories_burned_map = {}
+        bookings&.settled&.each do |booking|
+          puts "about to re-set heart rate data for every booking"
+          booking.set_heart_rate_data(true)
+          heart_rate_data = booking.heart_rate_data
+          if heart_rate_data.present? && heart_rate_data.hrm_data.present?
+            # Extract user_id and calories_burned values and store in the map
+            user_id = booking.user_id
+            calories_burned = heart_rate_data.hrm_data['calories_burned']
+            calories_burned_map[user_id] = calories_burned if calories_burned.present?
+          else
+            puts "no heart-rate data found, check db errors"
+          end
+        end
+
+        puts "Content of calories_burned_map:"
+        puts calories_burned_map.inspect
+        # Sort the map based on calories_burned in descending order
+        sorted_calories_burned_map = calories_burned_map.sort_by { |_, value| value }.reverse.to_h
+
+        puts "here"
+        if sorted_calories_burned_map
+          # Update user rankings based on the sorted map
+          sorted_calories_burned_map.each_with_index do |(user_id, calories_burned), index|
+            ranking_entry = training_session_rankings.find_or_initialize_by(user_id: user_id)
+            ranking_entry.update(ranking: index + 1, calories: calories_burned)
+          end
+          puts "here2"
+        end
+      end
+      rescue => e
+      puts e
+      puts "something went wrong setting ranking"
+      end
   end
+
 
 end

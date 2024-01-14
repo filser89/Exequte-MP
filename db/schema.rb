@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_12_13_085607) do
+ActiveRecord::Schema.define(version: 2024_01_11_091424) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 2023_12_13_085607) do
     t.datetime "destroyed_at"
     t.bigint "hrm_id"
     t.bigint "hrm_assignment_id"
+    t.integer "credits"
     t.index ["hrm_assignment_id"], name: "index_bookings_on_hrm_assignment_id"
     t.index ["hrm_id"], name: "index_bookings_on_hrm_id"
     t.index ["membership_id"], name: "index_bookings_on_membership_id"
@@ -270,6 +271,12 @@ ActiveRecord::Schema.define(version: 2023_12_13_085607) do
     t.integer "bookings_per_day"
     t.boolean "is_trial", default: false
     t.boolean "is_limited", default: false
+    t.integer "credits", default: 20
+    t.integer "book_before"
+    t.jsonb "settings", default: {}
+    t.boolean "is_unlimited", default: false
+    t.string "description"
+    t.string "cn_description"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -293,6 +300,12 @@ ActiveRecord::Schema.define(version: 2023_12_13_085607) do
     t.integer "bookings_per_day"
     t.boolean "is_trial", default: false
     t.boolean "is_limited", default: false
+    t.integer "credits", default: 20
+    t.integer "book_before"
+    t.jsonb "settings", default: {}
+    t.boolean "is_unlimited", default: false
+    t.string "description"
+    t.string "cn_description"
     t.index ["membership_type_id"], name: "index_memberships_on_membership_type_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
@@ -300,6 +313,17 @@ ActiveRecord::Schema.define(version: 2023_12_13_085607) do
   create_table "settings", force: :cascade do |t|
     t.string "key", null: false
     t.string "value", null: false
+  end
+
+  create_table "training_session_rankings", force: :cascade do |t|
+    t.integer "ranking"
+    t.integer "calories"
+    t.bigint "training_session_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["training_session_id"], name: "index_training_session_rankings_on_training_session_id"
+    t.index ["user_id"], name: "index_training_session_rankings_on_user_id"
   end
 
   create_table "training_sessions", force: :cascade do |t|
@@ -343,6 +367,7 @@ ActiveRecord::Schema.define(version: 2023_12_13_085607) do
     t.boolean "is_limited", default: false
     t.string "location"
     t.string "current_block"
+    t.integer "credits", default: 20
     t.index ["training_id"], name: "index_training_sessions_on_training_id"
     t.index ["user_id"], name: "index_training_sessions_on_user_id"
   end
@@ -368,6 +393,8 @@ ActiveRecord::Schema.define(version: 2023_12_13_085607) do
     t.string "cn_subtitle"
     t.integer "late_booking_minutes"
     t.boolean "is_limited", default: false
+    t.integer "credits"
+    t.string "location"
     t.index ["class_type_id"], name: "index_trainings_on_class_type_id"
   end
 
@@ -439,6 +466,7 @@ ActiveRecord::Schema.define(version: 2023_12_13_085607) do
     t.integer "oa_subscribed_at"
     t.boolean "waiver_signed"
     t.datetime "waiver_signed_at"
+    t.integer "credits", default: 20
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -504,6 +532,8 @@ ActiveRecord::Schema.define(version: 2023_12_13_085607) do
   add_foreign_key "info_items", "infos"
   add_foreign_key "memberships", "membership_types"
   add_foreign_key "memberships", "users"
+  add_foreign_key "training_session_rankings", "training_sessions"
+  add_foreign_key "training_session_rankings", "users"
   add_foreign_key "training_sessions", "trainings"
   add_foreign_key "training_sessions", "users"
   add_foreign_key "trainings", "class_types"

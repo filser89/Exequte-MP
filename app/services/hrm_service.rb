@@ -159,5 +159,37 @@ class HrmService
     end
   end
 
+  # last function
+  def fetch_heart_rate_values(bandId, start_timestamp, end_timestamp, gender, weight, age)
+    api_url = "https://hrm.exequte.cn"
+    url = "#{api_url}/get_hrm_data"
+    request_data = {
+      bandId: bandId,
+      startTimestamp: start_timestamp,
+      endTimestamp: end_timestamp,
+      gender: gender,
+      weight: weight,
+      age: age
+    }
+
+    begin
+      response = RestClient.post(url, request_data.to_json, content_type: :json)
+      if response.code == 200
+        data = JSON.parse(response)
+        puts "#{data}"
+        return data
+      else
+        puts "HTTP request failed with status code #{response.code}"
+        return nil
+      end
+    rescue RestClient::ExceptionWithResponse => e
+      puts "Error calculating calories: #{e.response}"
+      return nil
+    rescue StandardError => e
+      puts "Error calculating calories: #{e.message}"
+      return nil
+    end
+  end
+
 
 end

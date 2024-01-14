@@ -3,8 +3,8 @@ module Api
     class TrainingSessionsController < Api::BaseController
       before_action :find_training_session, only: [:show, :add_user_to_queue, :session_attendance, :cancel, :change_capacity]
       before_action :choose_date_range, only: %i[index dates_list]
-      skip_before_action :authenticate_api_key!, only: [:current, :current_hrm, :current_switch_block]
-      skip_before_action :authenticate_user_from_token!, only: [:current, :current_hrm, :current_switch_block]
+      skip_before_action :authenticate_api_key!, only: [:current, :current_hrm, :current_switch_block, :trigger_rank]
+      skip_before_action :authenticate_user_from_token!, only: [:current, :current_hrm, :current_switch_block, :trigger_rank]
 
 
       def index
@@ -281,6 +281,58 @@ module Api
         end
       end
 
+      def trigger_rank
+        block_name = params[:name]
+        session_id = params[:session_id]
+        location = params[:location]
+        current_time = DateTime.now
+
+        if session_id
+          puts "user sent session_id, fetch session"
+          current_ts = TrainingSession.find(session_id)
+          if current_ts.present?
+            puts "could not find record, default to current session"
+            current_ts = TrainingSession.where("begins_at <= ? AND ? <= (begins_at + duration * interval '1 minute') AND location = ? AND cancelled = ?",
+                                               current_time,
+                                               current_time,
+                                               location.present? ? location : '',
+                                               false
+            ).first  # Use .first to get a single record
+          end
+        else
+          # Fetch current training sessions with hrm_assignments
+          current_ts = TrainingSession.where("begins_at <= ? AND ? <= (begins_at + duration * interval '1 minute') AND location = ? AND cancelled = ?",
+                                             current_time,
+                                             current_time,
+                                             location.present? ? location : '',
+                                             false
+          ).first  # Use .first to get a single record
+        end
+
+
+        if current_ts.present?
+          puts "==================training session #{current_ts.name}"
+          puts "==================training session #{current_ts.name}  is finished, starting the ranking routine===="
+
+          # Check if current_ts has the attribute current_block
+          if current_ts.respond_to?(:set_ranking)
+            current_ts.set_ranking
+
+            if current_ts.save
+              puts "=========training session block updated successfully========"
+              render_success({msg: "ranking_set"})
+            else
+              render_error({ msg: 'error' })
+            end
+          else
+            puts "==================current_ts does not respond to set_ranking"
+            render_error({ msg: 'current_ts does not respond to set_ranking' })
+          end
+        else
+          puts "==================no active training session found"
+        end
+      end
+
       def dates_list
         @training_sessions = TrainingSession.where(
           training_id: params[:training_id],
@@ -316,7 +368,8 @@ module Api
         h[:price] = training_session_price(training_session)
         h[:btn_pattern] = btn_pattern(training_session)
         h[:hrm] = hrm_assigned(training_session)
-        h[:access_options] = access_options(training_session)
+        # h[:access_options] = access_options(training_session)
+        h[:access_options_credits] = access_options_credits(training_session)
         membership_to_use = usable_membership(training_session)
         begin
           sessions_left = sessions_left_for_day(training_session)
@@ -402,6 +455,26 @@ module Api
         options
       end
 
+      def access_options_credits(training_session)
+        begin
+          return { free: true } if training_session.class_kind == 3
+          if usable_membership_unlimited(training_session)
+            puts "unlimited membership, class is free"
+            return { free: true }
+          end
+          options = { drop_in: true }
+          return options if training_session.class_kind == 1
+          options[:can_use_credits] = usable_membership_credit(training_session)
+          options[:upgrade_membership] = upgrade_membership(training_session)
+          options[:credits] = usable_credits(training_session)
+          options[:membership] = usable_membership_unlimited(training_session)
+          options
+        rescue => e
+          puts e
+          puts "==something went wrong getting credits options=="
+        end
+      end
+
       def sessions_left_for_day(training_session)
         current_active_memberships = current_user.memberships.not_classpack.settled.find_by(
           'start_date <= ? AND end_date > ?',
@@ -448,6 +521,61 @@ module Api
           end
       end
 
+
+      def usable_membership_unlimited(training_session)
+       current_user.memberships.not_classpack.settled.is_unlimited.find_by(
+          'start_date <= ? AND end_date > ?',
+          training_session.begins_at,
+          training_session.begins_at
+        )
+      end
+
+
+      def upgrade_membership(training_session)
+        begin
+          return nil unless training_session
+
+          today = Date.today
+          start_date = training_session.begins_at.to_date
+          days_until_session = (start_date - today).to_i
+
+          membership_types = MembershipType.active.is_not_limited
+          return nil unless membership_types && membership_types.any?
+
+          upgrade_choice = membership_types.select { |membership_type| membership_type.book_before >= days_until_session }.min_by(&:book_before)
+
+          puts "===========CHOOSING: #{upgrade_choice&.name}========="
+          upgrade_choice
+        rescue => e
+          puts "something went wrong finding membership"
+        end
+      end
+
+      def usable_membership_credit(training_session)
+        current_privilege = current_user&.current_privilege
+        if current_privilege
+          if current_privilege&.is_unlimited
+            puts "unlimited membership, can book"
+            return true
+          end
+          book_before = current_privilege&.book_before
+          #add one day to privilege so that it counts until 23:59
+          furthest_bookable_session = DateTime.now.midnight + book_before&.days + 1.days
+          puts "user privilege: #{book_before} days before"
+          puts "training session: #{training_session.begins_at} "
+          puts "furthest_bookable_session : #{furthest_bookable_session} "
+          if training_session.begins_at < furthest_bookable_session
+            puts "can book"
+            return true
+          else
+            puts "need to upgrade"
+            return false
+          end
+        else
+          puts "need to upgrade"
+          return false
+        end
+      end
 
       def usable_membership(training_session)
         current_active_memberships = current_user.memberships.not_classpack.settled.find_by(
@@ -496,6 +624,14 @@ module Api
           puts "====something went wrong, return current membership"
           puts e
           return current_active_memberships
+        end
+      end
+
+      def usable_credits(training_session)
+        if training_session.credits.to_i <= current_user.credits.to_i
+          return true
+        else
+          return false
         end
       end
 
@@ -564,6 +700,16 @@ module Api
         return 'membership' if usable_membership(training_session)
 
         'buy-membership' unless upcoming_membership(training_session)
+      end
+
+      def membership_option_unlimited(training_session)
+        return 'membership' if usable_membership(training_session)
+        return null
+      end
+
+      def credits_sufficient_option(training_session)
+        return 'credits' if usable_membership_credit(training_session)
+        return 'buy-credits'
       end
 
       def classpack_option(training_session)

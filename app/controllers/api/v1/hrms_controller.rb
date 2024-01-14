@@ -18,17 +18,6 @@ module Api
         @hrm = Hrm.find(params[:id])
       end
 
-      def get_age(user)
-        return nil if user.birthday.nil? # Return nil if there's no birthdate
-        birthdate = user.birthday.to_date
-        current_date = Date.today
-        age = current_date.year - birthdate.year
-        if current_date.month < birthdate.month || (current_date.month == birthdate.month && current_date.day < birthdate.day)
-          age -= 1
-        end
-        age
-      end
-
       def get_data
         bookingId = params[:bookingId]
         force = params[:force]
@@ -41,7 +30,7 @@ module Api
         # Call the fetch_heart_rate_data method
         gender = current_user.gender.present? && ["Male", "Female"].include?(current_user.gender) ? current_user.gender : "Female"
         weight = current_user.current_weight || 60
-        age = get_age(current_user) || 30
+        age = current_user.age || 30
         puts "gender: #{gender},weight: #{weight}, age:#{age}"
         puts "start_timestamp: #{start_timestamp},end_timestamp: #{end_timestamp}"
 
@@ -73,7 +62,7 @@ module Api
         # Call the fetch_heart_rate_data method
         gender = current_user.gender.present? && ["Male", "Female"].include?(current_user.gender) ? current_user.gender : "Female"
         weight = current_user.current_weight || 60
-        age = get_age(current_user) || 30
+        age = current_user.age || 30
         puts "gender: #{gender},weight: #{weight}, age:#{age}"
         puts "start_timestamp: #{start_timestamp},end_timestamp: #{end_timestamp}"
 
@@ -105,7 +94,7 @@ module Api
         # Call the fetch_heart_rate_data method
         gender = current_user.gender.present? && ["Male", "Female"].include?(current_user.gender) ? current_user.gender : "Female"
         weight = current_user.current_weight || 60
-        age = get_age(current_user) || 30
+        age = current_user.age || 30
         avatar_url = current_user.avatar.service_url if current_user.avatar.attached?
 
         puts "gender: #{gender},weight: #{weight}, age:#{age}"
@@ -186,23 +175,39 @@ module Api
         # Call the fetch_heart_rate_data method
         gender = current_user.gender.present? && ["Male", "Female"].include?(current_user.gender) ? current_user.gender : "Female"
         weight = current_user.current_weight || 60
-        age = get_age(current_user) || 30
+        age = current_user.age || 30
         avatar_url = current_user.avatar.service_url if current_user.avatar.attached?
         name =  current_user.workout_name
         skills =  current_user.sports #todo do skills in user
-        points =  200 #todo do points in session booking.training_session.points
+        points = 200 #@todo implement points in classes
         workout_name =  booking.training_session.name
         workout_coach =  booking.training_session.instructor.name
         workout_date =  booking.training_session.localize_date_short
         avatar_img =  avatar_url
-        ranking = 1 #todo update with ranking logic
-
+        ranking = booking&.training_session&.training_session_rankings&.find_by(user: current_user)&.ranking || "-"
+        # puts "ranking:#{ranking}"
+        # if ranking.nil?
+        #   puts "someone called ranking before end of class, generate temporary rank."
+        #   if booking&.training_session&.respond_to?(:set_ranking)
+        #     booking&.training_session.set_ranking
+        #     if booking&.training_session.save
+        #       puts "=========training session block updated successfully========"
+        #       render_success({msg: "ranking_set"})
+        #     else
+        #       render_error({ msg: 'error' })
+        #     end
+        #   else
+        #     puts "==================current_ts does not respond to set_ranking"
+        #     render_error({ msg: 'current_ts does not respond to set_ranking' })
+        #   end
+        # end
+        puts "ranking now:#{ranking}"
         puts "gender: #{gender},weight: #{weight}, age:#{age}"
         puts "start_timestamp: #{start_timestamp},end_timestamp: #{end_timestamp}"
 
         # Check if heart rate data already exists for this booking and user (unless flag force = true, in that case force refresh)
         heart_rate_data = HeartRateData.find_by(booking_id: booking.id)
-        if heart_rate_data.nil? || force == "true"
+        if heart_rate_data.nil? || force == "true" || heart_rate_data['hrm_combined_graph'].nil? || heart_rate_data['hrm_combined_graph'].empty?
           puts "calling api"
           heart_rate_data = hrm_service.fetch_heart_rate_all_with_pic(
             bandId,
@@ -242,6 +247,8 @@ module Api
         # Select only the desired keys
         selected_keys = ['hrm_combined_graph', 'hrm_data']
         filtered_heart_rate_data = heart_rate_data.slice(*selected_keys)
+        filtered_heart_rate_data['ranking'] = booking&.training_session&.training_session_rankings&.map(&:show_hash)
+        filtered_heart_rate_data['my_ranking'] = ranking
         if heart_rate_data
           render_success(filtered_heart_rate_data)
         else

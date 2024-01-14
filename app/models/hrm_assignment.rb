@@ -1,6 +1,9 @@
 class HrmAssignment < ApplicationRecord
   belongs_to :hrm
   belongs_to :training_session
+  has_one :booking
+  has_one :user, through: :booking
+
 
   # You can have a method to assign an HRM
   def assign_hrm

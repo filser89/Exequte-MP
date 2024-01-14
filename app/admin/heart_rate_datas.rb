@@ -5,7 +5,9 @@ ActiveAdmin.register HeartRateData do
     selectable_column
     id_column
     column :booking
-    column :hrm_data_raw
+    column :hrm_data_raw do |heart_rate_data|
+      heart_rate_data.hrm_data_raw[0..1]
+    end
     column :hrm_data
     column 'Hrm Graph' do |heart_rate_data|
       image_tag("data:image/png;base64,#{heart_rate_data.hrm_graph['base64Data']}", height: '100')

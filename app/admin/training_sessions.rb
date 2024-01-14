@@ -1,6 +1,6 @@
 ActiveAdmin.register TrainingSession do
 
-  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, :location, :poster_photo, :current_block, workout_ids: [], photos: [], videos: []
+  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, :location, :poster_photo, :current_block, :credits, workout_ids: [], photos: [], videos: []
 
   member_action :delete_training_session_photo, method: :delete do
     begin
@@ -19,12 +19,11 @@ ActiveAdmin.register TrainingSession do
     selectable_column
     column :id
     column :name
-    column :subtitle
     column :begins_at
-    column :capacity
     column :queue
     column :instructor
     column :duration
+    column :credits
     column :price_1
     column :description
     column :calories
@@ -36,7 +35,6 @@ ActiveAdmin.register TrainingSession do
     column :enforce_cancellation_policy
     column :cancelled
     column :cancelled_at
-    column :note
     column :late_booking_minutes
     column :is_limited
     column :location
@@ -80,6 +78,7 @@ ActiveAdmin.register TrainingSession do
           f.input :is_limited
           f.input :location
           f.input :current_block
+          f.input :credits
         end
       end
       tab "Prices" do
@@ -101,6 +100,7 @@ ActiveAdmin.register TrainingSession do
     attributes_table do
       row :id
       row :name
+      row :credits
       row :cn_name
       row :training
       row :workouts
@@ -123,6 +123,19 @@ ActiveAdmin.register TrainingSession do
       row :price_1
       row :location
       row :current_block
+      row :ranking do
+        ul do
+          training_session.training_session_rankings&.order(:ranking)&.each do |ranking|
+            workout_name = ranking.user&.workout_name || "Unknown"
+            full_name = ranking.user&.full_name || "Unknown User"
+            calories_burned = ranking&.calories
+
+            li do
+              "#{ranking.ranking}. #{workout_name} (#{full_name}) [ #{calories_burned} cal]"
+            end
+          end
+        end
+      end
       row :poster_photo do |ts|
         if ts.poster_photo.attached?
           image_tag ts.poster_photo, width: 200
@@ -173,9 +186,10 @@ ActiveAdmin.register TrainingSession do
           hrm_assignments = HrmAssignment.where(training_session_id: training_session.id, assigned: true)
           hrm_assignments.each do |hrm_assignment|
             hrm = Hrm.find(hrm_assignment.hrm_id)
-            booking = training_session.bookings.find_by(hrm_assignment: hrm_assignment)
+            booking = hrm_assignment.booking # Use the direct association
+            user_name = booking&.user&.get_valid_name || "Unknown"
             li do
-              "#{hrm.name} (Assigned to: #{booking.user.full_name if booking})"
+              "#{hrm.name} (Assigned to: #{user_name})"
             end
           end
         end

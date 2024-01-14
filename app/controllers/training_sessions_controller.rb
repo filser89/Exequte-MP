@@ -37,22 +37,49 @@ class TrainingSessionsController < ApplicationController
         @training_session.price_7 = permitted_params[:price_1_cents]
       end
 
-      if permitted_params[:workout_ids] != ""
-        puts "found a workout id"
-        puts permitted_params[:workout_ids]
+      if permitted_params[:workout_ids].present? && !permitted_params[:workout_ids].first.empty?
+        puts "found a workout id: #{permitted_params[:workout_ids]}"
+        puts "workout_ids content: #{permitted_params[:workout_ids].first}"
+        puts "workout_ids length: #{permitted_params[:workout_ids].first.length}"
+        puts "workout_ids characters: #{permitted_params[:workout_ids].first.chars}"
         @training_session.workout_ids = permitted_params[:workout_ids]
+      else
+        puts "workout_ids is blank or nil. Setting it to default value."
+        @training_session.workout_ids = @training.workout_ids
       end
 
       @training_session.class_kind = @training.class_type.kind
       @training_session.enforce_cancellation_policy = true
       @training_session.late_booking_minutes = @training.late_booking_minutes
       @training_session.is_limited = @training.is_limited
-      if permitted_params[:cancel_before] == ""
-        @training_session.cancel_before = @training.class_type.cancel_before
-      else
+      if permitted_params[:cancel_before].present? && !permitted_params[:cancel_before].empty?
         @training_session.cancel_before = permitted_params[:cancel_before]
+        puts "cancel_before=#{permitted_params[:cancel_before]}"
+      else
+        @training_session.cancel_before = @training.class_type.cancel_before
       end
-      @training_session.poster_photo = @training.poster_photo
+      if permitted_params[:credits].present? && !permitted_params[:credits].empty?
+        puts "credits=#{permitted_params[:credits]}"
+        @training_session.credits = permitted_params[:credits]
+      else
+        @training_session.credits = @training.credits
+      end
+      if  permitted_params[:location].present? && !permitted_params[:location].empty?
+        puts "location=#{permitted_params[:location]}"
+        @training_session.location = permitted_params[:location]
+      else
+        @training_session.location = @training.location
+      end
+
+      # Handle the poster_photo attachment
+      begin
+        if @training.poster_photo.attached?
+          @training_session.poster_photo.attach(@training.poster_photo.blob)
+        end
+      rescue => e
+        puts e
+      end
+
       if @training_session.save
         create_for_weeks(params[:weeks], @training_session)
         redirect_to @training_session
@@ -97,12 +124,23 @@ class TrainingSessionsController < ApplicationController
         note: training_session.note,
         late_booking_minutes: training_session.late_booking_minutes,
         is_limited: training_session.is_limited,
-        poster_photo: training_session.poster_photo
+        poster_photo: training_session.poster_photo.attached? ? training_session.poster_photo.blob : nil,
+        location: training_session.location,
+        credits: training_session.credits
       )
     end
   end
 
   def permitted_params
-    params.require(:training_session).permit(:training_id, :begins_at, :user_id, :price_1_cents, :cancel_before, workout_ids: [])
+    params.require(:training_session).permit(
+      :training_id,
+      :begins_at,
+      :user_id,
+      :price_1_cents,
+      :cancel_before,
+      :credits,
+      :location,
+      workout_ids: []
+    ).transform_values(&:presence)
   end
 end

@@ -60,6 +60,7 @@ Rails.application.routes.draw do
           get :current
           get :current_hrm
           get :current_switch_block
+          get :trigger_rank
           get :sessions
         end
       end
@@ -71,6 +72,7 @@ Rails.application.routes.draw do
         end
         collection do
           put :take_attendance
+          get :hrm
         end
       end
 

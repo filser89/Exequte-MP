@@ -9,6 +9,10 @@ module Api
         render_success([upcoming, cancelled.concat(history)])
       end
 
+      def hrm
+        render_success( has_hrm )
+      end
+
       def show
         render_success(@booking.show_hash)
       end
@@ -38,7 +42,10 @@ module Api
         @booking.user = current_user
         @booking.training_session = @training_session
         @booking.payment_status = @booking.booked_with == 'drop-in' ?  'pending' : 'none'
+        puts "BOOKED WITH:#{@booking.booked_with}"
+        begin
         if @booking.save
+          puts "booking saved"
           @training_session.queue.delete(current_user.id)
           @training_session.save
           @booking.user.use_voucher! if @booking.booked_with == "voucher"
@@ -57,14 +64,21 @@ module Api
             rescue => e
               puts  "===================CLASS-PACK MEMBERSHIP NOT FOUND========================="
             end
+          elsif @booking.booked_with == "credits"
+            puts "this session needs #{@training_session.credits} credits"
+            @booking.user.use_credits(@training_session.credits)
           end
           #assign HRM devices
           begin
-          if @booking.payment_status == 'none'
-            puts  "===================ASSIGNING HRM========================="
-            @booking.assign_hrm_to_training_session
-            puts  "===================HRM ASSIGNED========================="
-          end
+            if @booking.payment_status == 'none'
+              if @training_session.location == "reshape"
+                puts  "===================ASSIGNING HRM========================="
+                @booking.assign_hrm_to_training_session
+                puts  "===================HRM ASSIGNED========================="
+              else
+                puts  "===================GLAM CLASS, NO ASSIGNING HRM========================="
+              end
+            end
           rescue => e
             puts  "===================ERROR ASSIGNING HRM========================="
           end
@@ -73,6 +87,10 @@ module Api
           render_success(response)
         else
           return render_error({msg: 'Booking was not created'})
+        end
+        rescue => e
+          puts "error saving"
+          puts e
         end
       end
 
@@ -91,8 +109,13 @@ module Api
           puts "===================BOOKING UPDATED========================="
           p @booking
           begin
-            puts  "===================ASSIGNING HRM========================="
-            @booking.assign_hrm_to_training_session
+            if @booking.training_session.location == "reshape"
+              puts  "===================ASSIGNING HRM========================="
+              @booking.assign_hrm_to_training_session
+              puts  "===================HRM ASSIGNED========================="
+            else
+              puts  "===================GLAM CLASS, NO ASSIGNING HRM========================="
+            end
           rescue => e
               puts  "===================ERROR ASSIGNING HRM========================="
           end
@@ -115,8 +138,8 @@ module Api
         puts "===================cancelled at #{@booking.cancelled_at} ========================="
         if @booking.save
           if @booking.cancelled_on_time?
-            if %w[voucher drop-in].include?(@booking.booked_with)
-              @booking.user.return_voucher!
+            if %w[voucher credits drop-in].include?(@booking.booked_with)
+              @booking.user.return_credits(@booking.training_session.credits)
               puts "===================RETURN VOUCHER========================="
             else
               if %w[class-pack].include?(@booking.booked_with)
@@ -124,7 +147,7 @@ module Api
                 begin
                   puts @booking.membership_id
                   @membership = Membership.find(@booking.membership_id)
-                  puts "===================CLASS PACK MEMBERSHIP NAME:#{@membership.name}========================="
+                  puts "===================CLASS PACK MEMBERSHIP NAME:#{@membership&.name}========================="
                   @membership.return_voucher!
                   if @membership.save
                     puts "===================MEMBERSHIP IS SAVED========================="
@@ -155,7 +178,7 @@ module Api
                   end
                   @logs = Log.new()
                   @logs.log_type = "LATE CANCEL BOOKING (ENFORCED)"
-                  @logs.value = "#{@booking.user.full_name} (id:#{@booking.user_id}) did a late cancellation on class #{@booking.training_session.name} (time: #{@booking.training_session.begins_at} ) with membership #{@membership.name} #{@membership.id}. The membership expiration date is now #{@membership.end_date}"
+                  @logs.value = "#{@booking.user.full_name} (id:#{@booking.user_id}) did a late cancellation on class #{@booking&.training_session&.name} (time: #{@booking&.training_session&.begins_at} ) with membership #{@membership&.name} #{@membership&.id}. The membership expiration date is now #{@membership&.end_date}"
                   if @logs.save
                     puts "log save successful"
                   else
@@ -184,12 +207,30 @@ module Api
                   puts e
                   puts  "===================MEMBERSHIP NOT FOUND========================="
                 end
+              else
+                puts "===================ENFORCE CANCELLATION POLICY IS FALSE, DO NOT REMOVE DAYS, BUT STILL LOG IT========================="
+                @logs = Log.new()
+                @logs.log_type = "LATE CANCEL BOOKING NOT ENFORCED"
+                @logs.value = "#{@booking.user.full_name} (id:#{@booking.user_id}) did a late cancellation on class #{@booking&.training_session&.name} (time: #{@booking&.training_session&.begins_at} )."
+                if @logs.save
+                  puts "log save successful"
+                else
+                  puts "error saving log"
+                end
               end
-            else
-              puts "===================ENFORCE CANCELLATION POLICY IS FALSE, DO NOT REMOVE DAYS, BUT STILL LOG IT========================="
+            elsif @booking.booked_with == "credits"
               @logs = Log.new()
-              @logs.log_type = "LATE CANCEL BOOKING NOT ENFORCED"
-              @logs.value = "#{@booking.user.full_name} (id:#{@booking.user_id}) did a late cancellation on class #{@booking.training_session.name} (time: #{@booking.training_session.begins_at} )."
+              @logs.log_type = "LATE CANCEL BOOKING (CREDITS)"
+              @logs.value = "#{@booking.user.full_name} (id:#{@booking.user_id}) did a late cancellation on class #{@booking&.training_session&.name} (time: #{@booking&.training_session&.begins_at} ) with membership #{@membership&.name} #{@membership&.id}. No credits refunded "
+              if @logs.save
+                puts "log save successful"
+              else
+                puts "error saving log"
+              end
+            elsif @booking.booked_with == "drop-in"
+              @logs = Log.new()
+              @logs.log_type = "LATE CANCEL BOOKING (DROP-IN)"
+              @logs.value = "#{@booking&.user&.full_name} (id:#{@booking&.user_id}) did a late cancellation on class #{@booking&.training_session&.name} (time: #{@booking&.training_session&.begins_at} ) with membership #{@membership&.name} #{@membership&.id}. No money refunded"
               if @logs.save
                 puts "log save successful"
               else
@@ -233,6 +274,10 @@ module Api
 
       def upcoming
         Booking.for(current_user).upcoming.active.map(&:upcoming_hash)
+      end
+
+      def has_hrm
+        Booking.for(current_user).history.active.with_hrm.map(&:hrm_hash)
       end
 
       def find_booking
