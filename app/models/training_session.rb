@@ -106,7 +106,7 @@ class TrainingSession < ApplicationRecord
       begins_at: begins_at,
       location: location,
       hrm_assignments: hrm_assignments_with_user,
-      poster_photo: poster_photo_url | "",
+      poster_photo: poster_photo_url || "",
       current_block: current_block
     }
   end
