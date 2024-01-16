@@ -81,6 +81,15 @@ class TrainingSession < ApplicationRecord
   end
 
   def show_assignment_ts
+    begin
+      if poster_photo.attached?
+        poster_photo_url = poster_photo.service_url
+      else
+        poster_photo_url = training.poster_photo.attached? ? training.poster_photo.service_url : ""
+      end
+    rescue => e
+      puts e
+    end
     {
       id: id,
       calories: calories,
@@ -97,7 +106,7 @@ class TrainingSession < ApplicationRecord
       begins_at: begins_at,
       location: location,
       hrm_assignments: hrm_assignments_with_user,
-      poster_photo: poster_photo.attached? ? poster_photo.service_url : "",
+      poster_photo: poster_photo_url | "",
       current_block: current_block
     }
   end

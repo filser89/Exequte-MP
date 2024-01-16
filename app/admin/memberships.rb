@@ -35,6 +35,7 @@ ActiveAdmin.register Membership do
       f.input :is_limited
       f.input :credits
       f.input :book_before
+      f.input :is_unlimited
       f.input :settings
       f.input :description
       f.input :cn_description

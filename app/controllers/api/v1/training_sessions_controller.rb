@@ -169,16 +169,17 @@ module Api
 
       def current
         location = params[:location]
-        current_session_time_start_bottom_range = DateTime.now - 60.minutes
-        current_session_time_start_top_range = DateTime.now + 60.minutes
-        current_session_time_start_range = (current_session_time_start_bottom_range..current_session_time_start_top_range)
-        puts "--------#{current_session_time_start_range}---------"
-        current_ts = TrainingSession.where(
-          begins_at: current_session_time_start_range,
-          location: location.present? ? location : '',
-          cancelled: false)
-          .map(&:show_workout_ts)
-        puts current_ts
+        current_time = DateTime.now
+        # Fetch current training sessions with hrm_assignments
+        current_sessions = TrainingSession.where(
+                                                     "begins_at <= ? AND ? <= (begins_at + duration * interval '1 minute') AND location = ? AND cancelled = ?",
+                                                     current_time,
+                                                     current_time,
+                                                     location.present? ? location : '',
+                                                     false
+                                                   )
+        puts "--------#{current_sessions}---------"
+        current_ts = current_sessions.map(&:show_workout_ts)
         render_success(current_ts)
       end
 
