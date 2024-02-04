@@ -37,15 +37,15 @@ class TrainingSessionsController < ApplicationController
         @training_session.price_7 = permitted_params[:price_1_cents]
       end
 
-      if permitted_params[:workout_ids].present? && !permitted_params[:workout_ids].first.empty?
+      if permitted_params[:workout_ids].present?
         puts "found a workout id: #{permitted_params[:workout_ids]}"
         puts "workout_ids content: #{permitted_params[:workout_ids].first}"
         puts "workout_ids length: #{permitted_params[:workout_ids].first.length}"
         puts "workout_ids characters: #{permitted_params[:workout_ids].first.chars}"
-        @training_session.workout_ids = permitted_params[:workout_ids]
+        @training_session.workouts = Workout.find(permitted_params[:workout_ids].reject(&:empty?).map(&:to_i))
       else
         puts "workout_ids is blank or nil. Setting it to default value."
-        @training_session.workout_ids = @training.workout_ids
+        @training_session.workouts = @training.workouts
       end
 
       @training_session.class_kind = @training.class_type.kind

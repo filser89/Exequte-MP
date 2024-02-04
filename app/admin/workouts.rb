@@ -2,6 +2,29 @@ ActiveAdmin.register Workout do
   #permit_params :photo, :video, :name, :cn_name, :description, :cn_description, :quote, :cn_quote, :title, :cn_title, :level, :total_duration, :warmup_duration, :warmup_exercise_duration, :blocks_duration, :block_a_format, :block_b_format, :block_c_format, :finisher_format, :block_a_title, :block_b_title, :block_c_title, :finisher_title, :block_a_duration_format, :block_b_duration_format, :block_c_duration_format, :finisher_duration_format, :block_a_reps_text, :block_b_reps_text, :block_c_reps_text, :finisher_reps_text, :warmup_duration_format,  :title_footer, :cn_title_footer, :blocks_rounds, :blocks_duration_text, :blocks_exercise_duration, :cooldown_duration, :breathing_duration, :workout_type, :training_session_id, :training_id, training_ids: [], training_session_ids: [],  exercises_workouts_attributes: [:id, :exercise_id, :format, :block, :reps_gold, :reps_silver, :reps_bronze, :sets, :time_limit, :_destroy]
   permit_params :photo, :video, :name, :cn_name, :description, :cn_description, :quote, :cn_quote, :title, :cn_title, :level, :total_duration, :warmup_duration, :warmup_exercise_duration, :blocks_duration, :block_a_format, :block_b_format, :block_c_format, :finisher_format, :block_a_title, :block_b_title, :block_c_title, :finisher_title, :block_a_duration_format, :block_b_duration_format, :block_c_duration_format, :finisher_duration_format, :block_a_reps_text, :block_b_reps_text, :block_c_reps_text, :finisher_reps_text, :warmup_duration_format, :title_footer, :cn_title_footer, :blocks_rounds, :blocks_duration_text, :blocks_exercise_duration, :cooldown_duration, :breathing_duration, :workout_type, :training_session_id, :training_id, training_ids: [], training_session_ids: [], exercises_workouts_attributes: [:id, :exercise_id, :format, :block, :reps, :reps_gold, :reps_silver, :reps_bronze, :sets, :time_limit, :_destroy, :batch_index, :order]
 
+  member_action :duplicate, method: :post do
+    original_workout = Workout.find(params[:id])
+    new_workout = original_workout.dup
+
+    # Customize attributes if needed
+    new_workout.name = "Copy of #{original_workout.name}"
+
+    if new_workout.save
+      # Duplicate associated exercises_workouts
+      original_workout.exercises_workouts.each do |original_ew|
+        new_ew = original_ew.dup
+        new_ew.workout_id = new_workout.id
+        new_ew.save
+      end
+
+      flash[:notice] = "Workout duplicated successfully!"
+    else
+      flash[:error] = "Error duplicating workout"
+    end
+
+    redirect_to admin_workout_path(new_workout)
+  end
+
   index do
     selectable_column
     column :id
@@ -35,8 +58,14 @@ ActiveAdmin.register Workout do
     end
     column :updated_at
     column :created_at
+    column "RESHAPE " do |workout|
+      link_to 'View', '#', data: { workout_id: workout.id, workout_name: workout.name } , class: 'act-btn', onclick: 'downloadWorkoutTemplate(this, "reshape");return false;'
+    end
+    column " GLAM" do |workout|
+      link_to 'View', '#', data: { workout_id: workout.id, workout_name: workout.name } , class: 'act-btn', onclick: 'downloadWorkoutTemplate(this, "glam");return false;'
+    end
     actions do |workout|
-      link_to 'Download Template', '#', data: { workout_id: workout.id, workout_name: workout.name } , class: 'download_link member_link', onclick: 'downloadWorkoutTemplate(this);return false;'
+      link_to 'Duplicate', duplicate_admin_workout_path(workout),  class: 'download_link member_link', method: :post
     end
     render partial: 'admin/index'
     render partial: 'admin/template'

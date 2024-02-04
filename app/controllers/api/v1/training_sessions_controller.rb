@@ -169,17 +169,24 @@ module Api
 
       def current
         location = params[:location]
-        current_time = DateTime.now
-        # Fetch current training sessions with hrm_assignments
-        current_sessions = TrainingSession.where(
-                                                     "begins_at <= ? AND ? <= (begins_at + duration * interval '1 minute') AND location = ? AND cancelled = ?",
-                                                     current_time,
-                                                     current_time,
-                                                     location.present? ? location : '',
-                                                     false
-                                                   )
-        puts "--------#{current_sessions}---------"
-        current_ts = current_sessions.map(&:show_workout_ts)
+        session_id = params[:id]
+        if session_id.present?
+          current_sessions = TrainingSession.find(session_id)
+          puts "passed id in request, --------#{current_sessions}---------"
+          current_ts = current_sessions.show_workout_ts
+        else
+          current_time = DateTime.now
+          # Fetch current training sessions with hrm_assignments
+          current_sessions = TrainingSession.where(
+            "begins_at <= ? AND ? <= (begins_at + duration * interval '1 minute') AND location = ? AND cancelled = ?",
+            current_time,
+            current_time,
+            location.present? ? location : '',
+            false
+          )
+          puts "--------#{current_sessions}---------"
+          current_ts = current_sessions.map(&:show_workout_ts)
+        end
         render_success(current_ts)
       end
 
@@ -206,16 +213,23 @@ module Api
       def current_hrm
         location = params[:location]
         current_time = DateTime.now
-        # Fetch current training sessions with hrm_assignments
-        current_sessions_with_hrm = TrainingSession.includes(:hrm_assignments)
-                                                   .where(
-                                                     "begins_at <= ? AND ? <= (begins_at + duration * interval '1 minute') AND location = ? AND cancelled = ?",
-                                                     current_time,
-                                                     current_time,
-                                                     location.present? ? location : '',
-                                                     false
-                                                   )
-        current_ts = current_sessions_with_hrm.map(&:show_assignment_ts)
+        session_id = params[:id]
+        if session_id.present?
+          current_sessions_with_hrm = TrainingSession.includes(:hrm_assignments).find(session_id)
+          puts "passed id in request, --------#{current_sessions_with_hrm}---------"
+          current_ts = current_sessions_with_hrm.show_assignment_ts
+        else
+          # Fetch current training sessions with hrm_assignments
+          current_sessions_with_hrm = TrainingSession.includes(:hrm_assignments)
+                                                     .where(
+                                                       "begins_at <= ? AND ? <= (begins_at + duration * interval '1 minute') AND location = ? AND cancelled = ?",
+                                                       current_time,
+                                                       current_time,
+                                                       location.present? ? location : '',
+                                                       false
+                                                     )
+          current_ts = current_sessions_with_hrm.map(&:show_assignment_ts)
+        end
         puts current_ts
         render_success(current_ts)
       end
@@ -249,16 +263,20 @@ module Api
       def current_switch_block
         block_name = params[:name]
         location = params[:location]
+        session_id = params[:id]
         current_time = DateTime.now
-
-        # Fetch current training sessions with hrm_assignments
-        current_ts = TrainingSession.where("begins_at <= ? AND ? <= (begins_at + duration * interval '1 minute') AND location = ? AND cancelled = ?",
-                                           current_time,
-                                           current_time,
-                                           location.present? ? location : '',
-                                           false
-        ).first  # Use .first to get a single record
-
+        if session_id.present?
+          current_ts = TrainingSession.find(session_id)
+          puts "passed id in request, --------#{current_ts}---------"
+        else
+          # Fetch current training sessions with hrm_assignments
+          current_ts = TrainingSession.where("begins_at <= ? AND ? <= (begins_at + duration * interval '1 minute') AND location = ? AND cancelled = ?",
+                                             current_time,
+                                             current_time,
+                                             location.present? ? location : '',
+                                             false
+          ).first  # Use .first to get a single record
+        end
         if current_ts.present?
           puts "==================training session #{current_ts.name}"
           puts "==================training session #{current_ts.name}  had this training block  #{current_ts.current_block}, changing to #{block_name} ==============="

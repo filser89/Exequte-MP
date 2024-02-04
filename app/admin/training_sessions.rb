@@ -39,11 +39,17 @@ ActiveAdmin.register TrainingSession do
     column :is_limited
     column :location
     column :current_block
-    actions do |training_session|
+    column "RESHAPE " do |training_session|
       if training_session.workout_current.present?
-      link_to 'Download Template', '#', data: { workout_id: training_session.workout_current.id, workout_name: training_session.workout_current.name } , class: 'download_link member_link', onclick: 'downloadWorkoutTemplate(this);return false;'
+        link_to 'View', '#', data: { workout_id: training_session.workout_current.id} , class: 'act-btn', onclick: 'downloadWorkoutTemplate(this, "reshape");return false;'
       end
     end
+    column " GLAM" do |training_session|
+      if training_session.workout_current.present?
+        link_to 'View', '#', data: { workout_id: training_session.workout_current.id} , class: 'act-btn', onclick: 'downloadWorkoutTemplate(this, "glam");return false;'
+      end
+    end
+    actions
     render partial: 'admin/index'
     render partial: 'admin/template'
   end
@@ -143,11 +149,11 @@ ActiveAdmin.register TrainingSession do
       end
       row :template do |training_session|
         if training_session.workout_current.present?
-            a 'Download Template', class: 'clickable-btn', 'data-workout-id': training_session.workout_current.id, 'data-workout-name': training_session.workout_current.name, onclick: 'downloadWorkoutTemplate(this);return false;' do
+            a 'Show RESHAPE Template', class: 'clickable-btn', 'data-workout-id': training_session.workout_current.id, 'data-workout-name': training_session.workout_current.name, onclick: 'downloadWorkoutTemplate(this, "reshape");return false;' do
               'Download Template'
             end
-            a 'Show Template', class: 'clickable-btn', 'data-workout-id': training_session.workout_current.id, 'data-workout-name': training_session.workout_current.name, onclick: 'showWorkoutTemplate(this, false);return false;' do
-              'Show Template'
+            a 'Show GLAM Template', class: 'clickable-btn', 'data-workout-id': training_session.workout_current.id, 'data-workout-name': training_session.workout_current.name, onclick: 'downloadWorkoutTemplate(this, "glam");return false;' do
+              'Download Template'
             end
             render partial: 'admin/index'
             render partial: 'admin/template'

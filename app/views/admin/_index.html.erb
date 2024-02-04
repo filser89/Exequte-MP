@@ -23,36 +23,49 @@
             showWorkoutDetails(workoutId, hideCanvas);
         }
     }
-
-    function downloadWorkoutTemplate(element) {
-        console.log(element);
+    function downloadWorkoutTemplate(element, studio) {
+        console.log(element, studio);
         try {
             let workoutId = element.dataset.workoutId;
-            let workoutName = element.dataset.workoutName;
             // Get the canvas element
-            var canvas = document.getElementById('myCanvas');
-            if (canvas.style.display == "none") {
-                console.log('picture not generated yet, generate it now');
-                showWorkoutDetails(workoutId, true);
-            }
-            setTimeout(function () {
-                // Convert the canvas to a data URL
-                console.log('downloading');
-                var dataURL = canvas.toDataURL('image/png');
-                // Create a link element
-                var link = document.createElement('a');
-                link.href = dataURL;
-                let fileName = "workout-template.png";
-                if (workoutName && workoutName != '')
-                  fileName = workoutName + ".png";
-                link.download = fileName;
-                // Programmatically click the link to trigger the download
-                link.click();
-            }, 2000);
+            if (studio === "reshape")
+                window.open("https://graph.exequte.cn/reshapeworkoutid?id=" + workoutId)
+            else
+                window.open("https://graph.exequte.cn/glamworkoutid?id=" + workoutId)
         } catch (e) {
             console.log(e);
         }
     }
+
+    // function downloadWorkoutTemplate(element) {
+    //     console.log(element);
+    //     try {
+    //         let workoutId = element.dataset.workoutId;
+    //         let workoutName = element.dataset.workoutName;
+    //         // Get the canvas element
+    //         var canvas = document.getElementById('myCanvas');
+    //         if (canvas.style.display == "none") {
+    //             console.log('picture not generated yet, generate it now');
+    //             showWorkoutDetails(workoutId, true);
+    //         }
+    //         setTimeout(function () {
+    //             // Convert the canvas to a data URL
+    //             console.log('downloading');
+    //             var dataURL = canvas.toDataURL('image/png');
+    //             // Create a link element
+    //             var link = document.createElement('a');
+    //             link.href = dataURL;
+    //             let fileName = "workout-template.png";
+    //             if (workoutName && workoutName != '')
+    //               fileName = workoutName + ".png";
+    //             link.download = fileName;
+    //             // Programmatically click the link to trigger the download
+    //             link.click();
+    //         }, 2000);
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // }
 </script>
 <style>
     .act-btn {
@@ -65,5 +78,7 @@
         cursor: pointer;
         padding: 5px 8px;
     }
+
+
 </style>
 <canvas id="myCanvas" width="1342" height="954" style="display:none;"></canvas>
