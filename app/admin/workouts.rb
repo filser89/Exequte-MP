@@ -235,7 +235,7 @@ ActiveAdmin.register Workout do
       f.input :finisher_duration_format
       f.input :cooldown_duration
       f.input :breathing_duration
-      f.input :workout_type, as: :select, collection: ['power', 'plyo', 'deload', 'hiit']
+      f.input :workout_type, as: :select, collection: ['power', 'strength', 'plyo', 'deload', 'hiit']
       #f.input :workout_type, as: :select, collection: Workout.workout_types.keys
       f.input :trainings, as: :select, collection: Training.all.map { |t| [t.name, t.id] }
       f.input :photo, as: :file

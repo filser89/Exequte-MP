@@ -3,12 +3,18 @@ module Api
     class TrainingSessionsController < Api::BaseController
       before_action :find_training_session, only: [:show, :add_user_to_queue, :session_attendance, :cancel, :change_capacity]
       before_action :choose_date_range, only: %i[index dates_list]
-      skip_before_action :authenticate_api_key!, only: [:current, :current_hrm, :current_switch_block, :trigger_rank]
-      skip_before_action :authenticate_user_from_token!, only: [:current, :current_hrm, :current_switch_block, :trigger_rank]
+      skip_before_action :authenticate_api_key!, only: [:current, :current_hrm, :current_switch_block, :trigger_rank, :nowshowing]
+      skip_before_action :authenticate_user_from_token!, only: [:current, :current_hrm, :current_switch_block, :trigger_rank, :sessions, :nowshowing]
 
 
       def index
         render_success(@date_range.to_a)#.map { |d| DateTimeService.date_wd_d_m(d) })
+      end
+
+      def nowshowing
+        time_range = DateTime.now.midnight..DateTime.now.end_of_day
+        session_all = TrainingSession.includes(:bookings, :training, bookings: [:user], training: [:class_type]).where(begins_at: time_range, cancelled: false)
+        render_success(session_all)
       end
 
       def sessions
@@ -424,11 +430,22 @@ module Api
 
       def training_session_price(training_session)
         kind = training_session.class_kind
-        prices = current_user.prices
+        if current_user.nil?
+          prices = {
+            1 => 'price_1_cents',
+            2 => 'price_1_cents',
+            3 => 'price_1_cents'
+        }
+        else
+          prices = current_user.prices
+        end
         training_session.attributes[prices[kind]].fdiv(100)
       end
 
       def hrm_assigned(training_session)
+        if current_user.nil?
+          return false
+        end
         booked = current_user.bookings.with_ts.any? { |b| b.training_session.id == training_session.id && !b.cancelled && b.settled? }
         if booked
           current_user.bookings.with_ts.each do | b|
@@ -443,6 +460,9 @@ module Api
       end
 
       def btn_pattern(training_session)
+        if current_user.nil?
+          return { disabled: false, action: 'navigateToBooking', text: "COMMIT" }
+        end
         booked = current_user.bookings.with_ts.any? { |b| b.training_session.id == training_session.id && !b.cancelled && b.settled? }
         if booked
           booking = nil
@@ -463,6 +483,9 @@ module Api
       end
 
       def access_options(training_session)
+        if current_user.nil?
+          return { drop_in: true }
+        end
         return { free: true } if training_session.class_kind == 3
 
         options = { drop_in: true }
@@ -476,6 +499,9 @@ module Api
 
       def access_options_credits(training_session)
         begin
+          if current_user.nil?
+            return { drop_in: true }
+          end
           return { free: true } if training_session.class_kind == 3
           if usable_membership_unlimited(training_session)
             puts "unlimited membership, class is free"
@@ -495,6 +521,9 @@ module Api
       end
 
       def sessions_left_for_day(training_session)
+        if current_user.nil?
+          return -1
+        end
         current_active_memberships = current_user.memberships.not_classpack.settled.find_by(
           'start_date <= ? AND end_date > ?',
           training_session.begins_at,
@@ -522,6 +551,9 @@ module Api
       end
 
       def usable_membership_for_limited_class(training_session, membership)
+        if current_user.nil?
+          return false
+        end
         if membership
             class_pack_type = membership.membership_type
             is_allowed = false
@@ -542,6 +574,9 @@ module Api
 
 
       def usable_membership_unlimited(training_session)
+        if current_user.nil?
+          return false
+        end
        current_user.memberships.not_classpack.settled.is_unlimited.find_by(
           'start_date <= ? AND end_date > ?',
           training_session.begins_at,
@@ -571,6 +606,9 @@ module Api
       end
 
       def usable_membership_credit(training_session)
+        if current_user.nil?
+          return false
+        end
         current_privilege = current_user&.current_privilege
         if current_privilege
           if current_privilege&.is_unlimited
@@ -597,6 +635,9 @@ module Api
       end
 
       def usable_membership(training_session)
+        if current_user.nil?
+          return false
+        end
         current_active_memberships = current_user.memberships.not_classpack.settled.find_by(
           'start_date <= ? AND end_date > ?',
           training_session.begins_at,
@@ -647,6 +688,9 @@ module Api
       end
 
       def usable_credits(training_session)
+        if current_user.nil?
+          return false
+        end
         if training_session.credits.to_i <= current_user.credits.to_i
           return true
         else
@@ -655,6 +699,9 @@ module Api
       end
 
       def usable_classpack(training_session)
+        if current_user.nil?
+          return false
+        end
         current_active_classpack = current_user.memberships.classpack.find_by(
           'start_date <= ? AND end_date > ? AND vouchers > 0',
           training_session.begins_at,
@@ -709,6 +756,9 @@ module Api
       end
 
       def upcoming_membership(training_session)
+        if current_user.nil?
+          return false
+        end
         current_user.memberships.settled.find_by(
           'start_date >  ?',
           training_session.begins_at

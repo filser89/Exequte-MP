@@ -62,6 +62,7 @@ Rails.application.routes.draw do
           get :current_switch_block
           get :trigger_rank
           get :sessions
+          get :nowshowing
         end
       end
 
