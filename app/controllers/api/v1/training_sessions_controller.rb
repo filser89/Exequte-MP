@@ -13,7 +13,7 @@ module Api
 
       def nowshowing
         time_range = DateTime.now.midnight..DateTime.now.end_of_day
-        session_all = TrainingSession.includes(:bookings, :training, bookings: [:user], training: [:class_type]).where(begins_at: time_range, cancelled: false)
+        session_all = TrainingSession.includes(:bookings, :training, bookings: [:user], training: [:class_type]).where(begins_at: time_range, cancelled: false).order(begins_at: :asc).map { |ts| ts_to_hash(ts) }
         render_success(session_all)
       end
 
