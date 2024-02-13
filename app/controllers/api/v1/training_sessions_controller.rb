@@ -393,7 +393,7 @@ module Api
         h[:price] = training_session_price(training_session)
         h[:btn_pattern] = btn_pattern(training_session)
         h[:hrm] = hrm_assigned(training_session)
-        # h[:access_options] = access_options(training_session)
+        h[:access_options] = access_options(training_session)
         h[:access_options_credits] = access_options_credits(training_session)
         membership_to_use = usable_membership(training_session)
         begin
