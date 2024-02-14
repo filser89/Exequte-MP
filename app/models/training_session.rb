@@ -126,6 +126,7 @@ class TrainingSession < ApplicationRecord
       from: DateTimeService.time_24_h_m(begins_at),
       to: DateTimeService.time_24_h_m(begins_at + duration.minutes),
       instructor_id: instructor.id,
+      instructor_name: instructor.get_coach_name,
       training_id: training.id,
       date: DateTimeService.date_long_wd_m_d_y(begins_at),
       date_locale: localize_date_long,
