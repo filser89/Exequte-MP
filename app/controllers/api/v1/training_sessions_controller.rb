@@ -1,7 +1,7 @@
 module Api
   module V1
     class TrainingSessionsController < Api::BaseController
-      before_action :find_training_session, only: [:show, :add_user_to_queue, :session_attendance, :cancel, :change_capacity]
+      before_action :find_training_session, only: [:show, :add_user_to_queue, :session_attendance, :cancel, :change_capacity, :group_picture]
       before_action :choose_date_range, only: %i[index dates_list]
       skip_before_action :authenticate_api_key!, only: [:current, :current_hrm, :current_switch_block, :trigger_rank, :nowshowing]
       skip_before_action :authenticate_user_from_token!, only: [:current, :current_hrm, :current_switch_block, :trigger_rank, :sessions, :nowshowing]
@@ -369,6 +369,30 @@ module Api
 
       def session_attendance
         render_success(@training_session.attendance_hash)
+      end
+
+      def group_picture
+        puts "==========IN group picture upload=============="
+        puts "PARAMS: #{params}"
+        group_picture = params[:group_picture]
+        puts "group_picture: #{group_picture}"
+        @training_session.group_photo.attach(group_picture)
+        if @training_session.group_photo.attached?
+          group_picture_url = @training_session.group_photo.service_url
+          puts "calling api to generate template with #{group_picture_url}"
+          pic_service = PictureService.new
+          from = DateTimeService.time_24_h_m(@training_session.begins_at)
+          to =  DateTimeService.time_24_h_m(@training_session.begins_at + @training_session.duration.minutes)
+          coach = @training_session.instructor.name
+          group_picture_url_complete = pic_service.get_group_picture_url(@training_session.id, @training_session.begins_at, from, to, @training_session.duration, @training_session.name, @training_session.location, coach, group_picture_url)
+          puts ">>>>>group_picture_url:#{group_picture_url_complete}"
+          @training_session.attach_group_photo_from_url(group_picture_url_complete)
+          puts  "Attached?  #{@training_session.group_photo.attached?}"
+          render_success({msg: 'ok'})
+          @training_session.save
+        else
+          render_success({msg: 'failed'})
+        end
       end
 
       private

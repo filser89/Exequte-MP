@@ -1,6 +1,6 @@
 ActiveAdmin.register TrainingSession do
 
-  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, :location, :poster_photo, :current_block, :credits, workout_ids: [], photos: [], videos: []
+  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, :location, :poster_photo, :group_photo, :current_block, :credits, workout_ids: [], photos: [], videos: []
 
   member_action :delete_training_session_photo, method: :delete do
     begin
@@ -97,6 +97,7 @@ ActiveAdmin.register TrainingSession do
         # # Add a section for uploading multiple videos
         f.input :videos, as: :file, input_html: { multiple: true }
         f.input :poster_photo, as: :file
+        f.input :group_photo, as: :file
       end
     end
     f.actions         # adds the 'Submit' and 'Cancel' buttons
@@ -145,6 +146,11 @@ ActiveAdmin.register TrainingSession do
       row :poster_photo do |ts|
         if ts.poster_photo.attached?
           image_tag ts.poster_photo, width: 200
+        end
+      end
+      row :group_photo do |ts|
+        if ts.group_photo.attached?
+          image_tag ts.group_photo, width: 200
         end
       end
       row :template do |training_session|

@@ -52,6 +52,7 @@ Rails.application.routes.draw do
           put :cancel
           put :change_capacity
           get :session_attendance
+          post :group_picture
         end
         collection do
           get :dates_list

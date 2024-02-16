@@ -20,6 +20,7 @@ class TrainingSession < ApplicationRecord
   has_many :hrm_assignments
   has_many :hrms, through: :hrm_assignments
   has_one_attached :poster_photo
+  has_one_attached :group_photo
   has_many :training_session_rankings
   has_many :ranked_users, through: :training_session_rankings, source: :user
 
@@ -64,7 +65,7 @@ class TrainingSession < ApplicationRecord
   end
 
   def attendance_hash
-    h = standard_hash
+    h = show_hash
     h[:date] = DateTimeService.date_wd_d_m(begins_at)
     h[:date_locale] = localize_date
     h[:bookings] = bookings.settled.where(cancelled: false).map(&:attendance_hash)
@@ -142,6 +143,7 @@ class TrainingSession < ApplicationRecord
       current_block: current_block
     }
     h[:image_url] =  training.photo.service_url if training.photo.attached?
+    h[:group_photo_url] = group_photo.service_url if group_photo.attached?
     h
   end
 
@@ -358,5 +360,8 @@ class TrainingSession < ApplicationRecord
       end
   end
 
+  def attach_group_photo_from_url(url)
+    group_photo.attach({ io: FileDownloaderService.download(url), filename: FileDownloaderService.filename })
+  end
 
 end
