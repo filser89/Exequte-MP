@@ -90,7 +90,7 @@ Rails.application.routes.draw do
       resources :banners, only: [:index]
 
       # INFOS
-      resources :infos, only: [:index]
+      resources :infos, only: [:index, :show]
 
       # SETTINGS
       resources :settings, only: [:index]

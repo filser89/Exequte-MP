@@ -532,6 +532,7 @@ module Api
             return { free: true }
           end
           options = { drop_in: true }
+          options[:can_use_dropin] = usable_membership_dropin(training_session)
           return options if training_session.class_kind == 1
           options[:can_use_credits] = usable_membership_credit(training_session)
           options[:upgrade_membership] = upgrade_membership(training_session)
@@ -626,6 +627,44 @@ module Api
           upgrade_choice
         rescue => e
           puts "something went wrong finding membership"
+        end
+      end
+
+      def usable_membership_dropin(training_session)
+        if current_user.nil?
+          return false
+        end
+        current_privilege = current_user&.current_privilege
+        if current_privilege
+          if current_privilege&.is_unlimited
+            puts "unlimited membership, can book"
+            return true
+          end
+          book_before = current_privilege&.book_before
+          #add one day to privilege so that it counts until 23:59
+          furthest_bookable_session = DateTime.now.midnight + book_before&.days + 1.days
+          puts "user privilege: #{book_before} days before"
+          puts "training session: #{training_session.begins_at} "
+          puts "furthest_bookable_session : #{furthest_bookable_session} "
+          if training_session.begins_at < furthest_bookable_session
+            puts "can use drop-in"
+            return true
+          else
+            puts "need to upgrade to use drop-in"
+            return false
+          end
+        else
+          furthest_bookable_session = DateTime.now.midnight + 2.days
+          puts "default book before drop-in without membership: 1days before"
+          puts "training session: #{training_session.begins_at} "
+          puts "furthest_bookable_session : #{furthest_bookable_session} "
+          if training_session.begins_at < furthest_bookable_session
+            puts "can use drop-in"
+            return true
+          else
+            puts "need to upgrade to use drop-in"
+            return false
+          end
         end
       end
 

@@ -62,6 +62,7 @@ en:
       current_card: "CARDS"
       active_until: "Active until"
       no_credits: "An empty wallet is a sad wallet."
+      apply: "USE COUPON CODE"
     about:
       coach: "Coach "
       address: "Address: "
@@ -123,7 +124,7 @@ en:
       book_class: "Book Class"
       pay: "Pay"
       total_price: "Total: "
-      apply: "Apply"
+      apply: "USE COUPON CODE"
       promo_code_placeholder: "Enter Promo Code"
       min: " min"
       kcal: " kCal"

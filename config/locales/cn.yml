@@ -29,6 +29,7 @@ zh-CN:
       current_card: "会员等级"
       active_until: "有效到"
       no_credits: "没卡的钱包是难过的钱包"
+      apply: "使用优惠券"
     about:
       coach: "教练 "
       address: "地址: "
@@ -91,7 +92,7 @@ zh-CN:
       book_class: "预约"
       pay: "付款"
       total_price: "总数:"
-      apply: "使用"
+      apply: "使用优惠券"
       promo_code_placeholder: "输入优惠码"
       min: " 分钟"
       kcal: " 卡路里"
