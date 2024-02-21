@@ -527,13 +527,13 @@ module Api
             return { drop_in: true }
           end
           return { free: true } if training_session.class_kind == 3
-          if usable_membership_unlimited(training_session)
+          if usable_membership_unlimited(training_session) && training_session.class_kind != 1
             puts "unlimited membership, class is free"
             return { free: true }
           end
           options = { drop_in: true }
           options[:can_use_dropin] = usable_membership_dropin(training_session)
-          return options if training_session.class_kind == 1
+          # return options if training_session.class_kind == 1
           options[:can_use_credits] = usable_membership_credit(training_session)
           options[:upgrade_membership] = upgrade_membership(training_session)
           options[:credits] = usable_credits(training_session)
@@ -636,7 +636,7 @@ module Api
         end
         current_privilege = current_user&.current_privilege
         if current_privilege
-          if current_privilege&.is_unlimited
+          if current_privilege&.is_unlimited  && training_session.class_kind != 1
             puts "unlimited membership, can book"
             return true
           end
@@ -674,7 +674,7 @@ module Api
         end
         current_privilege = current_user&.current_privilege
         if current_privilege
-          if current_privilege&.is_unlimited
+          if current_privilege&.is_unlimited && training_session.class_kind != 1
             puts "unlimited membership, can book"
             return true
           end

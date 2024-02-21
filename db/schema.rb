@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_11_091424) do
+ActiveRecord::Schema.define(version: 2024_02_21_100138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -466,7 +466,8 @@ ActiveRecord::Schema.define(version: 2024_01_11_091424) do
     t.integer "oa_subscribed_at"
     t.boolean "waiver_signed"
     t.datetime "waiver_signed_at"
-    t.integer "credits", default: 20
+    t.integer "credits", default: 0
+    t.string "injury"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

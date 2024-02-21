@@ -123,7 +123,7 @@ module Api
       end
 
       def permitted_params
-        params.require(:user).permit(:name, :mp_email, :city, :phone, :wechat, :gender, :first_name, :last_name, :workout_name, :emergency_name, :emergency_phone, :favorite_song, :favorite_food, :music_styles, :profession, :profession_activity_level, :sports, :birthday, :nationality, :height, :current_weight, :current_body_fat, :current_shapes, :target, :target_weight, :target_body_fat, :target_shapes, :waiver_signed, :waiver_signed_at)
+        params.require(:user).permit(:name, :mp_email, :city, :phone, :wechat, :gender, :first_name, :last_name, :workout_name, :emergency_name, :emergency_phone, :favorite_song, :favorite_food, :music_styles, :profession, :profession_activity_level, :sports, :birthday, :nationality, :height, :current_weight, :current_body_fat, :current_shapes, :target, :target_weight, :target_body_fat, :target_shapes, :waiver_signed, :waiver_signed_at, :injury)
       end
     end
   end

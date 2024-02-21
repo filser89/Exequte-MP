@@ -82,6 +82,7 @@ class User < ApplicationRecord
     h[:waiver_signed] = waiver_signed
     h[:waiver_signed_at] = waiver_signed_at
     h[:credits] = credits
+    h[:injury] = injury
     h
   end
 
@@ -121,7 +122,8 @@ class User < ApplicationRecord
       has_wx_info: wx_info.present?,
       waiver_signed: waiver_signed,
       waiver_signed_at: waiver_signed_at,
-      credits: credits
+      credits: credits,
+      injury: injury
     }
   end
 
@@ -142,8 +144,22 @@ class User < ApplicationRecord
   def current_privilege
     begin
       #check the membership that can book the earliest, and use this as membership power judge
-      memberships_list = memberships&.settled&.where('end_date >= ? AND is_class_pack = false AND credits > 0', DateTime.now.midnight)
+      #        current_user.memberships.not_classpack.settled.is_unlimited.find_by(
+      #           'start_date <= ? AND end_date > ?',
+      #           training_session.begins_at,
+      #           training_session.begins_at
+      #         )
+      memberships_list = memberships&.settled&.where('end_date >= ? AND is_class_pack = false', DateTime.now.midnight)
       highest_price_membership = memberships_list&.max_by { |membership| membership.membership_type&.book_before.to_i }
+      begin
+        unlimited_membership = memberships&.settled&.is_unlimited&.where('end_date >= ? AND is_class_pack = false', DateTime.now.midnight)&.first
+        if unlimited_membership
+          puts "found unlimited membership"
+          return unlimited_membership
+        end
+      rescue => f
+        puts f
+      end
       puts highest_price_membership
       highest_price_membership || nil
     rescue => e

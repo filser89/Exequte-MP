@@ -89,6 +89,7 @@ class Booking < ApplicationRecord
       price: price,
       can_cancel: can_cancel?,
       first_booking: first_booking?,
+      has_injury: has_injury?,
       status: status,
       status_locale: localize_status,
       hrm: hrm
@@ -97,6 +98,14 @@ class Booking < ApplicationRecord
 
   def can_cancel?
     DateTime.now < training_session.begins_at && !cancelled
+  end
+
+  def has_injury?
+    # if only active booking in system, then its first booking
+    if (user && user.injury && user.injury != "" && user.injury != " ")
+      return true
+    end
+    return false
   end
 
   def first_booking?
