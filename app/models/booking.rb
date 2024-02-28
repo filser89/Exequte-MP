@@ -2,6 +2,7 @@ class Booking < ApplicationRecord
   include WxPayable
   include MessageScheduler
   BOOKING_OPTIONS = [nil, 'free', 'drop-in', 'membership', 'voucher', 'class-pack', 'credits']
+  PAYMENT_OPTIONS = ['paid', 'none', 'pending']
   SETTLED_PAYMENTS = %w[paid none]
   monetize :price_cents
   belongs_to :user

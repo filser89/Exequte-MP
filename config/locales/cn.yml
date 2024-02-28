@@ -14,14 +14,15 @@ zh-CN:
     home:
       sign_up: '注册'
       #coming-up component
-      coming_up: "COMING UP"
-      no_sessions_today: "No sessions today"
+      coming_up: "即将到来"
+      no_sessions_today: "今天没有课"
       min: " min"
       kcal: " kCal"
-      booked: "BOOKED"
-      commit: "COMMIT"
-      in_queue: "IN QUEUE"
-      queue_up: "QUEUE UP"
+      booked: "预约了"
+      commit: "预约"
+      in_queue: "等待可用的预订位"
+      queue_up: "已售完"
+      queue_up_updates: "点击订阅更新"
     wallet:
       sign_up: '注册'
       topup: '充值余额'
@@ -44,8 +45,9 @@ zh-CN:
       kcal: " 卡路里"
       booked: "预约了"
       commit: "预约"
-      in_queue: "在排队"
-      queue_up: "排队"
+      in_queue: "等待可用的预订位"
+      queue_up: "已售完"
+      queue_up_updates: "点击订阅更新"
       sign_up: '注册'
     class-info:
       min: " 分钟"
@@ -60,8 +62,9 @@ zh-CN:
       time: "时间: "
       booked: "预约了"
       commit: "预约"
-      in_queue: "在排队"
-      queue_up: "排队"
+      in_queue: "等待可用的预订位"
+      queue_up: "已售完"
+      queue_up_updates: "点击订阅更新"
       sign_up: '注册'
       cancel_class: "取消预约"
       cancel_booking_normal_title: "确定取消吗？"

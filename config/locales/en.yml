@@ -52,8 +52,9 @@ en:
       kcal: " kCal"
       booked: "BOOKED"
       commit: "COMMIT"
-      in_queue: "IN QUEUE"
-      queue_up: "QUEUE UP"
+      in_queue: "WAITING FOR AVAILABLE SPOTS UPDATES"
+      queue_up: "SOLD OUT"
+      queue_up_updates: "CLICK FOR UPDATES"
     wallet:
       sign_up: 'SIGN UP'
       topup: 'TOP UP YOUR CREDITS'
@@ -77,8 +78,9 @@ en:
       kcal: " kCal"
       booked: "BOOKED"
       commit: "COMMIT"
-      in_queue: "IN QUEUE"
-      queue_up: "QUEUE UP"
+      in_queue: "WAITING FOR AVAILABLE SPOTS UPDATES"
+      queue_up: "SOLD OUT"
+      queue_up_updates: "CLICK FOR UPDATES"
       sign_up: "SIGN UP"
     class-info:
       min: " min"
@@ -93,8 +95,9 @@ en:
       time: "Time: "
       booked: "BOOKED"
       commit: "COMMIT"
-      in_queue: "IN QUEUE"
-      queue_up: "QUEUE UP"
+      in_queue: "WAITING FOR AVAILABLE SPOTS UPDATES"
+      queue_up: "SOLD OUT"
+      queue_up_updates: "CLICK FOR UPDATES"
       sign_up: "SIGN UP"
       cancel_class: "CANCEL CLASS"
       cancel_booking_normal_title: "Are you sure?"

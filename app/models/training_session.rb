@@ -312,7 +312,7 @@ class TrainingSession < ApplicationRecord
 
   def available_hrms
     assigned_hrms = hrm_assignments.where(assigned: true).pluck(:hrm_id)
-    Hrm.where.not(id: assigned_hrms)
+    Hrm.where.not(id: assigned_hrms).where(is_used: true)
   end
 
   def ends_at
