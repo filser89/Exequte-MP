@@ -72,9 +72,9 @@ module Api
               puts "#{booking.user.full_name} booked class #{booking.training_session.name}  with #{booking.booked_with}"
               begin
                 #return voucher if paid with drop-in or voucher
-                if %w[voucher drop-in class-pack].include?(booking.booked_with)
-                  puts "current user voucher #{booking.user.voucher_count}"
-                  booking.user.return_voucher!
+                if %w[voucher credits drop-in class-pack].include?(booking.booked_with)
+                  puts "current user credits #{booking.user.credits}"
+                  booking.user.return_credits(booking.training_session.credits)
                 else
                   puts "current user booked with membership, do nothing"
                 end
