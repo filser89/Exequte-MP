@@ -86,11 +86,12 @@ module Api
           puts "===================MEMBERSHIP UPDATED========================="
           p @membership
           begin
-            puts "======CURRENT USER CREDITS:#{current_user.credits.to_i}========"
-            puts "====user_id:#{current_user.id}"
-            current_user.credits = current_user.credits.to_i +  @membership.credits.to_i
-            if current_user.save
-              puts "======NEW CREDIT BALANCE :#{current_user.credits.to_i}========"
+            user = @membership.user
+            puts "======CURRENT USER CREDITS:#{user.credits.to_i}========"
+            puts "====user_id:#{user.id}"
+            user.credits = user.credits.to_i +  @membership.credits.to_i
+            if user.save
+              puts "======NEW CREDIT BALANCE :#{user.credits.to_i}========"
             end
           rescue => e
             puts "something went wrong saving user credits"
