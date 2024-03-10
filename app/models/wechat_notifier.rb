@@ -41,8 +41,8 @@ class WechatNotifier < ApplicationRecord
         # Ekaterina can edit!
         "first" => "COMMIT, bring water and a towel!",
         "keyword1" => "#{params[:ts_name]}",
-        "keyword2" => "exeQute JingAn",
-        "keyword3" => "425, Yanping Rd, 1F",
+        "keyword2" => "exeQute VIP",
+        "keyword3" => "889, Wanhangdu Rd, L2",
         "keyword4" => "#{params[:ts_time]}",
         "remark" => "Cancel #{params[:ts_cancel_before]}hrs in advance!"
       }
@@ -64,8 +64,8 @@ class WechatNotifier < ApplicationRecord
 
         "first" => "Yesss! A spot freed up!",
         "keyword1" => "#{params[:ts_name]}",
-        "keyword2" => "exeQute JingAn",
-        "keyword3" => "425, Yanping Rd, 1F",
+        "keyword2" => "exeQute VIP",
+        "keyword3" => "889, Wanhangdu Rd, L2",
         "keyword4" => "#{params[:ts_time]}",
         "remark" => "Be the FASTEST and COMMIT now!"
       }
@@ -88,8 +88,8 @@ class WechatNotifier < ApplicationRecord
         # Ekaterina can edit!
         "first" => "Updates from EXEQUTE!",
         "keyword1" => "#{params[:activity_name]}",
-        "keyword2" => "exeQute JingAn",
-        "keyword3" => "425, Yanping Rd, 1F",
+        "keyword2" => "exeQute VIP",
+        "keyword3" => "889, Wanhangdu Rd, L2",
         "keyword4" => "#{params[:activity_time]}",
         "remark" => "Check it out now!"
       }
@@ -132,8 +132,8 @@ class WechatNotifier < ApplicationRecord
       "data" => {
         "first" => "This training session was cancelled.　你预约了的课被取消了。",
         "keyword1" => "#{params[:ts_name]}",
-        "keyword2" => "exeQute JingAn",
-        "keyword3" => "425, Yanping Rd, 1F",
+        "keyword2" => "exeQute VIP",
+        "keyword3" => "889, Wanhangdu Rd, L2",
         "keyword4" => "#{params[:ts_time]}",
         "remark" => "If you booked with voucher/drop-in, your voucher has already been returned to your account."
       }
