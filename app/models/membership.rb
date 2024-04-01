@@ -19,6 +19,11 @@ class Membership < ApplicationRecord
   scope :is_not_limited, -> {where(is_limited: false)}
   scope :is_unlimited, -> {where(is_unlimited: true)}
   scope :is_not_unlimited, -> {where(is_unlimited: false)}
+  scope :new_studio, -> {where('start_date >= ?', '2024-01-01 00:00:00 +0800'
+          )}
+  scope :without_vouchers, -> {
+    joins(:membership_type).where("COALESCE(membership_types.vouchers, 0) <= ?", 0)
+  }
 
   def booking_hash
     h = standard_hash

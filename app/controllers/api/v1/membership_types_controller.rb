@@ -4,7 +4,9 @@ module Api
       def index
         begin
           #if new user / no bookings were made before, show all class-packs (including trials)
-          is_existing_user = current_user.bookings.active.settled.with_ts.any?
+          #is_existing_user = current_user.bookings.active.settled.with_ts.any?
+          #if new user / no bookings were made before, show all class-packs (including trials)
+          is_existing_user = current_user.memberships.settled.new_studio.without_vouchers.any?
           @membership_types = is_existing_user ? MembershipType.active.not_trial : MembershipType.active
           if (params[:session_id])
             @training_session = TrainingSession.find(params[:session_id])
@@ -26,8 +28,9 @@ module Api
           render_success(@membership_types.is_not_limited.map(&:standard_hash))
           end
         rescue => e
+          puts e
           puts ">>something went wrong, return all membership_types"
-          @membership_types = MembershipType.active.is_not_limited.
+          @membership_types = MembershipType.active.not_trial
           render_success(@membership_types.map(&:standard_hash))
         end
       end
