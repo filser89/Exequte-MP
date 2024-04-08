@@ -1,0 +1,6 @@
+New Membership Session was created:
+<div>Membership Type:<%= @membership.name %></div>
+<div>User:<%= @membership.user.full_name %></div>
+<div>User Credits:<%= @membership.user.credits %></div>
+<div>Begins At: <%= @membership.start_date %> </div>
+<%= link_to "Create another Membership", new_membership_path %>

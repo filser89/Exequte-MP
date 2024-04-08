@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :workouts, only: %i[new create show]
   resources :info_items, only: %i[new create show]
   resources :trainings, only: %i[new create show]
+  resources :memberships, only: %i[new create show]
 
   #helper methods for the workout backend
   namespace :admin do

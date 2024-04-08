@@ -1,0 +1,8 @@
+<div class="container" style="height: 1000px" >
+  <%= simple_form_for(@membership) do |f| %>
+    <%= f.association :membership_type , collection: MembershipType.new_studio.has_credits_or_unlimited.order_by_name, label_method: :title_summary %>
+    <%= f.association :user, collection: User.all.order_by_name, label_method: :full_name_credits %>
+    <%= f.input :start_date, as: :date %>
+    <%= f.button :submit, style: 'background-color: #5C0C17; color: #FFF' %>
+  <% end %>
+</div>

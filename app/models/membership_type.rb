@@ -18,6 +18,12 @@ class MembershipType < ApplicationRecord
   scope :with_trainings, -> { includes(:trainings) }
   scope :is_limited, -> {where(is_limited: true)}
   scope :is_not_limited, -> {where(is_limited: false)}
+  scope :order_by_credits, -> { order('credits DESC')}
+  scope :order_by_name, -> { order('name ASC')}
+  scope :new_studio, -> {where('updated_at >= ?', '2024-03-01 00:00:00 +0800'
+  )}
+  scope :has_credits_or_unlimited, -> {where('credits >= ? or is_unlimited = ?', 0, true
+  )}
 
   def standard_hash
     {
@@ -44,6 +50,10 @@ class MembershipType < ApplicationRecord
     else
       return false
     end
+  end
+
+  def title_summary
+    "#{name} - #{credits} credits - #{duration} days - #{price.to_i}元 - (#{book_before} days advance)"
   end
 
 end

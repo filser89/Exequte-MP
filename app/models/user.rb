@@ -205,6 +205,10 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def full_name_credits
+    "#{first_name} #{last_name} [#{credits}]"
+  end
+
   def get_valid_name
     return "#{first_name} #{last_name}" if first_name && last_name && !first_name.empty? && !last_name.empty?
     return first_name if first_name && !first_name.empty?
