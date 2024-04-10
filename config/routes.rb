@@ -5,7 +5,12 @@ Rails.application.routes.draw do
   get "wx_token", to: "pages#wx_token"
 
 
-  resources :training_sessions, only: %i[new create show]
+  resources :training_sessions, only: %i[new create show] do
+    collection do
+      get 'custom'
+    end
+  end
+
   resources :workouts, only: %i[new create show]
   resources :info_items, only: %i[new create show]
   resources :trainings, only: %i[new create show]

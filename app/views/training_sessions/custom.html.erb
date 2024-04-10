@@ -1,0 +1,48 @@
+<div class="container" style="height: 1000px">
+  <%= simple_form_for(@training_session) do |f| %>
+    <%= hidden_field_tag :custom_action, 'custom' %>
+    <%= f.association :training , label_method: :full_name %>
+    <%= f.association :instructor, collection: User.where(instructor: true), label_method: :full_name %>
+    <%= f.association :workouts, label_method: :full_name %>
+
+    <div id="datetime_fields">
+      <!-- This is where dynamically added datetime fields will go -->
+    </div>
+
+    <%= f.input :cancel_before, label: "Cancel Before (number of hours, e.g. 8)"  %>
+    <div>
+      <label>Location:</label>
+      <%= f.radio_button :location, 'reshape', checked: true %> Reshape
+      <%= f.radio_button :location, 'glam' %> Glam
+      <%= f.radio_button :location, 'pt' %> PT
+    </div>
+
+    <%= button_tag "Add Time", id: "add_time_button", type: "button" %>
+    <%= f.button :submit, style: 'background-color: #5C0C17; color: #FFF' %>
+  <% end %>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var addTimeButton = document.getElementById('add_time_button');
+        var datetimeFields = document.getElementById('datetime_fields');
+
+        addTimeButton.addEventListener('click', function() {
+            var datetimeInput = document.createElement('input');
+            datetimeInput.setAttribute('type', 'datetime-local');
+            datetimeInput.setAttribute('name', 'training_session[times][]');
+            datetimeFields.appendChild(datetimeInput);
+
+            var creditSelect = document.createElement('select');
+            creditSelect.setAttribute('name', 'training_session[credits_list][]');
+            var credits = [12, 15, 17, 20, 25];
+            credits.forEach(function(credit) {
+                var option = document.createElement('option');
+                option.text = credit;
+                option.value = credit;
+                creditSelect.appendChild(option);
+            });
+            datetimeFields.appendChild(creditSelect);
+        });
+    });
+</script>

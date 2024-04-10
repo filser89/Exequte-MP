@@ -141,6 +141,14 @@ module Api
             if %w[voucher credits drop-in].include?(@booking.booked_with)
               @booking.user.return_credits(@booking.training_session.credits)
               puts "===================RETURN VOUCHER========================="
+              @logs = Log.new()
+              @logs.log_type = "BOOKING CANCELED (ON TIME), RETURN CREDITS"
+              @logs.value = "#{@booking.user.full_name} (id:#{@booking.user_id}) canceled class #{@booking&.training_session&.name} (time: #{@booking&.training_session&.begins_at} ), credits refunded."
+              if @logs.save
+                puts "log save successful"
+              else
+                puts "error saving log"
+              end
             else
               if %w[class-pack].include?(@booking.booked_with)
                 puts "===================RETURNING ONE VOUCHER TO CLASS-PACK:========================="
