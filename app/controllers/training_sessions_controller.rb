@@ -194,10 +194,9 @@ class TrainingSessionsController < ApplicationController
           puts e
         end
         if @training_session.save
-          create_for_weeks(params[:weeks], @training_session)
-          redirect_to @training_session
+          puts "training session saved correctly"
         else
-          render :new
+          puts "error saving training session"
         end
         # unless @training_session.save
         #   puts "Error saving session"
@@ -212,6 +211,7 @@ class TrainingSessionsController < ApplicationController
       puts "Error: #{e.message}"
       puts "Backtrace: #{e.backtrace.join("\n")}"
     end
+    redirect_to @training_session
   end
 
   def show
