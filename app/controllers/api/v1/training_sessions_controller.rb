@@ -417,7 +417,7 @@ module Api
         h[:price] = training_session_price(training_session)
         h[:btn_pattern] = btn_pattern(training_session)
         h[:hrm] = hrm_assigned(training_session)
-        h[:access_options] = access_options(training_session)
+        # h[:access_options] = access_options(training_session)
         h[:access_options_credits] = access_options_credits(training_session)
         membership_to_use = usable_membership(training_session)
         begin
@@ -527,9 +527,42 @@ module Api
             return { drop_in: true }
           end
           return { free: true } if training_session.class_kind == 3
-          if usable_membership_unlimited(training_session) && training_session.class_kind != 1
-            puts "unlimited membership, class is free"
-            return { free: true }
+          current_privileges = usable_memberships(training_session)
+          current_privileges.each do | current_privilege |
+            puts "membership name:#{current_privilege&.name}"
+            if current_privilege.is_unlimited && training_session.class_kind != 1
+              begin
+                puts "unlimited membership, class-kind:#{training_session.class_kind}"
+                puts "checking if its limited (training) membership"
+                book_before = current_privilege&.book_before
+                #add one day to privilege so that it counts until 23:59
+                furthest_bookable_session = DateTime.now.midnight + book_before&.days + 1.days
+                puts "user privilege: #{book_before} days before"
+                puts "training session: #{training_session.begins_at} "
+                puts "furthest_bookable_session : #{furthest_bookable_session} "
+                if training_session.begins_at < furthest_bookable_session
+                  puts "can book"
+                  if current_privilege&.is_limited
+                    is_allowed = usable_membership_for_limited_class(training_session, current_privilege)
+                    if (!is_allowed)
+                      puts "training not allowed for this membership, move on"
+                    else
+                      puts "training  allowed for this membership, return true"
+                      return { free: true }
+                    end
+                  else
+                    puts "not limited membership, return true"
+                    return { free: true }
+                  end
+                else
+                  puts "need to upgrade, break from loop"
+                end
+              rescue => e
+                puts e
+                puts "something went wrong checking unlimited, return free"
+                return { free: true }
+              end
+            end
           end
           options = { drop_in: true }
           options[:can_use_dropin] = usable_membership_dropin(training_session)
@@ -609,6 +642,17 @@ module Api
         )
       end
 
+      def usable_memberships(training_session)
+        if current_user.nil?
+          return false
+        end
+        current_user.memberships.not_classpack.settled.where(
+          'start_date <= ? AND end_date > ?',
+          training_session.begins_at,
+          training_session.begins_at
+        )
+      end
+
 
       def upgrade_membership(training_session)
         begin
@@ -636,10 +680,10 @@ module Api
         end
         current_privilege = current_user&.current_privilege
         if current_privilege
-          if current_privilege&.is_unlimited  && training_session.class_kind != 1
-            puts "unlimited membership, can book"
-            return true
-          end
+          # if current_privilege&.is_unlimited  && training_session.class_kind != 1
+          #   puts "unlimited membership, can book"
+          #   return true
+          # end
           book_before = current_privilege&.book_before
           #add one day to privilege so that it counts until 23:59
           furthest_bookable_session = DateTime.now.midnight + book_before&.days + 1.days
@@ -672,29 +716,50 @@ module Api
         if current_user.nil?
           return false
         end
-        current_privilege = current_user&.current_privilege
-        if current_privilege
-          if current_privilege&.is_unlimited && training_session.class_kind != 1
-            puts "unlimited membership, can book"
-            return true
-          end
-          book_before = current_privilege&.book_before
-          #add one day to privilege so that it counts until 23:59
-          furthest_bookable_session = DateTime.now.midnight + book_before&.days + 1.days
-          puts "user privilege: #{book_before} days before"
-          puts "training session: #{training_session.begins_at} "
-          puts "furthest_bookable_session : #{furthest_bookable_session} "
-          if training_session.begins_at < furthest_bookable_session
-            puts "can book"
-            return true
+        current_privileges = usable_memberships(training_session)
+        is_usable = false
+        current_privileges.each do | current_privilege |
+          if current_privilege
+            if current_privilege&.is_unlimited && training_session.class_kind != 1
+              puts "unlimited membership, class-kind:#{training_session.class_kind}"
+              puts "checking if its limited (training) membership"
+              if current_privilege&.is_limited
+                is_allowed = usable_membership_for_limited_class(training_session, current_privilege)
+                if (!is_allowed)
+                  puts "training not allowed for this membership, return false"
+                  is_usable = false
+                else
+                  puts "training  allowed for this membership, break"
+                  is_usable = true
+                  break
+                end
+              else
+                is_usable = true
+                puts "not limited membership, break"
+                break
+              end
+            end
+            book_before = current_privilege&.book_before
+            #add one day to privilege so that it counts until 23:59
+            furthest_bookable_session = DateTime.now.midnight + book_before&.days + 1.days
+            puts "user privilege: #{book_before} days before"
+            puts "training session: #{training_session.begins_at} "
+            puts "furthest_bookable_session : #{furthest_bookable_session} "
+            if training_session.begins_at < furthest_bookable_session
+              puts "can book"
+              is_usable = true
+              break
+            else
+              puts "need to upgrade"
+              is_usable = false
+            end
           else
             puts "need to upgrade"
-            return false
+            is_usable = false
           end
-        else
-          puts "need to upgrade"
-          return false
         end
+        puts "is_usable? #{is_usable}"
+        return is_usable
       end
 
       def usable_membership(training_session)

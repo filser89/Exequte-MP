@@ -25,7 +25,7 @@ module Api
               render_success(@membership_types.is_not_limited.map(&:standard_hash))
             end
           else
-          render_success(@membership_types.is_not_limited.map(&:standard_hash))
+          render_success(@membership_types.map(&:standard_hash))
           end
         rescue => e
           puts e

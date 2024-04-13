@@ -127,7 +127,10 @@ class TrainingSessionsController < ApplicationController
           15 => 219,
           17 => 229,
           20 => 239,
-          25 => 288
+          25 => 288,
+          30 => 349,
+          50 => 700,
+          70 => 1000
         }
         credit = credits[index].to_i
 
