@@ -576,7 +576,9 @@ module Api
           options[:upgrade_membership] = upgrade_membership(training_session)
           options[:credits] = usable_credits(training_session)
           options[:membership] = usable_membership_unlimited(training_session)
-          options[:classpack] = classpack_option(training_session)
+          class_pack = classpack_option(training_session)
+          puts "found this class-pack:#{class_pack}"
+          options[:classpack] = class_pack
           options
         rescue => e
           puts e
@@ -882,11 +884,13 @@ module Api
             end
           end
         end
+        return nil
         rescue => e
           puts e
           puts "error computing classpacks, returning null"
           return nil
         end
+        return nil
       end
 
       def usable_classpack(training_session)
@@ -973,6 +977,8 @@ module Api
       end
 
       def classpack_option(training_session)
+        tmp_classpack = usable_classpack_credit(training_session)
+        puts "tmp classpack:#{tmp_classpack}"
         return 'classpack' if usable_classpack_credit(training_session)
       end
 
