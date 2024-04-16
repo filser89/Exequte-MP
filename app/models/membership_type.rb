@@ -22,7 +22,7 @@ class MembershipType < ApplicationRecord
   scope :order_by_name, -> { order('name ASC')}
   scope :new_studio, -> {where('updated_at >= ?', '2024-03-01 00:00:00 +0800'
   )}
-  scope :has_credits_or_unlimited, -> {where('credits >= ? or is_unlimited = ?', 0, true
+  scope :has_credits_or_unlimited_or_classpack, -> {where('credits >= ? or is_unlimited = ? or vouchers > ?', 0, true, 0
   )}
 
   def standard_hash
@@ -53,7 +53,7 @@ class MembershipType < ApplicationRecord
   end
 
   def title_summary
-    "#{name} - #{credits} credits - #{duration} days - #{price.to_i}元 - (#{book_before} days advance)"
+    is_class_pack ? "#{name} - #{vouchers} classes - #{duration} days - #{price.to_i}元 - (#{book_before} days advance)" : "#{name} - #{credits} credits - #{duration} days - #{price.to_i}元 - (#{book_before} days advance)"
   end
 
 end

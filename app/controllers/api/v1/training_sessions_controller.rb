@@ -439,7 +439,12 @@ module Api
           puts "====something went wrong computing session left, return normal membership"
           h[:usable_membership] = usable_membership(training_session).booking_hash if membership_to_use
         end
-        h[:usable_classpack] = usable_classpack(training_session).booking_hash if usable_classpack(training_session)
+        usable_classpack_tmp = usable_classpack_credit(training_session)
+        if usable_classpack_tmp.nil?
+          puts "no usable classpacks"
+        else
+          h[:usable_classpack] = usable_classpack_tmp
+        end
         # begin
         # workout = show_workout(training_session)
         # if workout
@@ -571,6 +576,7 @@ module Api
           options[:upgrade_membership] = upgrade_membership(training_session)
           options[:credits] = usable_credits(training_session)
           options[:membership] = usable_membership_unlimited(training_session)
+          options[:classpack] = classpack_option(training_session)
           options
         rescue => e
           puts e
@@ -653,6 +659,16 @@ module Api
         )
       end
 
+      def usable_classpacks(training_session)
+        if current_user.nil?
+          return false
+        end
+        current_user.memberships.classpack.settled.where(
+          'start_date <= ? AND end_date > ? AND vouchers > 0',
+          training_session.begins_at,
+          training_session.begins_at
+        )
+      end
 
       def upgrade_membership(training_session)
         begin
@@ -826,6 +842,53 @@ module Api
         end
       end
 
+      def usable_classpack_credit(training_session)
+        if current_user.nil?
+          return false
+        end
+        begin
+        current_privileges = usable_classpacks(training_session)
+        if current_privileges.nil?
+          puts "no classpack found"
+          return nil
+        end
+        current_privileges.each do | current_privilege |
+          if current_privilege
+            puts "checking #{current_privilege&.name}"
+            if current_privilege&.is_limited
+              puts "#{current_privilege&.name} is limited"
+              is_allowed = usable_membership_for_limited_class(training_session, current_privilege)
+              if (!is_allowed)
+                puts "training not allowed for this classpack, breaking"
+                next
+              else
+                puts "training  allowed for this classpack, continue as normal"
+              end
+            else
+              puts "not limited classpack, continue as normal"
+            end
+            book_before = current_privilege&.book_before
+            #add one day to privilege so that it counts until 23:59
+            furthest_bookable_session = DateTime.now.midnight + book_before&.days + 1.days
+            puts "classpack privilege: #{book_before} days before"
+            puts "training session: #{training_session.begins_at} "
+            puts "furthest_bookable_session : #{furthest_bookable_session} "
+            if training_session.begins_at < furthest_bookable_session
+              puts "can book, returning current classpack"
+              return current_privilege
+            else
+              puts "need to upgrade, breaking trying another classpack"
+              next
+            end
+          end
+        end
+        rescue => e
+          puts e
+          puts "error computing classpacks, returning null"
+          return nil
+        end
+      end
+
       def usable_classpack(training_session)
         if current_user.nil?
           return false
@@ -910,7 +973,7 @@ module Api
       end
 
       def classpack_option(training_session)
-        return 'classpack' if usable_classpack(training_session)
+        return 'classpack' if usable_classpack_credit(training_session)
       end
 
       def show_workout(training_session)
