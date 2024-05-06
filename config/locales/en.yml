@@ -48,6 +48,7 @@ en:
       #coming-up component
       coming_up: "COMING UP"
       no_sessions_today: "No sessions today"
+      no_tests: "No fitness tests"
       min: " min"
       kcal: " kCal"
       booked: "BOOKED"
@@ -55,6 +56,8 @@ en:
       in_queue: "WAITING FOR AVAILABLE SPOTS UPDATES"
       queue_up: "SOLD OUT"
       queue_up_updates: "CLICK FOR UPDATES"
+      heart: "HEART"
+      stats: "STATS"
     wallet:
       sign_up: 'SIGN UP'
       topup: 'TOP UP YOUR CREDITS'
@@ -197,7 +200,8 @@ en:
       cancel_class: "CANCEL CLASS"
       currency: " RMB"
       hrm_checkin: "Register at reception 10 min before class to collect the HRM"
-      hrm_data: "DATA"
+      hrm_data: "RECORD MATRIX HUB"
+      fitness_test: "FITNESS TEST"
     profile:
       customer_service: "Contact Us!"
       welcome: "Welcome to eXequte"
@@ -283,3 +287,30 @@ en:
     hrm-data:
       chart: "chart"
       refresh: "Refresh"
+    fitness-test:
+      denied: "DENIED"
+      denied_color: "#ff0000c4"
+      approved: "APPROVED"
+      approved_color: "#00ff00a2"
+      pending: "WAITING FOR APPROVAL"
+      pending_color: "#f2c84c85"
+      none: "WAITING SUBMISSION"
+      waiting_color: "#97daf540"
+      no_past_data: "No past data"
+      other_error: "Error"
+      workout_submitted: "Fitness test submitted for approval!"
+      close: "Close"
+      log_another: "Back"
+      approve: "APPROVE"
+      deny: "DENY"
+      upload: "SUBMIT"
+      comments: "NOTE"
+      time: "TIME"
+      reps: "REPS"
+      sets: "SETS"
+      weight: "WEIGHT"
+      show_past: "CLICK TO SEE PAST PERFORMANCE"
+      format: "TYPE:"
+      hide_past: "HIDE OLD RECORDS"
+
+

@@ -9,6 +9,7 @@ class Workout < ApplicationRecord
   has_many :exercises_workouts
   has_many :exercises, through: :exercises_workouts
   accepts_nested_attributes_for :exercises_workouts, allow_destroy: true
+  has_many :logged_workouts, dependent: :destroy
   scope :order_by_name, -> { order('name ASC')}
   scope :order_by_title, -> { order('title ASC')}
 
@@ -74,7 +75,8 @@ class Workout < ApplicationRecord
           block: ew.block,
           format: ew.format,
           sets: ew.sets,
-          time: ew.time_limit
+          time: ew.time_limit,
+          weight: ew.weight
         }
       end
     }
@@ -170,7 +172,8 @@ class Workout < ApplicationRecord
           format: ew.format.presence || "",
           sets: ew.sets.presence || "",
           time: ew.time_limit.presence || "",
-          order: ew.order.presence || ""
+          order: ew.order.presence || "",
+          weight: ew.weight.presence || ""
         }
       end
     end

@@ -8,7 +8,7 @@ ActiveAdmin.register Booking do
   # Uncomment all parameters which should be permitted for assignment
   #
   includes :user, training_session: [:instructor]
-  permit_params :user_id, :training_session_id, :price_cents, :price_currency, :cancelled, :cancelled_at, :attended, :booked_with, :membership_id, :hrm_id, :payment_status
+  permit_params :user_id, :training_session_id, :price_cents, :price_currency, :cancelled, :cancelled_at, :attended, :booked_with, :membership_id, :hrm_id, :payment_status, :is_fitness_test
   json_editor
 
   filter :user_id, :as => :select, :collection => User.all.map {|user| [user.last_name, user.id]}, label: 'Client Last Name'
@@ -51,6 +51,7 @@ ActiveAdmin.register Booking do
     column :hrm do |booking|
       booking.hrm.display_name if booking.hrm.present?
     end
+    column :is_fitness_test
     column :created_at
     column :updated_at
     actions
@@ -75,31 +76,88 @@ ActiveAdmin.register Booking do
     column :created_at
     column :updated_at
     column :instructor
+    column :is_fitness_test
   end
 
   show do
-    attributes_table do
-      row :id
-      row :client_first_name
-      row :client_last_name
-      row :user_id
-      row :class_time
-      row :training_session_id
-      row :class_name
-      row :subtitle
-      row :price_cents
-      row :cancelled
-      row :cancelled_at
-      row :attended
-      row :booked_with
-      row :payment_status
-      row :membership_id
-      row :hrm do |booking|
-        booking.hrm.display_name if booking.hrm.present?
+    tabs do
+      tab "Booking Details" do
+        attributes_table do
+            row :id
+            row :client_first_name
+            row :client_last_name
+            row :user_id
+            row :class_time
+            row :training_session_id
+            row :class_name
+            row :subtitle
+            row :price_cents
+            row :cancelled
+            row :cancelled_at
+            row :attended
+            row :booked_with
+            row :payment_status
+            row :membership_id
+            row :is_fitness_test
+            row :hrm do |booking|
+              booking.hrm.display_name if booking.hrm.present?
+            end
+            row :created_at
+            row :updated_at
+          end
+        end
+        tab "Logged Workout" do
+          panel "Logged Workout Details" do
+            if booking.logged_workout.present?
+              attributes_table_for booking.logged_workout do
+                row :id
+                row :validation_status
+                row :validated_by
+                row :validated_at
+                row :validation_request_at
+              end
+            else
+              para "No logged workout associated with this booking."
+            end
+          end
+
+          panel "Logged Workout Exercises Workouts" do
+            if booking.logged_workout.present?
+              # Display associated logged exercises
+                grouped_logged_exercises = booking.logged_workout.logged_exercises.order(:block, :order).group_by(&:block)
+                ordered_blocks = ['warm-up', 'block-a', 'block-b', 'block-c', 'finisher', 'cooldown', 'breathing']
+                ordered_blocks.each do |block_name|
+                  exercise_workouts = grouped_logged_exercises[block_name]
+
+                  # para "Logged exercise workout Details: #{exercise_workouts.inspect}"
+
+                  next if exercise_workouts.blank?
+
+                  span block_name.capitalize, class: 'group-heading' do
+                    table_for exercise_workouts do
+                      column :order
+                      column :exercise
+                      column :block
+                      column :comments
+                      column :format
+                      column :reps
+                      column :reps_gold
+                      column :reps_silver
+                      column :reps_bronze
+                      column :sets
+                      column :time_limit
+                      column :created_at
+                      column :updated_at
+                    end
+                  end
+                end
+                # Add other columns for logged exercise attributes as needed
+            else
+              para "No logged workout associated with this booking."
+            end
+          end
+        end
       end
-      row :created_at
-      row :updated_at
-    end
 
     # Display the heart rate data associated with the booking
     if resource.heart_rate_data.present?

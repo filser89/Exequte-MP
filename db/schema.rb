@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_21_100138) do
+ActiveRecord::Schema.define(version: 2024_04_29_190138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 2024_02_21_100138) do
     t.bigint "hrm_id"
     t.bigint "hrm_assignment_id"
     t.integer "credits"
+    t.boolean "is_fitness_test", default: false
     t.index ["hrm_assignment_id"], name: "index_bookings_on_hrm_assignment_id"
     t.index ["hrm_id"], name: "index_bookings_on_hrm_id"
     t.index ["membership_id"], name: "index_bookings_on_membership_id"
@@ -145,6 +146,7 @@ ActiveRecord::Schema.define(version: 2024_02_21_100138) do
     t.integer "batch_index"
     t.integer "order"
     t.string "reps"
+    t.integer "weight"
     t.index ["exercise_id"], name: "index_exercises_workouts_on_exercise_id"
     t.index ["workout_id"], name: "index_exercises_workouts_on_workout_id"
   end
@@ -239,6 +241,44 @@ ActiveRecord::Schema.define(version: 2024_02_21_100138) do
     t.string "cn_title_four"
     t.datetime "destroyed_at"
     t.boolean "terms", default: false
+  end
+
+  create_table "logged_exercises", force: :cascade do |t|
+    t.bigint "logged_workout_id"
+    t.integer "time_limit"
+    t.string "format"
+    t.integer "sets"
+    t.string "block"
+    t.string "reps_gold"
+    t.string "reps_silver"
+    t.string "reps_bronze"
+    t.integer "batch_index"
+    t.integer "order"
+    t.string "reps"
+    t.string "comments"
+    t.bigint "exercise_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "weight"
+    t.index ["exercise_id"], name: "index_logged_exercises_on_exercise_id"
+    t.index ["logged_workout_id"], name: "index_logged_exercises_on_logged_workout_id"
+  end
+
+  create_table "logged_workouts", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "workout_id"
+    t.bigint "booking_id"
+    t.string "comments"
+    t.boolean "validated", default: false, null: false
+    t.string "validated_by"
+    t.datetime "validated_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "validation_status"
+    t.datetime "validation_request_at"
+    t.index ["booking_id"], name: "index_logged_workouts_on_booking_id"
+    t.index ["user_id"], name: "index_logged_workouts_on_user_id"
+    t.index ["workout_id"], name: "index_logged_workouts_on_workout_id"
   end
 
   create_table "logs", force: :cascade do |t|
@@ -368,6 +408,7 @@ ActiveRecord::Schema.define(version: 2024_02_21_100138) do
     t.string "location"
     t.string "current_block"
     t.integer "credits", default: 20
+    t.boolean "is_fitness_test", default: false
     t.index ["training_id"], name: "index_training_sessions_on_training_id"
     t.index ["user_id"], name: "index_training_sessions_on_user_id"
   end
@@ -395,6 +436,7 @@ ActiveRecord::Schema.define(version: 2024_02_21_100138) do
     t.boolean "is_limited", default: false
     t.integer "credits"
     t.string "location"
+    t.boolean "is_fitness_test", default: false
     t.index ["class_type_id"], name: "index_trainings_on_class_type_id"
   end
 
@@ -531,6 +573,11 @@ ActiveRecord::Schema.define(version: 2024_02_21_100138) do
   add_foreign_key "hrm_assignments", "training_sessions"
   add_foreign_key "info_items", "info_item_patterns"
   add_foreign_key "info_items", "infos"
+  add_foreign_key "logged_exercises", "exercises"
+  add_foreign_key "logged_exercises", "logged_workouts"
+  add_foreign_key "logged_workouts", "bookings"
+  add_foreign_key "logged_workouts", "users"
+  add_foreign_key "logged_workouts", "workouts"
   add_foreign_key "memberships", "membership_types"
   add_foreign_key "memberships", "users"
   add_foreign_key "training_session_rankings", "training_sessions"

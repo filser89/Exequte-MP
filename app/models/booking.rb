@@ -13,6 +13,7 @@ class Booking < ApplicationRecord
 
   has_one :heart_rate_data, dependent: :destroy
   has_one_attached :heart_rate_data_picture
+  has_one :logged_workout
 
   validates :booked_with, inclusion: BOOKING_OPTIONS
   after_create  :notify_new
@@ -36,6 +37,8 @@ class Booking < ApplicationRecord
                              .where('training_sessions.begins_at >= ? and training_sessions.begins_at <= ?', DateTime.now.midnight, Time.now.end_of_day)}
 
   scope :with_hrm, -> { where.not(hrm_id: nil) }
+  scope :order_by_create_at, -> { order('created_at ASC')}
+  scope :is_fitness_test, -> {where(is_fitness_test: true)}
 
   def settled?
     payment_status.in?(SETTLED_PAYMENTS)
@@ -76,6 +79,22 @@ class Booking < ApplicationRecord
     h
   end
 
+  def workout_hash
+    h = standard_hash
+    begin
+    if logged_workout.present?
+      puts "booking has associated logged workout"
+      h[:workout] = logged_workout.show_hash_blocks
+    else
+      puts "no associated logged workout"
+    end
+    rescue => e
+      puts e
+      puts "error processing logged workout hash"
+    end
+    h
+  end
+
   def standard_hash
     {
       id: id,
@@ -93,7 +112,8 @@ class Booking < ApplicationRecord
       has_injury: has_injury?,
       status: status,
       status_locale: localize_status,
-      hrm: hrm
+      hrm: hrm,
+      is_fitness_test: is_fitness_test
     }
   end
 
@@ -112,6 +132,10 @@ class Booking < ApplicationRecord
   def first_booking?
     # if only active booking in system, then its first booking
     Booking.for(user).active.size == 1 ? true : false
+  end
+
+  def title_summary
+    "#{user.full_name}-#{class_name} - #{training_session.begins_at}"
   end
 
   def cancelled_on_time?
@@ -165,6 +189,56 @@ class Booking < ApplicationRecord
       return I18n.locale == :'zh-CN' ? "即将" : "new"
     when "no show"
       return I18n.locale == :'zh-CN' ? "没上课了" : "no show"
+    end
+  end
+
+  def create_logged_workout
+    begin
+      if self.training_session.workouts.present?
+        @template_workout = self.training_session.workouts.first
+        if @template_workout.present?
+          #template_workout_dup = Marshal.load(Marshal.dump(@template_workout))
+          logged_workout = LoggedWorkout.create(user: self.user, booking: self, workout: @template_workout)
+          # Save the logged_workout
+          if logged_workout.persisted?
+            # Optionally, you can associate the logged_workout with the booking
+            self.logged_workout = logged_workout
+
+            save # Save the booking to associate it with the logged_workout
+
+            #Create associations for exercises_workouts
+            @template_workout.exercises_workouts.each do |exercises_workout|
+              logged_exercise = LoggedExercise.new(
+                logged_workout: logged_workout,  # Assuming logged_workout has a reference to the original workout
+                exercise: exercises_workout.exercise,  # Assuming exercises_workout has a reference to the exercise
+                sets: exercises_workout.sets,
+                time_limit: exercises_workout.time_limit,
+                format: exercises_workout.format,
+                block: exercises_workout.block,
+                reps_gold: exercises_workout.reps_gold,
+                reps_silver: exercises_workout.reps_silver,
+                reps_bronze: exercises_workout.reps_bronze,
+                batch_index: exercises_workout.batch_index,
+                order: exercises_workout.order,
+                reps: exercises_workout.reps,
+                weight: exercises_workout.weight
+              )
+              if logged_exercise.save
+              else
+                puts "Errors: #{logged_exercise.errors.full_messages}" # Output errors if any
+                puts "Logged exercise save failed"
+              end
+            end
+            save
+          else
+            puts "Errors: #{logged_workout.errors.full_messages}" # Output errors if any
+          end
+        end
+      else
+        puts "No associated workouts found, exiting"
+      end
+    rescue => e
+      puts "Something went wrong creating associated logged workout: #{e.message}"
     end
   end
 

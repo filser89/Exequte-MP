@@ -1,6 +1,6 @@
 ActiveAdmin.register TrainingSession do
 
-  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, :location, :poster_photo, :group_photo, :current_block, :credits, workout_ids: [], photos: [], videos: []
+  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, :location, :poster_photo, :group_photo, :current_block, :credits, :is_fitness_test, workout_ids: [], photos: [], videos: []
 
   member_action :delete_training_session_photo, method: :delete do
     begin
@@ -38,6 +38,7 @@ ActiveAdmin.register TrainingSession do
     column :late_booking_minutes
     column :is_limited
     column :location
+    column :is_fitness_test
     column :current_block
     column "RESHAPE " do |training_session|
       if training_session.workout_current.present?
@@ -85,6 +86,7 @@ ActiveAdmin.register TrainingSession do
           f.input :location
           f.input :current_block
           f.input :credits
+          f.input :is_fitness_test
         end
       end
       tab "Prices" do
@@ -130,6 +132,7 @@ ActiveAdmin.register TrainingSession do
       row :price_1
       row :location
       row :current_block
+      row :is_fitness_test
       row :ranking do
         ul do
           training_session.training_session_rankings&.order(:ranking)&.each do |ranking|

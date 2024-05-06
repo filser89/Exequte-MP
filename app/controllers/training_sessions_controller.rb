@@ -29,6 +29,7 @@ class TrainingSessionsController < ApplicationController
         @training_session.duration = @training.duration
         @training_session.capacity = @training.capacity
         @training_session.calories = @training.calories
+        @training_session.is_fitness_test = @training.is_fitness_test
         if permitted_params[:price_1_cents] == ""
           set_default_prices
         else
@@ -122,6 +123,7 @@ class TrainingSessionsController < ApplicationController
         @training_session.duration = @training.duration
         @training_session.capacity = @training.capacity
         @training_session.calories = @training.calories
+        @training_session.is_fitness_test = @training.is_fitness_test
         price_per_credit = {
           12 => 200,
           15 => 219,
@@ -238,6 +240,7 @@ class TrainingSessionsController < ApplicationController
         duration: training_session.duration,
         capacity: training_session.capacity,
         calories: training_session.calories,
+        is_fitness_test: training_session.is_fitness_test,
         price_1: training_session.price_1,
         price_2: training_session.price_2,
         price_3: training_session.price_3,

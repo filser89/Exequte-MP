@@ -107,6 +107,7 @@ class TrainingSession < ApplicationRecord
       begins_at: begins_at,
       location: location,
       hrm_assignments: hrm_assignments_with_user,
+      is_fitness_test: is_fitness_test,
       poster_photo: poster_photo_url || "",
       current_block: current_block
     }
@@ -140,7 +141,8 @@ class TrainingSession < ApplicationRecord
       note: note,
       late_booking_minutes: late_booking_minutes,
       location: location,
-      current_block: current_block
+      current_block: current_block,
+      is_fitness_test: is_fitness_test
     }
     h[:image_url] =  training.photo.service_url if training.photo.attached?
     h[:group_photo_url] = group_photo.service_url if group_photo.attached?

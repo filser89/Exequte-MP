@@ -77,10 +77,31 @@ Rails.application.routes.draw do
       resources :bookings, only: %i[index show destroy] do
         member do
           put :cancel
+          get :workout_log
+          post :log_workout
         end
         collection do
           put :take_attendance
           get :hrm
+          get :workout_logs
+          get :fitness_tests
+        end
+      end
+
+      resources :logged_workouts, only: %i[index show destroy] do
+        member do
+          post :log_workout
+          post :approve_workout
+          post :deny_workout
+        end
+      end
+
+      resources :logged_exercises, only: %i[index show destroy] do
+        collection do
+          get :show_all_by_exercise
+        end
+        member do
+          get :show_all_by_logged_exercise_id
         end
       end
 

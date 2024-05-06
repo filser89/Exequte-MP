@@ -16,6 +16,7 @@ zh-CN:
       #coming-up component
       coming_up: "即将到来"
       no_sessions_today: "今天没有课"
+      no_tests: "没有数据"
       min: " min"
       kcal: " kCal"
       booked: "预约了"
@@ -23,6 +24,9 @@ zh-CN:
       in_queue: "等待可用的预订位"
       queue_up: "已售完"
       queue_up_updates: "点击订阅更新"
+      heart: "心跳"
+      stats: "数据"
+      fitness_test: "健身测试"
     wallet:
       sign_up: '注册'
       topup: '充值余额'
@@ -249,4 +253,29 @@ zh-CN:
     hrm-data:
       chart: "表"
       refresh: "刷新"
+    fitness-test:
+      denied: "拒绝"
+      denied_color: "#ff0000c4"
+      approved: "批准"
+      approved_color: "#00ff00a2"
+      pending: "等待批准"
+      pending_color: "#f2c84c85"
+      none: "等待提交"
+      waiting_color: "#97daf540"
+      no_past_data: "没有过去数据"
+      other_error: "错误"
+      workout_submitted: "健身测试已提交待批准！"
+      close: "关闭"
+      log_another: "返回"
+      approve: "批准"
+      deny: "拒绝"
+      upload: "提交"
+      comments: "备注"
+      time: "时间"
+      reps: "次数"
+      sets: "组数"
+      weight: "重量"
+      show_past: "点击查看过去表现"
+      format: "类型:"
+      hide_past: "隐藏旧记录"
 

@@ -1,6 +1,6 @@
 ActiveAdmin.register Training do
 
-  permit_params :name, :calories, :duration, :capacity, :class_type_id, :description, :cn_name, :cn_description, :photo, :poster_photo, :subtitle, :cn_subtitle, :late_booking_minutes, :is_limited, :credits, :location, workout_ids: []
+  permit_params :name, :calories, :duration, :capacity, :class_type_id, :description, :cn_name, :cn_description, :photo, :poster_photo, :subtitle, :cn_subtitle, :late_booking_minutes, :is_limited, :credits, :is_fitness_test, :location, workout_ids: []
 
   # form do |f|
   #   f.semantic_errors # shows errors on :base
@@ -31,6 +31,7 @@ ActiveAdmin.register Training do
       f.input :late_booking_minutes
       f.input :is_limited
       f.input :credits
+      f.input :is_fitness_test
       f.input :location, as: :radio, collection: ['reshape', 'glam', 'pt', 'other'], label: 'Location'
       f.input :workouts, collection: Workout.all
     end
@@ -49,6 +50,7 @@ ActiveAdmin.register Training do
       row :capacity
       row :duration
       row :class_type
+      row :is_fitness_test
       row :photo do |t|
         if t.photo.attached?
           image_tag t.photo, width: 200

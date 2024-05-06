@@ -4,13 +4,53 @@ module Api
       skip_before_action :authenticate_api_key!, only: [:payment_confirmed]
       skip_before_action :authenticate_user_from_token!, only: [:payment_confirmed]
       before_action :find_training_session, only: %i[create attendance_list]
-      before_action :find_booking, only: %i[show cancel destroy]
+      before_action :find_booking, only: %i[show cancel destroy workout_log]
       def index
         render_success([upcoming, cancelled.concat(history)])
       end
 
       def hrm
         render_success( has_hrm )
+      end
+
+      #get all logged workouts (GET)
+      def workout_logs
+        render_success( has_workout_log )
+      end
+
+      def fitness_tests
+        render_success( has_workout_log )
+      end
+
+      #get single logged workout (GET)
+      def workout_log
+        render_success( @booking.workout_hash )
+      end
+
+      #log single workout (POST)
+      def log_workout
+        begin
+          # Parse the parameters from the request
+          logged_exercises_params = params[:logged_exercises]
+          puts "#{logged_exercises_params}"
+          if logged_exercises_params.present?
+            # Iterate over each logged exercise parameter
+            logged_exercises_params.each do |logged_exercise_params|
+              # Find the corresponding LoggedExercise object by ID
+              puts logged_exercise_params
+              logged_exercise = LoggedExercise.find(logged_exercise_params[:id])
+              puts logged_exercise
+              # Update the attributes of the LoggedExercise object
+              logged_exercise.update(logged_exercise_params.except(:id))
+            end
+            render_success({msg: 'workout logged'})
+          else
+            render_error({msg: 'no param found'})
+          end
+        rescue => e
+          puts e
+          render_error({msg: 'other error'})
+        end
       end
 
       def show
@@ -41,8 +81,14 @@ module Api
         @booking = Booking.new(permitted_params)
         @booking.user = current_user
         @booking.training_session = @training_session
+        @booking.is_fitness_test = @training_session.is_fitness_test
         @booking.payment_status = @booking.booked_with == 'drop-in' ?  'pending' : 'none'
         puts "BOOKED WITH:#{@booking.booked_with}"
+        begin
+          @booking.create_logged_workout
+        rescue => f
+          puts "error creating associated log workout"
+        end
         begin
         if @booking.save
           puts "booking saved"
@@ -286,6 +332,14 @@ module Api
 
       def has_hrm
         Booking.for(current_user).history.active.with_hrm.map(&:hrm_hash)
+      end
+
+      def has_workout_log
+        Booking.for(current_user).history.active.map(&:workout_hash)
+      end
+
+      def is_fitness_test
+        Booking.for(current_user).history.active.is_fitness_test.map(&:workout_hash)
       end
 
       def find_booking

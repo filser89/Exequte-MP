@@ -25,6 +25,7 @@ class User < ApplicationRecord
   has_one_attached :instructor_photo
   has_one_attached :avatar
   has_many :training_session_rankings
+  has_many :logged_workouts
   has_many :ranked_sessions, through: :training_session_rankings, source: :training_session
 
   before_validation :set_defaults
