@@ -553,11 +553,15 @@ module Api
                       puts "training not allowed for this membership, move on"
                     else
                       puts "training  allowed for this membership, return true"
-                      return { free: true }
+                      if training_session.can_use_unlimited
+                        return { free: true }
+                      end
                     end
                   else
                     puts "not limited membership, return true"
-                    return { free: true }
+                    if training_session.can_use_unlimited
+                      return { free: true }
+                    end
                   end
                 else
                   puts "need to upgrade, break from loop"
@@ -570,12 +574,12 @@ module Api
             end
           end
           options = { drop_in: true }
-          options[:can_use_dropin] = usable_membership_dropin(training_session)
+          options[:can_use_dropin] = usable_membership_dropin(training_session) && training_session.can_use_dropin
           # return options if training_session.class_kind == 1
-          options[:can_use_credits] = usable_membership_credit(training_session)
+          options[:can_use_credits] = usable_membership_credit(training_session) && training_session.can_use_credits
           options[:upgrade_membership] = upgrade_membership(training_session)
           options[:credits] = usable_credits(training_session)
-          options[:membership] = usable_membership_unlimited(training_session)
+          options[:membership] = usable_membership_unlimited(training_session) && training_session.can_use_unlimited
           class_pack = classpack_option(training_session)
           puts "found this class-pack:#{class_pack}"
           options[:classpack] = class_pack
@@ -979,7 +983,7 @@ module Api
       def classpack_option(training_session)
         tmp_classpack = usable_classpack_credit(training_session)
         puts "tmp classpack:#{tmp_classpack}"
-        return 'classpack' if usable_classpack_credit(training_session)
+        return 'classpack' if usable_classpack_credit(training_session) && training_session.can_use_packs
       end
 
       def show_workout(training_session)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_29_190138) do
+ActiveRecord::Schema.define(version: 2024_05_15_190138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -317,6 +317,7 @@ ActiveRecord::Schema.define(version: 2024_04_29_190138) do
     t.boolean "is_unlimited", default: false
     t.string "description"
     t.string "cn_description"
+    t.boolean "is_voucher", default: false
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -346,6 +347,7 @@ ActiveRecord::Schema.define(version: 2024_04_29_190138) do
     t.boolean "is_unlimited", default: false
     t.string "description"
     t.string "cn_description"
+    t.boolean "is_voucher", default: false
     t.index ["membership_type_id"], name: "index_memberships_on_membership_type_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
@@ -409,6 +411,11 @@ ActiveRecord::Schema.define(version: 2024_04_29_190138) do
     t.string "current_block"
     t.integer "credits", default: 20
     t.boolean "is_fitness_test", default: false
+    t.boolean "can_use_dropin", default: true
+    t.boolean "can_use_credits", default: true
+    t.boolean "can_use_packs", default: true
+    t.boolean "can_use_unlimited", default: true
+    t.boolean "can_use_voucher", default: true
     t.index ["training_id"], name: "index_training_sessions_on_training_id"
     t.index ["user_id"], name: "index_training_sessions_on_user_id"
   end
@@ -437,6 +444,11 @@ ActiveRecord::Schema.define(version: 2024_04_29_190138) do
     t.integer "credits"
     t.string "location"
     t.boolean "is_fitness_test", default: false
+    t.boolean "can_use_dropin", default: true
+    t.boolean "can_use_credits", default: true
+    t.boolean "can_use_packs", default: true
+    t.boolean "can_use_unlimited", default: true
+    t.boolean "can_use_voucher", default: true
     t.index ["class_type_id"], name: "index_trainings_on_class_type_id"
   end
 

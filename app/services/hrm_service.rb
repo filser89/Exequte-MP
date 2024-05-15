@@ -66,6 +66,7 @@ class HrmService
   end
 
 
+  #function used by hrm-data MP
   def fetch_heart_rate_all_with_pic(bandId, start_timestamp, end_timestamp, gender, weight, age, ranking, name, skills,
                                     points, workout_name, workout_coach, workout_date, avatar_img)
     api_url = "https://hrm.exequte.cn"

@@ -30,6 +30,7 @@ class MembershipsController < ApplicationController
       @membership.is_unlimited = @membership_type.is_unlimited
       @membership.description = @membership_type.description
       @membership.cn_description = @membership_type.cn_description
+      @membership.is_voucher = @membership_type.is_voucher
 
       if @membership.save
         puts "membership saved"

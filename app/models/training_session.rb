@@ -142,7 +142,12 @@ class TrainingSession < ApplicationRecord
       late_booking_minutes: late_booking_minutes,
       location: location,
       current_block: current_block,
-      is_fitness_test: is_fitness_test
+      is_fitness_test: is_fitness_test,
+      can_use_dropin: can_use_dropin,
+      can_use_credits: can_use_credits,
+      can_use_packs: can_use_packs,
+      can_use_unlimited: can_use_unlimited,
+      can_use_voucher: can_use_voucher
     }
     h[:image_url] =  training.photo.service_url if training.photo.attached?
     h[:group_photo_url] = group_photo.service_url if group_photo.attached?

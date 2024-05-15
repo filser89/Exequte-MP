@@ -1,6 +1,6 @@
 ActiveAdmin.register Training do
 
-  permit_params :name, :calories, :duration, :capacity, :class_type_id, :description, :cn_name, :cn_description, :photo, :poster_photo, :subtitle, :cn_subtitle, :late_booking_minutes, :is_limited, :credits, :is_fitness_test, :location, workout_ids: []
+  permit_params :name, :calories, :duration, :capacity, :class_type_id, :description, :cn_name, :cn_description, :photo, :poster_photo, :subtitle, :cn_subtitle, :late_booking_minutes, :is_limited, :credits, :is_fitness_test, :can_use_dropin, :can_use_credits, :can_use_packs, :can_use_unlimited, :can_use_voucher, :location, workout_ids: []
 
   # form do |f|
   #   f.semantic_errors # shows errors on :base
@@ -14,28 +14,38 @@ ActiveAdmin.register Training do
   #   f.actions         # adds the 'Submit' and 'Cancel' buttons
   # end
   form do |f|
-    f.semantic_errors # shows errors on :base
-    f.inputs do
-      f.input :name
-      f.input :calories
-      f.input :duration
-      f.input :capacity
-      f.input :class_type
-      f.input :description
-      f.input :cn_name
-      f.input :cn_description
-      f.input :photo, as: :file
-      f.input :poster_photo, as: :file
-      f.input :subtitle
-      f.input :cn_subtitle
-      f.input :late_booking_minutes
-      f.input :is_limited
-      f.input :credits
-      f.input :is_fitness_test
-      f.input :location, as: :radio, collection: ['reshape', 'glam', 'pt', 'other'], label: 'Location'
-      f.input :workouts, collection: Workout.all
+    tabs do
+      tab "Basic" do
+        f.semantic_errors # shows errors on :base
+        f.inputs do
+          f.input :name
+          f.input :calories
+          f.input :duration
+          f.input :capacity
+          f.input :class_type
+          f.input :description
+          f.input :cn_name
+          f.input :cn_description
+          f.input :photo, as: :file
+          f.input :poster_photo, as: :file
+          f.input :subtitle
+          f.input :cn_subtitle
+          f.input :late_booking_minutes
+          f.input :is_limited
+          f.input :credits
+          f.input :is_fitness_test
+          f.input :location, as: :radio, collection: ['reshape', 'glam', 'pt', 'other'], label: 'Location'
+          f.input :workouts, collection: Workout.all
+        end
+      end
+      tab "Payment Types" do
+        f.input :can_use_dropin
+        f.input :can_use_credits
+        f.input :can_use_packs
+        f.input :can_use_unlimited
+        f.input :can_use_voucher
+      end
     end
-
     f.actions # adds the 'Submit' and 'Cancel' buttons
   end
 
@@ -60,6 +70,16 @@ ActiveAdmin.register Training do
         if t.poster_photo.attached?
           image_tag t.poster_photo, width: 200
         end
+      end
+    end
+
+    panel 'Payment Types' do
+      attributes_table do
+        row :can_use_dropin
+        row :can_use_credits
+        row :can_use_packs
+        row :can_use_unlimited
+        row :can_use_voucher
       end
     end
 

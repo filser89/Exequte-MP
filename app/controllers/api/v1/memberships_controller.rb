@@ -30,6 +30,7 @@ module Api
         @membership.book_before = @membership_type.book_before
         @membership.settings = @membership_type.settings
         @membership.is_unlimited = @membership_type.is_unlimited
+        @membership.is_voucher = @membership_type.is_voucher
         @membership.end_date = end_date
         @membership.membership_type = @membership_type
         @membership.payment_status = 'pending'

@@ -1,6 +1,6 @@
 ActiveAdmin.register TrainingSession do
 
-  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, :location, :poster_photo, :group_photo, :current_block, :credits, :is_fitness_test, workout_ids: [], photos: [], videos: []
+  permit_params :queue, :training_id, :begins_at, :user_id, :duration, :capacity, :calories, :name, :cn_name, :price_1, :price_1_currency, :price_2, :price_2_currency, :price_3, :price_3_currency, :price_4, :price_4_currency, :price_5, :price_5_currency, :price_6, :price_6_currency, :price_7, :price_7_currency, :description, :cn_description, :class_kind, :cancel_before, :subtitle, :cn_subtitle, :enforce_cancellation_policy, :cancelled, :cancelled_at, :note, :late_booking_minutes, :is_limited, :location, :poster_photo, :group_photo, :current_block, :credits, :is_fitness_test, :can_use_dropin, :can_use_credits, :can_use_packs, :can_use_unlimited, :can_use_voucher, workout_ids: [], photos: [], videos: []
 
   member_action :delete_training_session_photo, method: :delete do
     begin
@@ -39,6 +39,11 @@ ActiveAdmin.register TrainingSession do
     column :is_limited
     column :location
     column :is_fitness_test
+    column :can_use_dropin
+    column :can_use_credits
+    column :can_use_packs
+    column :can_use_unlimited
+    column :can_use_voucher
     column :current_block
     column "RESHAPE " do |training_session|
       if training_session.workout_current.present?
@@ -89,6 +94,13 @@ ActiveAdmin.register TrainingSession do
           f.input :is_fitness_test
         end
       end
+      tab "Payment Options" do
+        f.input :can_use_dropin
+        f.input :can_use_credits
+        f.input :can_use_packs
+        f.input :can_use_unlimited
+        f.input :can_use_voucher
+      end
       tab "Prices" do
         f.semantic_errors # shows errors on :base
         f.inputs :price_1, :price_2, :price_3,:price_4, :price_5, :price_6, :price_7
@@ -133,6 +145,15 @@ ActiveAdmin.register TrainingSession do
       row :location
       row :current_block
       row :is_fitness_test
+      panel 'Payment Types' do
+        attributes_table do
+          row :can_use_dropin
+          row :can_use_credits
+          row :can_use_packs
+          row :can_use_unlimited
+          row :can_use_voucher
+        end
+      end
       row :ranking do
         ul do
           training_session.training_session_rankings&.order(:ranking)&.each do |ranking|

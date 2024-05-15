@@ -163,6 +163,7 @@ module Api
         end
       end
 
+      #function used by hrm-data MP
       def get_data_graph
         bookingId = params[:bookingId]
         force = params[:force]

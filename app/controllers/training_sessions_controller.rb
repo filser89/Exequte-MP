@@ -30,6 +30,12 @@ class TrainingSessionsController < ApplicationController
         @training_session.capacity = @training.capacity
         @training_session.calories = @training.calories
         @training_session.is_fitness_test = @training.is_fitness_test
+        @training_session.can_use_dropin = @training.can_use_dropin
+        @training_session.can_use_credits = @training.can_use_credits
+        @training_session.can_use_packs = @training.can_use_packs
+        @training_session.can_use_unlimited = @training.can_use_unlimited
+        @training_session.can_use_voucher = @training.can_use_voucher
+
         if permitted_params[:price_1_cents] == ""
           set_default_prices
         else
@@ -124,6 +130,11 @@ class TrainingSessionsController < ApplicationController
         @training_session.capacity = @training.capacity
         @training_session.calories = @training.calories
         @training_session.is_fitness_test = @training.is_fitness_test
+        @training_session.can_use_dropin = @training.can_use_dropin
+        @training_session.can_use_credits = @training.can_use_credits
+        @training_session.can_use_packs = @training.can_use_packs
+        @training_session.can_use_unlimited = @training.can_use_unlimited
+        @training_session.can_use_voucher = @training.can_use_voucher
         price_per_credit = {
           12 => 200,
           15 => 219,
@@ -136,7 +147,7 @@ class TrainingSessionsController < ApplicationController
         }
         credit = credits[index].to_i
 
-        if credit.present? && credit < 40
+        if credit.present? && credit < 100
           begin
             puts "Calculating price from credits"
             price = price_per_credit[credit]
@@ -241,6 +252,11 @@ class TrainingSessionsController < ApplicationController
         capacity: training_session.capacity,
         calories: training_session.calories,
         is_fitness_test: training_session.is_fitness_test,
+        can_use_dropin: training_session.can_use_dropin,
+        can_use_credits: training_session.can_use_credits,
+        can_use_packs: training_session.can_use_packs,
+        can_use_unlimited: training_session.can_use_unlimited,
+        can_use_voucher: training_session.can_use_voucher,
         price_1: training_session.price_1,
         price_2: training_session.price_2,
         price_3: training_session.price_3,
