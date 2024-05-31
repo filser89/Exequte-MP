@@ -27,6 +27,21 @@ zh-CN:
       heart: "心跳"
       stats: "数据"
       fitness_test: "健身测试"
+      hrm_data: "心率监测数据"
+      about_us: "信息"
+      howto: "路线指引"
+      studios: "健身工作室"
+      facilities: "设施"
+      science: "科技"
+      workouts: "训练"
+      hrm: "心率监测"
+      barefoot: "赤脚"
+      terms: "条款和条件"
+      creditswork: "金币系统介绍"
+      pictures: "最近的照片"
+      stats_new: "点击查数据"
+      heart_new: "点击查数据"
+
     wallet:
       sign_up: '注册'
       topup: '充值余额'
@@ -35,6 +50,21 @@ zh-CN:
       active_until: "有效到"
       no_credits: "没卡的钱包是难过的钱包"
       apply: "使用优惠券"
+      classes_left: "剩课"
+      credits_left: "剩金币"
+      book_before: "天提前预订"
+      total_price: "付款"
+      credits: "金币"
+      unlimited: "无限"
+      classes: "课"
+      womennoclick: "这是女性专属会员。"
+      genderupdate: "请在购买此会员之前更新您的性别信息"
+      maybelater: "稍后"
+      updatenow: "更新"
+      need_to_signup: "为了继续，您需要完成注册过程。"
+      cancel: "取消"
+      confirm: "确定"
+      pay: "付款"
     about:
       coach: "教练 "
       address: "地址: "
@@ -170,7 +200,7 @@ zh-CN:
       hrm_checkin: "为了收HRM，请上课10分钟前在前台登记"
     profile:
       customer_service: "联系我们!"
-      welcome: "Welcome to eXequte"
+      welcome: "欢迎来到EXEQUTE"
       personal_info: "我的信息"
       sign_up: "注册"
       classes: "课"
@@ -186,10 +216,18 @@ zh-CN:
       voucher_available: "可以使用的代金券"
       voucher_desc: "代金券代一次课."
       slogan: "脑子! 营养! 动!"
-      classes_left: "剩预约"
+      classes_left: "剩课"
       classes_left_today: "当天剩预约"
       active_until: "有效到"
       privilege_label: "会员等级"
+      my_scans: "身体数据"
+      topup: "充值 ¥"
+      left: "剩"
+      credits: "金币"
+      book_before: "天提前预订"
+      my_fitness_test: "我的健身测试"
+
+
     profile-update:
       waiver_title: "知情同意书"
       waiver_form: "我，下面提到的参与者，已经同意参加 ExeQute 训练，\

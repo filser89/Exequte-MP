@@ -58,6 +58,22 @@ en:
       queue_up_updates: "CLICK FOR UPDATES"
       heart: "HEART"
       stats: "STATS"
+      fitness_test: "FITNESS TEST"
+      hrm_data: "HRM DATA"
+      about_us: "INFO"
+      howto: "DIRECTIONS"
+      studios: "STUDIOS"
+      facilities: "FACILITIES"
+      science: "SCIENCE"
+      workouts: "WORKOUTS"
+      hrm: "HRM"
+      barefoot: "BAREFOOT"
+      terms: "TERMS AND CONDITIONS"
+      creditswork: "HOW CREDITS WORK"
+      pictures: "LAST PICTURES"
+      stats_new: "CLICK FOR STATS"
+      heart_new: "CLICK FOR STATS"
+
     wallet:
       sign_up: 'SIGN UP'
       topup: 'TOP UP YOUR CREDITS'
@@ -67,6 +83,22 @@ en:
       active_until: "Active until"
       no_credits: "An empty wallet is a sad wallet."
       apply: "USE COUPON CODE"
+      classes_left: " CLASSES LEFT"
+      credits_left: " CREDITS LEFT"
+      book_before: " days advance bookings"
+      total_price: "PAY:"
+      credits: "CREDITS"
+      unlimited: "UNLIMITED"
+      classes: "CLASSES"
+      womennoclick: "This is a women-only membership."
+      genderupdate: "Please update your gender in profile before buying this membership."
+      maybelater: "Later"
+      updatenow: "Update"
+      need_to_signup: "Please sign-up in order to proceed"
+      cancel: "Close"
+      confirm: "Ok"
+      pay: "Pay"
+
     about:
       coach: "Coach "
       address: "Address: "
@@ -224,6 +256,13 @@ en:
       classes_left_today: "booking left for this day"
       active_until: "Active until"
       privilege_label: "CARD TYPE"
+      my_scans: "My Scans"
+      topup: "TOP UP ¥"
+      left: "left"
+      credits: "CREDITS"
+      book_before: "advance bookings"
+      my_fitness_test: "My Fitness Tests"
+
     profile-update:
       waiver_title: "Informed Consent Form"
       waiver_form: "I, the participant named below, have agreed to participate in the ExeQute workouts,\

@@ -257,6 +257,114 @@ module Api
         end
       end
 
+
+      #new function
+      def get_data_graph_custom
+        bookingId = params[:bookingId]
+        force = params[:force]
+        user_id = params[:user_id]
+        booking = Booking.find(bookingId)
+        start_timestamp = booking.training_session.begins_at - 8.hours
+        end_timestamp = booking.training_session.ends_at - 8.hours
+        bandId = booking.hrm.id
+        # Create an instance of HrmService
+        hrm_service = HrmService.new
+        user_to_use = current_user
+        begin
+          if user_id.present?
+            user_to_use = User.find_by(id: user_id)
+            if !user_to_use.present?
+              user_to_use = current_user
+            end
+          end
+        rescue => e
+          puts e
+          user_to_use = current_user
+        end
+        # Call the fetch_heart_rate_data method
+        gender = user_to_use.gender.present? && ["Male", "Female"].include?(user_to_use.gender) ? user_to_use.gender : "Female"
+        weight = user_to_use.current_weight || 60
+        age = user_to_use.age || 30
+        avatar_url = user_to_use.avatar.service_url if user_to_use.avatar.attached?
+        name =  user_to_use.workout_name
+        skills =  user_to_use.sports #todo do skills in user
+        points = 200 #@todo implement points in classes
+        workout_name =  booking.training_session.name
+        workout_coach =  booking.training_session.instructor.name
+        workout_date =  booking.training_session.localize_date_short
+        avatar_img =  avatar_url
+        ranking = booking&.training_session&.training_session_rankings&.find_by(user: user_to_use)&.ranking || "-"
+        # puts "ranking:#{ranking}"
+        # if ranking.nil?
+        #   puts "someone called ranking before end of class, generate temporary rank."
+        #   if booking&.training_session&.respond_to?(:set_ranking)
+        #     booking&.training_session.set_ranking
+        #     if booking&.training_session.save
+        #       puts "=========training session block updated successfully========"
+        #       render_success({msg: "ranking_set"})
+        #     else
+        #       render_error({ msg: 'error' })
+        #     end
+        #   else
+        #     puts "==================current_ts does not respond to set_ranking"
+        #     render_error({ msg: 'current_ts does not respond to set_ranking' })
+        #   end
+        # end
+        puts "ranking now:#{ranking}"
+        puts "gender: #{gender},weight: #{weight}, age:#{age}"
+        puts "start_timestamp: #{start_timestamp},end_timestamp: #{end_timestamp}"
+
+        # Check if heart rate data already exists for this booking and user (unless flag force = true, in that case force refresh)
+        heart_rate_data = HeartRateData.find_by(booking_id: booking.id)
+        if heart_rate_data.nil? || force == "true" || heart_rate_data['hrm_combined_graph'].nil? || heart_rate_data['hrm_combined_graph'].empty?
+          puts "calling api"
+          heart_rate_data = hrm_service.fetch_heart_rate_all_with_pic(
+            bandId,
+            start_timestamp,
+            end_timestamp,
+            gender,
+            weight,
+            age,
+            ranking,
+            name,
+            skills,
+            points,
+            workout_name,
+            workout_coach,
+            workout_date,
+            avatar_img
+          )
+
+
+          if heart_rate_data["error"]
+            puts "HRM api returned error, not saving in DB"
+            puts "#{heart_rate_data["error"]}"
+          else
+            heart_rate_data_attributes = {
+              hrm_data_raw: heart_rate_data['hrm_data_raw'],
+              hrm_data: heart_rate_data['hrm_data'],
+              hrm_graph: heart_rate_data['hrm_graph'],
+              hrm_zone_graph: heart_rate_data['hrm_zone_graph'],
+              hrm_combined_graph: heart_rate_data['hrm_combined_graph'],
+            }
+            # Create and associate HeartRateData with Booking
+            heart_rate_data = booking.create_heart_rate_data!(heart_rate_data_attributes)
+            booking.save!
+          end
+        end
+
+        # Select only the desired keys
+        selected_keys = ['hrm_combined_graph', 'hrm_data']
+        filtered_heart_rate_data = heart_rate_data.slice(*selected_keys)
+        filtered_heart_rate_data['ranking'] = booking&.training_session&.training_session_rankings&.map(&:show_hash)
+        filtered_heart_rate_data['my_ranking'] = ranking
+        if heart_rate_data
+          render_success(filtered_heart_rate_data)
+        else
+          render_error('hrm_data_error', :unprocessable_entity)
+        end
+      end
+
     end
   end
 end

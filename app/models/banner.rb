@@ -11,6 +11,7 @@ class Banner < ApplicationRecord
       id: id,
     }
     h[:url] =  photo.service_url if photo.attached?
+    h[:settings] = settings if self.settings.present?
     h
   end
 

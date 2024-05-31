@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_15_190138) do
+ActiveRecord::Schema.define(version: 2024_05_31_190138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2024_05_15_190138) do
     t.datetime "destroyed_at"
     t.string "activity_name"
     t.string "activity_time"
+    t.jsonb "settings"
   end
 
   create_table "bookings", force: :cascade do |t|
