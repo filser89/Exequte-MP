@@ -1,6 +1,7 @@
 ActiveAdmin.register Workout do
   #permit_params :photo, :video, :name, :cn_name, :description, :cn_description, :quote, :cn_quote, :title, :cn_title, :level, :total_duration, :warmup_duration, :warmup_exercise_duration, :blocks_duration, :block_a_format, :block_b_format, :block_c_format, :finisher_format, :block_a_title, :block_b_title, :block_c_title, :finisher_title, :block_a_duration_format, :block_b_duration_format, :block_c_duration_format, :finisher_duration_format, :block_a_reps_text, :block_b_reps_text, :block_c_reps_text, :finisher_reps_text, :warmup_duration_format,  :title_footer, :cn_title_footer, :blocks_rounds, :blocks_duration_text, :blocks_exercise_duration, :cooldown_duration, :breathing_duration, :workout_type, :training_session_id, :training_id, training_ids: [], training_session_ids: [],  exercises_workouts_attributes: [:id, :exercise_id, :format, :block, :reps_gold, :reps_silver, :reps_bronze, :sets, :time_limit, :_destroy]
-  permit_params :photo, :video, :name, :cn_name, :description, :cn_description, :quote, :cn_quote, :title, :cn_title, :level, :total_duration, :warmup_duration, :warmup_exercise_duration, :blocks_duration, :block_a_format, :block_b_format, :block_c_format, :finisher_format, :block_a_title, :block_b_title, :block_c_title, :finisher_title, :block_a_duration_format, :block_b_duration_format, :block_c_duration_format, :finisher_duration_format, :block_a_reps_text, :block_b_reps_text, :block_c_reps_text, :finisher_reps_text, :warmup_duration_format, :title_footer, :cn_title_footer, :blocks_rounds, :blocks_duration_text, :blocks_exercise_duration, :cooldown_duration, :breathing_duration, :workout_type, :training_session_id, :training_id, training_ids: [], training_session_ids: [], exercises_workouts_attributes: [:id, :exercise_id, :format, :block, :reps, :reps_gold, :reps_silver, :reps_bronze, :sets, :time_limit, :_destroy, :batch_index, :order, :weight]
+  #permit_params :photo, :video, :name, :cn_name, :description, :cn_description, :quote, :cn_quote, :title, :cn_title, :level, :total_duration, :warmup_duration, :warmup_exercise_duration, :blocks_duration, :block_a_format, :block_b_format, :block_c_format, :finisher_format, :block_a_title, :block_b_title, :block_c_title, :finisher_title, :block_a_duration_format, :block_b_duration_format, :block_c_duration_format, :finisher_duration_format, :block_a_reps_text, :block_b_reps_text, :block_c_reps_text, :finisher_reps_text, :warmup_duration_format, :title_footer, :cn_title_footer, :blocks_rounds, :blocks_duration_text, :blocks_exercise_duration, :cooldown_duration, :breathing_duration, :workout_type, :training_session_id, :training_id, training_ids: [], training_session_ids: [], exercises_workouts_attributes: [:id, :exercise_id, :format, :block, :reps, :reps_gold, :reps_silver, :reps_bronze, :sets, :time_limit, :_destroy, :batch_index, :order, :weight]
+  permit_params :photo, :video, :name, :cn_name, :description, :cn_description, :quote, :cn_quote, :title, :cn_title, :level, :total_duration, :warmup_duration, :warmup_exercise_duration, :blocks_duration, :block_a_format, :cn_block_a_format, :block_b_format, :cn_block_b_format, :block_c_format, :cn_block_c_format, :finisher_format, :cn_finisher_format, :block_a_title, :cn_block_a_title, :block_b_title, :cn_block_b_title, :block_c_title, :cn_block_c_title, :finisher_title, :cn_finisher_title, :block_a_duration_format, :cn_block_a_duration_format, :block_b_duration_format, :cn_block_b_duration_format, :block_c_duration_format, :cn_block_c_duration_format, :finisher_duration_format, :cn_finisher_duration_format, :block_a_reps_text, :cn_block_a_reps_text, :block_b_reps_text, :cn_block_b_reps_text, :block_c_reps_text, :cn_block_c_reps_text, :finisher_reps_text, :cn_finisher_reps_text, :warmup_duration_format, :cn_warmup_duration_format, :title_footer, :cn_title_footer, :blocks_rounds, :blocks_duration_text, :cn_blocks_duration_text, :blocks_exercise_duration, :cooldown_duration, :breathing_duration, :workout_type, :training_session_id, :training_id, training_ids: [], training_session_ids: [], exercises_workouts_attributes: [:id, :exercise_id, :format, :block, :reps, :reps_gold, :reps_silver, :reps_bronze, :sets, :time_limit, :_destroy, :batch_index, :order, :weight]
 
   member_action :duplicate, method: :post do
     original_workout = Workout.find(params[:id])
@@ -90,25 +91,43 @@ ActiveAdmin.register Workout do
       row :warmup_duration
       row :warmup_exercise_duration
       row :block_a_format
+      row :cn_block_a_format
       row :block_b_format
+      row :cn_block_b_format
       row :block_c_format
+      row :cn_block_c_format
       row :finisher_format
+      row :cn_finisher_format
       row :block_a_title
+      row :cn_block_a_title
       row :block_b_title
+      row :cn_block_b_title
       row :block_c_title
+      row :cn_block_c_title
       row :finisher_title
+      row :cn_finisher_title
       row :block_a_reps_text
+      row :cn_block_a_reps_text
       row :block_b_reps_text
+      row :cn_block_b_reps_text
       row :block_c_reps_text
+      row :cn_block_c_reps_text
       row :finisher_reps_text
+      row :cn_finisher_reps_text
       row :block_a_duration_format
+      row :cn_block_a_duration_format
       row :block_b_duration_format
+      row :cn_block_b_duration_format
       row :block_c_duration_format
+      row :cn_block_c_duration_format
       row :finisher_duration_format
+      row :cn_finisher_duration_format
       row :warmup_duration_format
+      row :cn_warmup_duration_format
       row :blocks_duration
       row :blocks_rounds
       row :blocks_duration_text
+      row :cn_blocks_duration_text
       row :blocks_exercise_duration
       row :cooldown_duration
       row :breathing_duration
@@ -190,21 +209,36 @@ ActiveAdmin.register Workout do
       # Default values for new records only
       if f.object.new_record?
         f.input :quote, input_html: { value: '"Keep your face always toward the sunshine, and shadows will fall behind you."' }
+        f.input :cn_quote, input_html: { value: '"永远面朝阳光，阴影将被抛在身后."' }
         f.input :level, input_html: { value: '5' }
         f.input :block_a_format, input_html: { value: 'EMOM' }
+        f.input :cn_block_a_format, input_html: { value: '每分钟一次' }
         f.input :block_b_format, input_html: { value: 'EMOM' }
+        f.input :cn_block_b_format, input_html: { value: '每分钟一次' }
         f.input :block_c_format, input_html: { value: 'EMOM' }
+        f.input :cn_block_c_format, input_html: { value: '每分钟一次' }
         f.input :finisher_format, input_html: { value: 'TABATA' }
+        f.input :cn_finisher_format, input_html: { value: '塔巴塔' }
         f.input :block_a_title, input_html: { value: 'Block A' }
+        f.input :cn_block_a_title, input_html: { value: 'A区' }
         f.input :block_b_title, input_html: { value: 'Block B' }
+        f.input :cn_block_b_title, input_html: { value: 'B区' }
         f.input :block_c_title, input_html: { value: 'Block C' }
+        f.input :cn_block_c_title, input_html: { value: 'C区' }
         f.input :finisher_title, input_html: { value: 'Finisher' }
+        f.input :cn_finisher_title, input_html: { value: '终结者' }
         f.input :block_a_duration_format, input_html: { value: '20 min AMRAP' }
+        f.input :cn_block_a_duration_format, input_html: { value: '20分钟尽可能多次重复' }
         f.input :block_b_duration_format, input_html: { value: '20 min AMRAP' }
+        f.input :cn_block_b_duration_format, input_html: { value: '20分钟尽可能多次重复' }
         f.input :block_c_duration_format, input_html: { value: '20 min AMRAP' }
+        f.input :cn_block_c_duration_format, input_html: { value: '20分钟尽可能多次重复' }
         f.input :finisher_duration_format, input_html: { value: 'Tabata' }
+        f.input :cn_finisher_duration_format, input_html: { value: '塔巴塔' }
         f.input :warmup_duration_format, input_html: { value: '6 min AMRAP' }
+        f.input :cn_warmup_duration_format, input_html: { value: '6分钟尽可能多次重复' }
         f.input :blocks_duration_text, input_html: { value: '40 min AMRAP' }
+        f.input :cn_blocks_duration_text, input_html: { value: '40分钟尽可能多次重复' }
       end
       f.input :quote
       f.input :cn_quote
@@ -216,27 +250,41 @@ ActiveAdmin.register Workout do
       f.input :total_duration
       f.input :blocks_duration
       f.input :blocks_duration_text
+      f.input :cn_blocks_duration_text
       f.input :blocks_rounds
       f.input :blocks_exercise_duration
       f.input :warmup_duration
       f.input :warmup_exercise_duration
       f.input :block_a_title
+      f.input :cn_block_a_title
       f.input :block_b_title
+      f.input :cn_block_b_title
       f.input :block_c_title
+      f.input :cn_block_c_title
       f.input :finisher_title
+      f.input :cn_finisher_title
       f.input :block_a_reps_text
+      f.input :cn_block_a_reps_text
       f.input :block_b_reps_text
+      f.input :cn_block_b_reps_text
       f.input :block_c_reps_text
+      f.input :cn_block_c_reps_text
       f.input :finisher_reps_text
+      f.input :cn_finisher_reps_text
       f.input :warmup_duration_format
+      f.input :cn_warmup_duration_format
       f.input :block_a_duration_format
+      f.input :cn_block_a_duration_format
       f.input :block_b_duration_format
+      f.input :cn_block_b_duration_format
       f.input :block_c_duration_format
+      f.input :cn_block_c_duration_format
       f.input :finisher_duration_format
+      f.input :cn_finisher_duration_format
       f.input :cooldown_duration
       f.input :breathing_duration
       f.input :workout_type, as: :select, collection: ['power', 'strength', 'plyo', 'deload', 'hiit']
-      #f.input :workout_type, as: :select, collection: Workout.workout_types.keys
+      # f.input :workout_type, as: :select, collection: Workout.workout_types.keys
       f.input :trainings, as: :select, collection: Training.all.map { |t| [t.name, t.id] }
       f.input :photo, as: :file
       f.input :video, as: :file

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_31_190138) do
+ActiveRecord::Schema.define(version: 2024_06_10_010138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -571,6 +571,24 @@ ActiveRecord::Schema.define(version: 2024_05_31_190138) do
     t.string "finisher_format"
     t.string "finisher_duration_format"
     t.string "finisher_reps_text"
+    t.string "cn_blocks_duration_text"
+    t.string "cn_block_a_format"
+    t.string "cn_block_b_format"
+    t.string "cn_block_c_format"
+    t.string "cn_block_a_title"
+    t.string "cn_block_b_title"
+    t.string "cn_block_c_title"
+    t.string "cn_block_a_duration_format"
+    t.string "cn_block_b_duration_format"
+    t.string "cn_block_c_duration_format"
+    t.string "cn_block_a_reps_text"
+    t.string "cn_block_b_reps_text"
+    t.string "cn_block_c_reps_text"
+    t.string "cn_warmup_duration_format"
+    t.string "cn_finisher_title"
+    t.string "cn_finisher_format"
+    t.string "cn_finisher_duration_format"
+    t.string "cn_finisher_reps_text"
     t.index ["training_id"], name: "index_workouts_on_training_id"
     t.index ["training_session_id"], name: "index_workouts_on_training_session_id"
   end

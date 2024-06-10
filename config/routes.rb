@@ -135,6 +135,7 @@ Rails.application.routes.draw do
           get :get_data
           get :get_graph
           get :get_data_graph
+          get :get_data_graph_custom
         end
       end
 
