@@ -136,9 +136,9 @@ class TrainingSessionsController < ApplicationController
         @training_session.can_use_unlimited = @training.can_use_unlimited
         @training_session.can_use_voucher = @training.can_use_voucher
         price_per_credit = {
-          12 => 200,
-          15 => 219,
-          17 => 229,
+          12 => 130,
+          15 => 150,
+          17 => 180,
           20 => 239,
           25 => 288,
           30 => 349,
@@ -153,7 +153,7 @@ class TrainingSessionsController < ApplicationController
             price = price_per_credit[credit]
             if price.nil?
               puts "No match found, using default multiplier"
-              multiplier = 17.5 # using highest price
+              multiplier = 10 # using highest price
               price = credit * multiplier
             else
               puts "Price for #{credit} credits: #{price}元"
