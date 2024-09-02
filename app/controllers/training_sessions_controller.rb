@@ -136,6 +136,8 @@ class TrainingSessionsController < ApplicationController
         @training_session.can_use_unlimited = @training.can_use_unlimited
         @training_session.can_use_voucher = @training.can_use_voucher
         price_per_credit = {
+          6 => 60,
+          8 => 79,
           12 => 130,
           15 => 150,
           17 => 180,
