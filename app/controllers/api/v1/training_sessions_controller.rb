@@ -708,7 +708,7 @@ module Api
           # end
           book_before = current_privilege&.book_before
           #add one day to privilege so that it counts until 23:59
-          furthest_bookable_session = DateTime.now.midnight + book_before&.days + 1.days
+          furthest_bookable_session = DateTime.now.midnight + book_before&.days + 14.days
           puts "user privilege: #{book_before} days before"
           puts "training session: #{training_session.begins_at} "
           puts "furthest_bookable_session : #{furthest_bookable_session} "
@@ -720,7 +720,7 @@ module Api
             return false
           end
         else
-          furthest_bookable_session = DateTime.now.midnight + 2.days
+          furthest_bookable_session = DateTime.now.midnight + 14.days
           puts "default book before drop-in without membership: 1days before"
           puts "training session: #{training_session.begins_at} "
           puts "furthest_bookable_session : #{furthest_bookable_session} "
@@ -763,7 +763,7 @@ module Api
             end
             book_before = current_privilege&.book_before
             #add one day to privilege so that it counts until 23:59
-            furthest_bookable_session = DateTime.now.midnight + book_before&.days + 1.days
+            furthest_bookable_session = DateTime.now.midnight + book_before&.days + 7.days
             puts "user privilege: #{book_before} days before"
             puts "training session: #{training_session.begins_at} "
             puts "furthest_bookable_session : #{furthest_bookable_session} "
