@@ -138,6 +138,7 @@ class TrainingSessionsController < ApplicationController
         price_per_credit = {
           6 => 60,
           8 => 79,
+          10 => 89,
           12 => 130,
           15 => 150,
           17 => 180,
