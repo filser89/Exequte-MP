@@ -16,6 +16,7 @@ WORKDIR /tmp
 RUN gem install bundler -v 2.2.2
 RUN bundle install --jobs 5 --retry 5 --without development test
 #set china registry when installing yarn
+RUN yarn cache clean
 RUN yarn install --registry https://r.cnpmjs.org/
 #RUN yarn install
 ENV TZ=Asia/Shanghai
