@@ -15,9 +15,9 @@ COPY mimemagic-01f92d86d15d /tmp/mimemagic-01f92d86d15d
 WORKDIR /tmp
 RUN gem install bundler -v 2.2.2
 RUN bundle install --jobs 5 --retry 5 --without development test
-#set china registry
-RUN yarn config set registry https://r.cnpmjs.org/
-RUN yarn install
+#set china registry when installing yarn
+RUN yarn install --registry https://r.cnpmjs.org/
+#RUN yarn install
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN mkdir /app
