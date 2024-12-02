@@ -10,7 +10,8 @@ RUN apt-get --allow-releaseinfo-change update && apt-get -qqyy install nodejs ya
 # Install Ruby Gems and node modules
 COPY Gemfile* /tmp/
 COPY package.json /tmp/
-COPY yarn.lock /tmp/
+#temporarily comment out
+#COPY yarn.lock /tmp/
 COPY mimemagic-01f92d86d15d /tmp/mimemagic-01f92d86d15d
 WORKDIR /tmp
 RUN gem install bundler -v 2.2.2
